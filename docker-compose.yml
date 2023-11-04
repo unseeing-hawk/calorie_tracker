@@ -27,12 +27,16 @@ services:
    frontend:
        container_name: "frontend-java-app"
        image: "client-calorie-tracker"
+       build:
+           context: ./client-calorie-tracker
        ports:
            - "8081:8081"
 
    backend:
        container_name: "backend-java-app"
        image: "rest-calorie-tracker"
+       build:
+           context: ./rest-calorie-tracker
        ports:
            - "8082:8082"
        depends_on:
