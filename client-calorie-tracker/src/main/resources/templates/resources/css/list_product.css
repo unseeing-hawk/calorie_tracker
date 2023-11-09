@@ -1,0 +1,285 @@
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 5px;
+    background-color: #fff;
+    justify-content: center;
+    box-shadow:  0px -1px 12px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.header .main-block-header {
+    display: flex;
+    max-width: 1000px;
+    height: 60px;
+    width: 100%;
+    background-color: white;
+}
+
+.name-webapp {
+    font-size: 25px;
+    font-weight: 700;
+    background-color: white;
+    color: #0066EE;
+}
+
+.name-webapp:hover {
+    cursor: pointer;
+}
+
+.data-table-container {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 65px);
+    background-color: white;
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 15px 60px 10px 20px;
+}
+
+
+.data-table-container h1{
+    text-align: center;
+    font-size: 35px;
+}
+.search-box {
+    width: 100%;
+    height: 45px;
+    background-color: white;
+    box-sizing: border-box;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow:  0px -1px 12px rgba(0, 0, 0, 0.1);
+}
+
+.search-box .bx-search-alt-2 {
+    font-size: 25px;
+    margin-right: 5px;
+    
+}
+
+.search-box input {
+    width: 100%;
+    height: 100%;
+    color: black;
+    padding-left: 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 17px;
+    outline: none;
+}
+
+.table-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    
+}
+
+.product-container {
+    position: relative;
+    width: 100%;
+    height: 496px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.product-container {
+    margin-top: 20px;
+    height: 550px;
+}
+
+.tb {
+    width: 100%;
+    height: 85%;
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.header-tb {
+    position: relative;
+    width: 100%;
+    height: 8%;
+    background-color: rgba(104, 161, 235, 1);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.header-tb p {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.body-tb {
+    width: 100%;
+    height: 92%;
+    border-radius: 0 0 12px 12px;
+    border-left: 2px;
+    border-bottom: 2px;
+    border-right: 2px;
+    border-color: rgba(0, 0, 0, 0.1);
+    border-style: solid;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    table-layout: auto;
+}
+
+
+table, th, td {
+    border-collapse: collapse;
+    padding: 8px;
+    text-align: left;
+}
+
+thead th {
+    text-align: center;
+    font-size: 18px;
+}
+
+thead th:first-child {
+    text-align: left;
+}
+
+tbody td {
+    text-align: center;
+    font-size: 18px;
+}
+
+tbody td:focus {
+    outline: none;
+  }
+
+tbody td:first-child {
+    text-align: left;
+}
+
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    box-shadow:  0px -1px 5px rgba(0, 0, 0, 0.3);
+}
+
+tbody tr:hover {
+    background-color: rgba(234, 230, 230, 0.5);
+}
+
+tbody input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+}
+
+.button-box {
+    height: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.product-container .button-box button {
+    height: 40%;
+    width: 20%;
+    border-radius: 5px;
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.button-box #btn-apply-changes {
+    background-color: rgb(86, 148, 229);
+}
+
+ #btn-apply-changes:hover {
+    
+    background: rgba(14, 107, 229, 0.85);
+}
+
+.button-box #btn-back-to-main {
+    background-color: #a6a3a3;
+}
+
+.button-box #btn-back-to-main:hover {
+    background: rgba(110, 110, 110, 0.85);
+}
+
+.product-container .button-box #btn-delete {
+    background: rgba(255, 0, 0, 0.6);
+}
+
+.product-container .button-box #btn-delete:hover {
+    background: rgba(255, 0, 0, 0.8);
+}
+
+.chosen-product-container {
+    width: 30%;
+}
+
+.chosen-product-table {
+    box-shadow:  0px -1px 12px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.header-chosen-product-table {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chosen-product-container .button-box button {
+    height: 40%;
+    width: 40%;
+    border-radius: 5px;
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
+    background-color: rgb(86, 148, 229);
+}
+
+.chosen-product-container .button-box button:hover {
+    background: rgba(14, 107, 229, 0.85);
+}
+
+.chosen-product-container .button-box #btn-delete {
+    background: rgba(255, 0, 0, 0.6);
+}
+
+.chosen-product-container .button-box #btn-delete:hover {
+    background: rgba(255, 0, 0, 0.8);
+}
