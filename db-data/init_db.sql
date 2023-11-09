@@ -3,36 +3,36 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS public."dayTime"
+CREATE TABLE IF NOT EXISTS public."mealTimes"
 (
-    "dayTime_id" bigint NOT NULL,
-    "dayTime_name" "char"[] NOT NULL,
-    CONSTRAINT "dayTime_pkey" PRIMARY KEY ("dayTime_id")
+    "mealTime_id" bigint NOT NULL,
+    "mealTime_name" "char"[] NOT NULL,
+    CONSTRAINT "mealTime_pkey" PRIMARY KEY ("mealTime_id")
 );
 
 CREATE TABLE IF NOT EXISTS public.meals
 (
-    meals_id bigint NOT NULL,
-    "meals_userId" bigint NOT NULL,
-    "meals_productId" bigint NOT NULL,
-    "meals_productWeight" numeric NOT NULL,
-    meals_date date NOT NULL,
-    "meals_timeId" bigint NOT NULL,
-    CONSTRAINT meals_pkey PRIMARY KEY (meals_id)
+    meal_id bigint NOT NULL,
+    "meal_userId" bigint NOT NULL,
+    "meal_productId" bigint NOT NULL,
+    "meal_productWeight" numeric NOT NULL,
+    meal_date date NOT NULL,
+    "meal_timeId" bigint NOT NULL,
+    CONSTRAINT meals_pkey PRIMARY KEY (meal_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.products
 (
-    products_id bigint NOT NULL,
-    "products_fatsecretId" bigint,
-    "products_userId" bigint,
-    products_name "char"[] NOT NULL,
-    products_calories integer NOT NULL,
-    "products_ proteins" numeric NOT NULL,
-    "products_ fats" numeric NOT NULL,
-    "products_ carbohydrates" numeric NOT NULL,
-    "products_isActive" boolean NOT NULL,
-    CONSTRAINT products_pkey PRIMARY KEY (products_id)
+    product_id bigint NOT NULL,
+    "product_fatsecretId" bigint,
+    "product_userId" bigint,
+    product_name "char"[] NOT NULL,
+    product_calories integer NOT NULL,
+    "product_ proteins" numeric NOT NULL,
+    "product_ fats" numeric NOT NULL,
+    "product_ carbohydrates" numeric NOT NULL,
+    "product_isActive" boolean NOT NULL,
+    CONSTRAINT products_pkey PRIMARY KEY (product_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.users
@@ -46,23 +46,23 @@ CREATE TABLE IF NOT EXISTS public.users
 );
 
 ALTER TABLE IF EXISTS public.meals
-    ADD CONSTRAINT "meals_meals_productId_fkey" FOREIGN KEY ("meals_productId")
-    REFERENCES public.products (products_id) MATCH SIMPLE
+    ADD CONSTRAINT "meals_meal_productId_fkey" FOREIGN KEY ("meal_productId")
+    REFERENCES public.products (product_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
 ALTER TABLE IF EXISTS public.meals
-    ADD CONSTRAINT "meals_meals_timeId_fkey" FOREIGN KEY ("meals_timeId")
-    REFERENCES public."dayTime" ("dayTime_id") MATCH SIMPLE
+    ADD CONSTRAINT "meals_meal_timeId_fkey" FOREIGN KEY ("meal_timeId")
+    REFERENCES public."mealTimes" ("mealTime_id") MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
 ALTER TABLE IF EXISTS public.meals
-    ADD CONSTRAINT "meals_meals_userId_fkey" FOREIGN KEY ("meals_userId")
+    ADD CONSTRAINT "meals_meal_userId_fkey" FOREIGN KEY ("meal_userId")
     REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
@@ -70,7 +70,7 @@ ALTER TABLE IF EXISTS public.meals
 
 
 ALTER TABLE IF EXISTS public.products
-    ADD CONSTRAINT "users_usersProducts" FOREIGN KEY ("products_userId")
+    ADD CONSTRAINT "users_userProducts" FOREIGN KEY ("product_userId")
     REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
