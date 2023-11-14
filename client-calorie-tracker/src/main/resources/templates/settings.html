@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="/resources/css/settings.css">
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="main-block-header">
+            <button class="name-webapp">nameWebApp</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="block-setting">
+            <h1>Settings</h1>
+            <div class="input-box">
+                <label for="">Name</label>
+                <input id="name" type="text" placeholder="name" autofocus="true" value="Pham Van Nhan">
+                <label id="error-name" class="error-lable" for=""></label>
+            </div>
+            <div class="input-box">
+                <label for="">Weight</label>
+                <input id="weight" type="text" placeholder="weight" autofocus="true" value="60">
+                <label id="error-weight" class="error-lable" for=""></label>
+            </div>
+            <div class="input-box input-password">
+                <label for="">Password</label>
+                <input id="password" type="password" placeholder="" autofocus="true">
+                <i class='bx bx-show showhide'></i>
+                <i class='bx bx-hide showhide'></i>
+                <label id="error-password" class="error-lable" for="">dsc</label>
+            </div>
+            <div class="btns-box">
+                <button id="btn-back" class="btn" type="button">Back</button>
+                <button id="btn-save" class="btn" type="button">Save change</button>
+            </div>
+        </div>
+    </div>
+    <script src="/resources/js/settings.js"></script>
+</body>
+</html>
