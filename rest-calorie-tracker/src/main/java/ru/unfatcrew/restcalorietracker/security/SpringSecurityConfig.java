@@ -37,6 +37,7 @@ public class SpringSecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(policy -> policy.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .anyRequest().authenticated());
 
         return httpSecurity.build();
