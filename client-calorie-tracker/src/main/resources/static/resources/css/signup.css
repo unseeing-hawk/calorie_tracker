@@ -95,15 +95,41 @@ p {
     border-radius: 10px;
     color: #0b0202c3;
     padding-left: 15px;
+    padding-right: 10px;
 }
 
 .block-signup label {
+    position: absolute;
+    color: rgba(54, 47, 47, 0.6);
+    font-size: 17px;
+    top: 8px;
+    left: 15px;
+    pointer-events: none;
+    transition: all 0.15s ease-in-out;
+}
+
+.block-signup input:focus {
+    border: 2px solid rgba(54, 47, 47, 0.5);
+}
+
+.block-signup input:focus + label,
+.block-signup input:valid + label{
+    top: -10px;
+    font-size: 13px;
+    background-color: #fff;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: rgba(54, 47, 47, 1);
+}
+
+.block-signup span {
     display: none;
-    font-size: 14px;
-    max-width: 325px;
+    font-size: 12px;
+    max-width: 370px;
     width: 100%;
     margin-left: 5px;
-    color: red;
+    margin-top: 3px;
+    color: rgb(196, 67, 67);
 }
 
 .btn {
