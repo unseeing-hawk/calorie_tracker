@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.users
     user_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     user_name character varying(100) NOT NULL,
     user_login character varying(30) NOT NULL,
-    user_password character varying(50) NOT NULL,
+    user_password text NOT NULL,
     user_weight numeric NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (user_id)
 );
