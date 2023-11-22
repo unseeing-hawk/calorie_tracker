@@ -5,14 +5,14 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS public."mealTimes"
 (
-    "mealTime_id" bigint NOT NULL,
-    "mealTime_name" "char"[] NOT NULL,
+    "mealTime_id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+    "mealTime_name" character varying(50) NOT NULL,
     CONSTRAINT "mealTime_pkey" PRIMARY KEY ("mealTime_id")
 );
 
 CREATE TABLE IF NOT EXISTS public.meals
 (
-    meal_id bigint NOT NULL,
+    meal_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     "meal_userId" bigint NOT NULL,
     "meal_productId" bigint NOT NULL,
     "meal_productWeight" numeric NOT NULL,
@@ -23,24 +23,24 @@ CREATE TABLE IF NOT EXISTS public.meals
 
 CREATE TABLE IF NOT EXISTS public.products
 (
-    product_id bigint NOT NULL,
+    product_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     "product_fatsecretId" bigint,
     "product_userId" bigint,
-    product_name "char"[] NOT NULL,
+    product_name character varying(100) NOT NULL,
     product_calories integer NOT NULL,
-    "product_ proteins" numeric NOT NULL,
-    "product_ fats" numeric NOT NULL,
-    "product_ carbohydrates" numeric NOT NULL,
+    "product_proteins" numeric NOT NULL,
+    "product_fats" numeric NOT NULL,
+    "product_carbohydrates" numeric NOT NULL,
     "product_isActive" boolean NOT NULL,
     CONSTRAINT products_pkey PRIMARY KEY (product_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    user_id bigint NOT NULL,
-    user_name "char"[] NOT NULL,
-    user_login "char"[] NOT NULL,
-    user_password "char"[] NOT NULL,
+    user_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+    user_name character varying(100) NOT NULL,
+    user_login character varying(30) NOT NULL,
+    user_password character (68) NOT NULL,
     user_weight numeric NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (user_id)
 );
