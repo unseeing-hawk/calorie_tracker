@@ -68,7 +68,7 @@ function registerAccount(e) {
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
     }
-    else if(!(/^[1-9]([0-9]+)?.?([0-9]+)?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?.?([0-9]+)?$/.test(weightElement.value))) {
         weightErrorSpan.style.display = 'block'
         weightLabel.style.color = '#C9544D'
         weightErrorSpan.innerHTML  = "Please enter a valid weight."
@@ -76,10 +76,18 @@ function registerAccount(e) {
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
     }
-    else if(!(/^[1-9]([0-9]+)?.?([0-9]{1,2})?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?.?([0-9]{1,2})?$/.test(weightElement.value))) {
         weightErrorSpan.style.display = 'block'
         weightLabel.style.color = '#C9544D'
         weightErrorSpan.innerHTML  = "Please round to 2 decimal places"
+        setAnimationError(weightErrorSpan)
+        setAnimationError(weightElement)
+        setAnimationError(weightLabel)
+    }
+    else if(parseFloat(weightElement.value) > (3.4 ** 38)) {
+        weightErrorSpan.style.display = 'block'
+        weightLabel.style.color = '#C9544D'
+        weightErrorSpan.innerHTML  = "The weight value is a positive Float number"
         setAnimationError(weightErrorSpan)
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
@@ -99,18 +107,10 @@ function registerAccount(e) {
         setAnimationError(usernameElement)
         usernameErrorSpan.style.display = 'none'
     }
-    else if(!(/^[0-9a-zA-Z\_\.]+$/.test(usernameElement.value))) {
+    else if(usernameElement.value.trim().length == 0) {
         usernameErrorSpan.style.display = 'block'
         usernameLabel.style.color = '#C9544D'
-        usernameErrorSpan.innerHTML  = "Username only contains the following characters: a-z, A-Z, 0-9,'_', '.'"
-        setAnimationError(usernameErrorSpan)
-        setAnimationError(usernameElement)
-        setAnimationError(usernameLabel)
-    }
-    else if (!(/[a-zA-Z]/.test(usernameElement.value))) {
-        usernameErrorSpan.style.display = 'block'
-        usernameLabel.style.color = '#C9544D'
-        usernameErrorSpan.innerHTML  = "Username must contain letters"
+        usernameErrorSpan.innerHTML  = "Username cannot contain only space characters"
         setAnimationError(usernameErrorSpan)
         setAnimationError(usernameElement)
         setAnimationError(usernameLabel)
@@ -138,18 +138,10 @@ function registerAccount(e) {
         setAnimationError(passwordElement)
         passwordErrorSpan.style.display = 'none'
     }
-    else if(/^\s|\s$/.test(passwordElement.value)) {
+    else if(passwordElement.value.trim().length == 0) {
         passwordErrorSpan.style.display = 'block'
         passwordLabel.style.color = '#C9544D'
-        passwordErrorSpan.innerHTML  = "Password cannot begin or end with a space"
-        setAnimationError(passwordErrorSpan)
-        setAnimationError(passwordElement)
-        setAnimationError(passwordLabel)
-    }
-    else if(!(/^[a-zA-Z0-9\s\,\.\/\<\>\?\;\'\:\"\[\]\{\}\=\-\\\+\_\)\(\*\&\^\%\$\#\@\!\~\`\)]*$/.test(passwordElement.value))) {
-        passwordErrorSpan.style.display = 'block'
-        passwordLabel.style.color = '#C9544D'
-        passwordErrorSpan.innerHTML  = "Use only common letters, numbers, and punctuation marks"
+        passwordErrorSpan.innerHTML  = "Password cannot contain only space characters"
         setAnimationError(passwordErrorSpan)
         setAnimationError(passwordElement)
         setAnimationError(passwordLabel)
@@ -171,6 +163,7 @@ function registerAccount(e) {
 
 nameElement.addEventListener("keypress", function(event) {
     // Khi nhập thì chữ cái (sau dấu cách hoặc là ký tự đầu tiên thì tự động viết hoa)
+    // When entering, letters (after a space or the first character are automatically capitalized)
     let el = event.target
     let oldValueEl = el.value
     let charInput = event.keyCode;
