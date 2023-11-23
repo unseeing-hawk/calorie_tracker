@@ -2,21 +2,20 @@ package ru.unfatcrew.restcalorietracker.pojo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import ru.unfatcrew.restcalorietracker.validation.annotation.FiniteFloat;
 
 @Entity
 @Table(name="users")
 public class User {
 
-    @Min(0)
-    @Max(0)
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="user_id")
     private long id;
 
     @NotBlank
     @Size(min=1, max=100)
-    @Pattern(regexp="([A-Z][a-z]*[ ])*([A-Z][a-z]*)")
+    @Pattern(regexp="([A-Z][a-zA-Z]*[ ])*([A-Z][a-zA-Z]*)")
     @Column(name="user_name")
     private String name;
 
@@ -26,9 +25,12 @@ public class User {
     private String login;
 
     @NotBlank
+    @Size(min=68,max=68)
     @Column(name="user_password")
     private String password;
 
+    @Positive
+    @FiniteFloat
     @Column(name="user_weight")
     private float weight;
 

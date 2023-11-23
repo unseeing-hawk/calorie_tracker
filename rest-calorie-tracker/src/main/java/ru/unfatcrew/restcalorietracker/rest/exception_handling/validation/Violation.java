@@ -1,4 +1,4 @@
-package ru.unfatcrew.restcalorietracker.rest.exception_handling;
+package ru.unfatcrew.restcalorietracker.rest.exception_handling.validation;
 
 public class Violation {
 
