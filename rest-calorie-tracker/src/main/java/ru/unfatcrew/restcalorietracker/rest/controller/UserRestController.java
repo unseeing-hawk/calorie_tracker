@@ -1,8 +1,8 @@
 package ru.unfatcrew.restcalorietracker.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.unfatcrew.restcalorietracker.pojo.entity.User;
 import ru.unfatcrew.restcalorietracker.service.UserService;
 
 @RestController
@@ -14,5 +14,10 @@ public class UserRestController {
     @Autowired
     public UserRestController(UserService userService) {
         this.userService = userService;
+    }
+
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
     }
 }
