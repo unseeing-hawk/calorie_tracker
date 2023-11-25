@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
 import ru.unfatcrew.restcalorietracker.pojo.entity.User;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.IllegalRequestArgumentException;
+import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.validation.Violation;
 
 import java.util.ArrayList;
@@ -41,6 +42,17 @@ public class UserService {
         }
 
         userDAO.save(user);
+
+        return user;
+    }
+
+    public User findUser(String login) {
+        List<Violation> violationList = new ArrayList<>();
+        User user = userDAO.findByLogin(login);
+        if (user == null) {
+            violationList.add(new Violation("findUser.login", "not found"));
+            throw new ResourceNotFoundException(violationList);
+        }
 
         return user;
     }
