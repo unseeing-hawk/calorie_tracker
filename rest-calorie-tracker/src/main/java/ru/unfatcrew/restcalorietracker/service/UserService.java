@@ -56,4 +56,23 @@ public class UserService {
 
         return user;
     }
+
+    @Transactional
+    public User updateUser(@Valid User user) {
+        List<Violation> violationList = new ArrayList<>();
+        if (user.getId() <= 0) {
+            violationList.add(new Violation("updateUser.user.id", "must be positive"));
+            throw new IllegalRequestArgumentException(violationList);
+        }
+
+        User userForUpdate = userDAO.findByIdAndLogin(user.getId(), user.getLogin());
+        if (userForUpdate == null) {
+            violationList.add(new Violation("updateUser.user.id-login", "not found"));
+            throw new ResourceNotFoundException(violationList);
+        }
+
+        userDAO.save(user);
+
+        return user;
+    }
 }

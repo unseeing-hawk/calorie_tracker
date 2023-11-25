@@ -7,4 +7,6 @@ import ru.unfatcrew.restcalorietracker.pojo.entity.User;
 @Repository
 public interface UserDAO extends JpaRepository<User, Long> {
     User findByLogin(String login);
+
+    User findByIdAndLogin(long id, String login);
 }
