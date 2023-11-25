@@ -34,6 +34,14 @@ function registerAccount(e) {
         setAnimationError(nameErrorSpan)
         setAnimationError(nameElement)
     }
+    else if(!(/^[A-Z][a-zA-Z]*(\s*\s[A-Z][a-zA-Z]*)*$/.test(nameElement.value))){
+        nameErrorSpan.style.display = 'block'
+        nameErrorSpan.innerHTML  = "Format error! The first letters of the name must be capitalized."
+        nameLabel.style.color = '#C9544D'
+        setAnimationError(nameLabel)
+        setAnimationError(nameErrorSpan)
+        setAnimationError(nameElement)
+    }
     else {
         nameElement.style.color = '#0b0202c3'
         nameLabel.style.color = 'rgba(54, 47, 47, 1)'
@@ -63,7 +71,7 @@ function registerAccount(e) {
     else if((/[^0-9.]/.test(weightElement.value))) {
         weightErrorSpan.style.display = 'block'
         weightLabel.style.color = '#C9544D'
-        weightErrorSpan.innerHTML  = "The weigth only contains the following characters: 0-9 and '.'"
+        weightErrorSpan.innerHTML  = "The weight only contains the following characters: 0-9 and '.'"
         setAnimationError(weightErrorSpan)
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
@@ -80,6 +88,14 @@ function registerAccount(e) {
         weightErrorSpan.style.display = 'block'
         weightLabel.style.color = '#C9544D'
         weightErrorSpan.innerHTML  = "Please round to 2 decimal places"
+        setAnimationError(weightErrorSpan)
+        setAnimationError(weightElement)
+        setAnimationError(weightLabel)
+    }
+    else if(parseFloat(weightElement.value) == 0) {
+        weightErrorSpan.style.display = 'block'
+        weightLabel.style.color = '#C9544D'
+        weightErrorSpan.innerHTML  = "Weight cannot take the value 0"
         setAnimationError(weightErrorSpan)
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
