@@ -101,20 +101,22 @@ h1 {
     border-radius: 10px;
     color: #0b0202c3;
     padding-left: 15px;
+    padding-right: 45px;
+    box-sizing: border-box;
+
 }
 
-.error-lable {
-    display: none;
-    font-size: 14px;
+.block-setting span {
+    font-size: 12px;
     max-width: 325px;
     width: 100%;
-    margin-left: 5px;
-    color: red;
+    margin-left: 13px;
+    color: #C9544D;
 }
 
 .showhide {
     position: absolute;
-    right: 20px;
+    right: 30px;
     top: 45px;
     font-size: 20px;
 }
