@@ -29,4 +29,9 @@ public class UserRestController {
     public User findUser(@RequestParam(name="login") @NotBlank @Size(min=8, max=30) String login) {
         return userService.findUser(login);
     }
+
+    @PutMapping
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
+    }
 }
