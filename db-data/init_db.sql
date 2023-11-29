@@ -3,35 +3,35 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS public."mealTimes"
+CREATE TABLE IF NOT EXISTS public.mealTimes
 (
-    "mealTime_id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "mealTime_name" character varying(50) NOT NULL,
-    CONSTRAINT "mealTime_pkey" PRIMARY KEY ("mealTime_id")
+    mealTime_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+    mealTime_name character varying(50) NOT NULL,
+    CONSTRAINT "mealTime_pkey" PRIMARY KEY (mealTime_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.meals
 (
     meal_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "meal_userId" bigint NOT NULL,
-    "meal_productId" bigint NOT NULL,
-    "meal_productWeight" numeric NOT NULL,
+    meal_userId bigint NOT NULL,
+    meal_productId bigint NOT NULL,
+    meal_productWeight numeric NOT NULL,
     meal_date date NOT NULL,
-    "meal_timeId" bigint NOT NULL,
+    meal_timeId bigint NOT NULL,
     CONSTRAINT meals_pkey PRIMARY KEY (meal_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.products
 (
     product_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "product_fatsecretId" bigint,
-    "product_userId" bigint,
+    product_fatsecretId bigint,
+    product_userId bigint,
     product_name character varying(100) NOT NULL,
     product_calories integer NOT NULL,
-    "product_proteins" numeric NOT NULL,
-    "product_fats" numeric NOT NULL,
-    "product_carbohydrates" numeric NOT NULL,
-    "product_isActive" boolean NOT NULL,
+    product_proteins numeric NOT NULL,
+    product_fats numeric NOT NULL,
+    product_carbohydrates numeric NOT NULL,
+    product_isActive boolean NOT NULL,
     CONSTRAINT products_pkey PRIMARY KEY (product_id)
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS public.users
 );
 
 ALTER TABLE IF EXISTS public.meals
-    ADD CONSTRAINT "meals_meal_productId_fkey" FOREIGN KEY ("meal_productId")
+    ADD CONSTRAINT "meals_meal_productId_fkey" FOREIGN KEY (meal_productId)
     REFERENCES public.products (product_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
@@ -54,15 +54,15 @@ ALTER TABLE IF EXISTS public.meals
 
 
 ALTER TABLE IF EXISTS public.meals
-    ADD CONSTRAINT "meals_meal_timeId_fkey" FOREIGN KEY ("meal_timeId")
-    REFERENCES public."mealTimes" ("mealTime_id") MATCH SIMPLE
+    ADD CONSTRAINT "meals_meal_timeId_fkey" FOREIGN KEY (meal_timeId)
+    REFERENCES public.mealTimes (mealTime_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
 ALTER TABLE IF EXISTS public.meals
-    ADD CONSTRAINT "meals_meal_userId_fkey" FOREIGN KEY ("meal_userId")
+    ADD CONSTRAINT "meals_meal_userId_fkey" FOREIGN KEY (meal_userId)
     REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
@@ -70,10 +70,16 @@ ALTER TABLE IF EXISTS public.meals
 
 
 ALTER TABLE IF EXISTS public.products
-    ADD CONSTRAINT "users_userProducts" FOREIGN KEY ("product_userId")
+    ADD CONSTRAINT "users_userProducts" FOREIGN KEY (product_userId)
     REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
+
+INSERT INTO public.mealTimes (mealtime_name)
+VALUES 
+('breakfast'),
+('lunch'),
+('dinner');
 
 END;
