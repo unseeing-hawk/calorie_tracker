@@ -14,6 +14,10 @@ var passwordElement = document.querySelector('#password')
 var signupButton = document.querySelector('button[class="btn"]')
 signupButton.onclick = registerAccount
 function registerAccount(e) {
+    let isCorrectFormatName = false
+    let isCorrectFormatWeight = false
+    let isCorrectFormatUsername = false
+    let isCorrectFormatPassword = false
 
     // input name
     nameElement.value = nameElement.value.trim()
@@ -57,6 +61,7 @@ function registerAccount(e) {
                 nameElement.value += arrayNames[i]
             }
         }
+        isCorrectFormatName = true
     }
 
     // input weight
@@ -112,6 +117,7 @@ function registerAccount(e) {
         weightLabel.style.color = 'rgba(54, 47, 47, 1)'
         weightElement.style.borderColor = "rgba(54, 47, 47, 0.4)"
         weightErrorSpan.style.display = 'none'
+        isCorrectFormatWeight = true
     }
     
     // input username
@@ -143,6 +149,7 @@ function registerAccount(e) {
         usernameLabel.style.color = 'rgba(54, 47, 47, 1)'
         usernameElement.style.borderColor = "rgba(54, 47, 47, 0.4)"
         usernameErrorSpan.style.display = 'none'
+        isCorrectFormatUsername = true
     }
     
     // input password
@@ -174,7 +181,13 @@ function registerAccount(e) {
         passwordLabel.style.color = 'rgba(54, 47, 47, 1)'
         passwordElement.style.borderColor = "rgba(54, 47, 47, 0.4)"
         passwordErrorSpan.style.display = 'none'
+        isCorrectFormatPassword = true
     }
+
+    if(isCorrectFormatName && isCorrectFormatWeight  && isCorrectFormatUsername  && isCorrectFormatPassword ){
+        document.getElementById('registerForm').submit();
+    }
+
 }
 
 nameElement.addEventListener("keypress", function(event) {
@@ -204,11 +217,19 @@ nameElement.addEventListener("keypress", function(event) {
     }
 })
 
+nameElement.oninvalid  = function(e) {
+    e.preventDefault()
+}
+
 weightElement.addEventListener('keypress', function(e) {
     if(e.keyCode == 13) {
         registerAccount()
     }
 })
+
+weightElement.oninvalid  = function(e) {
+    e.preventDefault()
+}
 
 usernameElement.addEventListener('keypress', function(e) {
     if(e.keyCode == 13) {
@@ -219,6 +240,10 @@ usernameElement.addEventListener('keypress', function(e) {
     }
 })
 
+usernameElement.oninvalid  = function(e) {
+    e.preventDefault()
+}
+
 passwordElement.addEventListener('keypress', function(e) {
     if(e.keyCode == 13) {
         registerAccount()
@@ -227,3 +252,7 @@ passwordElement.addEventListener('keypress', function(e) {
         e.preventDefault()
     }
 })
+
+passwordElement.oninvalid  = function(e) {
+    e.preventDefault()
+}
