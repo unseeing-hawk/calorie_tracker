@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,13 +17,13 @@
             <div class="btn-box">
 
                 <div class="profiles-setting-box">
-                    <i class='bx bx-cog' style='color:#0066EE' ></i>
+                    <i class='bx bx-cog' style='color:#0066EE'></i>
                     <a href="">Profile settings</a>
                 </div>
 
                 <div class="signout-box">
-                    <i class='bx bx-log-out bx-rotate-180' style='color:#0066EE' ></i>
-                    <a href="">Sign out</a>
+                    <i class='bx bx-log-out bx-rotate-180' style='color:#0066EE'></i>
+                    <a th:href="@{/logout}">Sign out</a>
                 </div>
 
             </div>
