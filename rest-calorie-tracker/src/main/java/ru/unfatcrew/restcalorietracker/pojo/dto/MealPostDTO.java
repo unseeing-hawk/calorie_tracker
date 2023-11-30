@@ -1,26 +1,27 @@
-package ru.unfatcrew.restcalorietracker.dto;
+package ru.unfatcrew.restcalorietracker.pojo.dto;
 
-public class MealDTO {
+public class MealPostDTO {
+
     private Long id;
     private String userLogin;
-    private ProductDTO product;
+    private Long productId;
     private Float weight;
     private String date;
     private String mealTime;
 
-    public MealDTO() {
+    public MealPostDTO() {
         this.id = 0L;
         this.userLogin = "";
-        this.product = new ProductDTO();
+        this.productId = 0L;
         this.weight = 0.0f;
         this.date = "";
         this.mealTime = "";
     }
 
-    public MealDTO(Long id, String userLogin, ProductDTO product, Float weight, String date, String mealTime) {
+    public MealPostDTO(Long id, String userLogin, Long productId, Float weight, String date, String mealTime) {
         this.id = id;
         this.userLogin = userLogin;
-        this.product = product;
+        this.productId = productId;
         this.weight = weight;
         this.date = date;
         this.mealTime = mealTime;
@@ -34,8 +35,8 @@ public class MealDTO {
         return userLogin;
     }
 
-    public ProductDTO getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
     public Float getWeight() {
@@ -58,8 +59,8 @@ public class MealDTO {
         this.userLogin = userLogin;
     }
 
-    public void setProduct(ProductDTO product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public void setWeight(Float weight) {
@@ -73,6 +74,4 @@ public class MealDTO {
     public void setMealTime(String mealTime) {
         this.mealTime = mealTime;
     }
-
-   
 }

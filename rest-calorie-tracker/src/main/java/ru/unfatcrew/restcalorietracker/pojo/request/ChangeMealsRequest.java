@@ -1,13 +1,13 @@
-package ru.unfatcrew.restcalorietracker.request;
+package ru.unfatcrew.restcalorietracker.pojo.request;
 
-import ru.unfatcrew.restcalorietracker.dto.MealDTO;
+import ru.unfatcrew.restcalorietracker.pojo.dto.MealPostDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ChangeMealsRequest {
-    private List<MealDTO> mealsForChange;
+    private List<MealPostDTO> mealsForChange;
     private List<Long> mealIdsForDeletion;
 
     public ChangeMealsRequest() {
@@ -15,12 +15,12 @@ public class ChangeMealsRequest {
         this.mealIdsForDeletion = new ArrayList<>();
     }
 
-    public ChangeMealsRequest(List<MealDTO> mealsForChange, List<Long> mealIdsForDeletion) {
+    public ChangeMealsRequest(List<MealPostDTO> mealsForChange, List<Long> mealIdsForDeletion) {
         this.mealsForChange = mealsForChange;
         this.mealIdsForDeletion = mealIdsForDeletion;
     }
 
-    public List<MealDTO> getMealsForChange() {
+    public List<MealPostDTO> getMealsForChange() {
         return mealsForChange;
     }
 
@@ -28,7 +28,7 @@ public class ChangeMealsRequest {
         return mealIdsForDeletion;
     }
     
-    public void setMealsForChange(List<MealDTO> mealsForChange) {
+    public void setMealsForChange(List<MealPostDTO> mealsForChange) {
         this.mealsForChange = mealsForChange;
     }
 
