@@ -14,14 +14,14 @@ public class Meal {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="meal_userid")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="product_id")
+    @JoinColumn(name="meal_productid")
     private Product product;
 
-    @Column(name="meal_productWeight")
+    @Column(name="meal_productweight")
     private float weight;
 
     @Temporal(TemporalType.DATE)
@@ -29,7 +29,7 @@ public class Meal {
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name="mealTime_id")
+    @JoinColumn(name="meal_timeid")
     private MealTime mealTime;
 
     public Meal() {
