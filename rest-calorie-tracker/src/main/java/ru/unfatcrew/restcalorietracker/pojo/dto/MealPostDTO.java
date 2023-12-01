@@ -8,8 +8,6 @@ import ru.unfatcrew.restcalorietracker.validation.annotation.LessThan10YearOldDa
 public class MealPostDTO {
 
     @NotNull
-    @Min(0)
-    @Max(0)
     private Long id;
 
     @Size(min=8, max=30)

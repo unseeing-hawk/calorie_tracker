@@ -55,6 +55,13 @@ public class MealService {
         List<Violation> violationList = new ArrayList<>();
         List<Meal> mealList = new ArrayList<>();
         for (int i = 0; i < mealPostDTOList.size(); i++) {
+            if (mealPostDTOList.get(i).getId() != 0) {
+                violationList.add(new Violation("createMeals.mealPostDTOList["
+                        + Integer.toString(i)
+                        + "].id",
+                        "must be 0"));
+            }
+
             mealList.add(validateMealPostDtoFieldsExistence(mealPostDTOList.get(i), violationList, i));
         }
 
