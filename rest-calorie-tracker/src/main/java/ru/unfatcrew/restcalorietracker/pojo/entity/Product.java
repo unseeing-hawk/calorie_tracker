@@ -12,9 +12,8 @@ public class Product {
     @Column(name="product_id")
     private long id;
 
-    @Min(0)
     @Column(name="product_fatsecretId")
-    private long fatsecretId;
+    private Long fatsecretId;
 
     @ManyToOne
     @JoinColumn(name="product_userId")
@@ -46,7 +45,7 @@ public class Product {
 
     public Product() {}
 
-    public Product(long fatsecretId,
+    public Product(Long fatsecretId,
                    User user, String name,
                    int calories,
                    float proteins,
@@ -71,11 +70,11 @@ public class Product {
         this.id = id;
     }
 
-    public long getFatsecretId() {
+    public Long getFatsecretId() {
         return fatsecretId;
     }
 
-    public void setFatsecretId(long fatsecretId) {
+    public void setFatsecretId(Long fatsecretId) {
         this.fatsecretId = fatsecretId;
     }
 

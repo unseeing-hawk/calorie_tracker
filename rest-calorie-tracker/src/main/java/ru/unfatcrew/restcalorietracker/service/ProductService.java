@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
 import ru.unfatcrew.restcalorietracker.dao.ProductDAO;
 import ru.unfatcrew.restcalorietracker.pojo.dto.ProductPostDTO;
@@ -42,7 +43,7 @@ public class ProductService {
             throw new IllegalRequestArgumentException(violationList);
         }
 
-        Product product = new Product(0,
+        Product product = new Product(null,
                                     user,
                                     productPostDTO.getName(),
                                     productPostDTO.getCalories(),
