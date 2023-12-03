@@ -1,44 +1,50 @@
 package ru.unfatcrew.restcalorietracker.pojo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name="products")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="product_id")
     private long id;
 
+    @Min(0)
     @Column(name="product_fatsecretId")
     private long fatsecretId;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="product_userId")
     private User user;
 
+    @NotBlank
+    @Size(min=1, max=100)
     @Column(name="product_name")
     private String name;
 
+    @Min(0)
     @Column(name="product_calories")
     private int calories;
 
+    @DecimalMin(value = "0.00", inclusive = false, message = "Proteins must be a positive number with precision up to two decimal places")
     @Column(name="product_proteins")
     private float proteins;
-
+    
+    @DecimalMin(value = "0.00", inclusive = false, message = "Fats must be a positive number with precision up to two decimal places")
     @Column(name="product_fats")
     private float fats;
-
+    
+    @DecimalMin(value = "0.00", inclusive = false, message = "Carbohydrates must be a positive number with precision up to two decimal places")
     @Column(name="product_carbohydrates")
     private float carbohydrates;
 
     @Column(name="product_isActive")
     private boolean isActive;
 
-    public Product() {
-
-    }
+    public Product() {}
 
     public Product(long fatsecretId,
                    User user, String name,
