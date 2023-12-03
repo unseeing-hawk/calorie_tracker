@@ -1,13 +1,13 @@
 package ru.unfatcrew.restcalorietracker.pojo.request;
 
-import ru.unfatcrew.restcalorietracker.pojo.dto.ProductDTO;
+import ru.unfatcrew.restcalorietracker.pojo.entity.Product;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ChangeProductsRequest {
-    private List<ProductDTO> productsForChange;
+    private List<Product> productsForChange;
     private List<Long> productIdsForDeletion;
 
     public ChangeProductsRequest() {
@@ -15,12 +15,12 @@ public class ChangeProductsRequest {
         this.productIdsForDeletion = new ArrayList<>();
     }
 
-    public ChangeProductsRequest(List<ProductDTO> productsForChange, List<Long> productIdsForDeletion) {
+    public ChangeProductsRequest(List<Product> productsForChange, List<Long> productIdsForDeletion) {
         this.productsForChange = productsForChange;
         this.productIdsForDeletion = productIdsForDeletion;
     }
 
-    public List<ProductDTO> getProductsForChange() {
+    public List<Product> getProductsForChange() {
         return productsForChange;
     }
 
@@ -28,7 +28,7 @@ public class ChangeProductsRequest {
         return productIdsForDeletion;
     }
 
-    public void setProductsForChange(List<ProductDTO> productsForChange) {
+    public void setProductsForChange(List<Product> productsForChange) {
         this.productsForChange = productsForChange;
     }
 
