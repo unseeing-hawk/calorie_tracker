@@ -20,34 +20,41 @@
             <h1>Get started</h1>
             <p>We're delighted to have you here and ready to assist you in achieving your health and fitness goals. Let's take the first step towards a better you.</p>
             
-            <form id="registerForm" th:action="@{/register}" th:object="${user}" method="post">
+            <form id="registerForm" th:action="@{/register}" th:object="${user}" method="post" >
                 <div class="input-box">
                     <input id="name" type="text" th:field="*{name}" autofocus="true" required>
                     <label id="name-label" for="">Name</label>
-                    <span id="name-error-span" for=""></span>
+                    <span class="client-error" id="name-error-span" for=""></span>
                 </div>
     
                 <div class="input-box">
                     <input id="weight" type="text" th:field="*{weight}" autofocus="true" required>
                     <label id="weight-label" for="">Weight</label>
-                    <span id="weight-error-span" for=""></span>
+                    <span class="client-error" id="weight-error-span" for=""></span>
                 </div>
     
                 <div class="input-box">
                     <input id="username" type="text" th:field="*{login}" autofocus="true" required>
                     <label id="username-label" for="">Username</label>
-                    <span id="username-error-span" for=""></span>
+                    <span class="client-error" id="username-error-span" for=""></span>
                 </div>
     
                 <div class="input-box">
                     <input id="password" type="text" th:field="*{password}" autofocus="true" required>
                     <label id="password-label" for="">Password</label>
-                    <span id="password-error-span" for=""></span>
+                    <span class="client-error" id="password-error-span" for=""></span>
                 </div>
     
                 <button class="btn" type="button">Sign up</button>
             </form>
             <P>Already have an account? <a href="">Sign in</a></P>
+            <div id="errorContainer" class="errorContainer" th:if="${param.error}">
+                <div id="errorBox" class="error-box">
+                    <p>Error</p>
+                    <span class="sever-error" id="error-message" th:text="${param.error}"></span>
+                    <button>OK</button>
+                </div>
+            </div>
         </div>
     </div>
     <script src="/resources/js/signup.js"></script>
