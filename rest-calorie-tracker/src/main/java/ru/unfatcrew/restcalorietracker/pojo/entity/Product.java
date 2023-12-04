@@ -12,11 +12,11 @@ public class Product {
     @Column(name="product_id")
     private long id;
 
-    @Column(name="product_fatsecretId")
+    @Column(name="product_fatsecret_id")
     private Long fatsecretId;
 
     @ManyToOne
-    @JoinColumn(name="product_userId")
+    @JoinColumn(name="product_user_id")
     private User user;
 
     @NotBlank
@@ -40,7 +40,7 @@ public class Product {
     @Column(name="product_carbohydrates")
     private float carbohydrates;
 
-    @Column(name="product_isActive")
+    @Column(name="product_is_active")
     private boolean isActive;
 
     public Product() {}

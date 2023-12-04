@@ -3,15 +3,15 @@ package ru.unfatcrew.restcalorietracker.pojo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="mealTime")
+@Table(name="mealTimes")
 public class MealTime {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="mealTime_id")
+    @Column(name="meal_time_id")
     private long id;
 
-    @Column(name="mealTime_name")
+    @Column(name="meal_time_name")
     private String name;
 
     public MealTime() {
