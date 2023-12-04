@@ -1,6 +1,6 @@
-package ru.unfatcrew.restcalorietracker.request;
+package ru.unfatcrew.restcalorietracker.pojo.request;
 
-import ru.unfatcrew.restcalorietracker.dto.MealDTO;
+import ru.unfatcrew.restcalorietracker.pojo.dto.MealDTO;
 
 import java.util.ArrayList;
 import java.util.List;
