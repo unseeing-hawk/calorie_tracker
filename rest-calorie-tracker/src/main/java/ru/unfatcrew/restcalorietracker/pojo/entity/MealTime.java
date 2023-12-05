@@ -3,7 +3,7 @@ package ru.unfatcrew.restcalorietracker.pojo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="mealTimes")
+@Table(name="meal_times")
 public class MealTime {
 
     @Id

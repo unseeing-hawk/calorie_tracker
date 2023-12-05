@@ -3,7 +3,7 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS public."mealTimes"
+CREATE TABLE IF NOT EXISTS public."meal_times"
 (
     "meal_time_id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     "meal_time_name" character varying(50) NOT NULL,
@@ -55,7 +55,7 @@ ALTER TABLE IF EXISTS public.meals
 
 ALTER TABLE IF EXISTS public.meals
     ADD CONSTRAINT "meals_meal_time_id_fkey" FOREIGN KEY ("meal_time_id")
-    REFERENCES public."mealTimes" ("meal_time_id") MATCH SIMPLE
+    REFERENCES public."meal_times" ("meal_time_id") MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
