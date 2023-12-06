@@ -1,38 +1,27 @@
-package ru.unfatcrew.restcalorietracker.response;
+package ru.unfatcrew.restcalorietracker.pojo.response;
 
-import ru.unfatcrew.restcalorietracker.dto.ProductDTO;
+import ru.unfatcrew.restcalorietracker.pojo.dto.ProductPostDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ChangeProductsResponse {
-    private List<ProductDTO> productsForChange;
-    private List<ProductDTO> productsForDeletion;
+    private List<ProductPostDTO> productsForChange;
 
     public ChangeProductsResponse() {
         this.productsForChange = new ArrayList<>();
-        this.productsForDeletion = new ArrayList<>();
     }
 
-    public ChangeProductsResponse(List<ProductDTO> productsForChange, List<ProductDTO> productsForDeletion) {
+    public ChangeProductsResponse(List<ProductPostDTO> productsForChange, List<ProductPostDTO> productsForDeletion) {
         this.productsForChange = productsForChange;
-        this.productsForDeletion = productsForDeletion;
     }
 
-    public List<ProductDTO> getProductsForChange() {
+    public List<ProductPostDTO> getProductsForChange() {
         return productsForChange;
     }
-
-    public List<ProductDTO> getProductsForDeletion() {
-        return productsForDeletion;
-    }
     
-    public void setProductsForChange(List<ProductDTO> productsForChange) {
+    public void setProductsForChange(List<ProductPostDTO> productsForChange) {
         this.productsForChange = productsForChange;
-    }
-
-    public void setProductsForDeletion(List<ProductDTO> productsForDeletion) {
-        this.productsForDeletion = productsForDeletion;
     }
 }
