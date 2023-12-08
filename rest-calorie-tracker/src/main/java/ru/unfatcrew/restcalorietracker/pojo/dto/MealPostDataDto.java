@@ -1,15 +1,22 @@
 package ru.unfatcrew.restcalorietracker.pojo.dto;
 
-public class MealProductDataDto {
+import jakarta.validation.constraints.Positive;
+import ru.unfatcrew.restcalorietracker.validation.annotation.FiniteFloat;
 
+public class MealPostDataDto {
+
+    @Positive
     private long productId;
+
+    @Positive
+    @FiniteFloat
     private float weight;
 
-    public MealProductDataDto() {
+    public MealPostDataDto() {
 
     }
 
-    public MealProductDataDto(long productId, float weight) {
+    public MealPostDataDto(long productId, float weight) {
         this.productId = productId;
         this.weight = weight;
     }

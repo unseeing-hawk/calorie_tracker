@@ -14,6 +14,10 @@ public class LessThan10YearOldDateValidator implements ConstraintValidator<LessT
 
     @Override
     public boolean isValid(String dateString, ConstraintValidatorContext constraintValidatorContext) {
+        if (dateString == null) {
+            return false;
+        }
+
         LocalDate date;
         try {
             date = LocalDate.parse(dateString, DateFormat);
