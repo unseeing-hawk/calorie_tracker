@@ -1,6 +1,7 @@
 package ru.unfatcrew.restcalorietracker.pojo.dto;
 
 public class ProductPostDTO {
+    private Long fatsecretId;
     private String userLogin;
     private String name;
     private Integer calories;
@@ -9,6 +10,7 @@ public class ProductPostDTO {
     private Float carbohydrates;
 
     public ProductPostDTO() {
+        this.fatsecretId = 0L;
         this.userLogin = "";
         this.name = "";
         this.calories = 0;
@@ -17,7 +19,17 @@ public class ProductPostDTO {
         this.carbohydrates = 0.0f;
     }
 
-    public ProductPostDTO(Long id, String userLogin, String name, Integer calories, Float proteins,
+    public ProductPostDTO(Long fatsecretId, String name, Integer calories, Float proteins,
+                      Float fats, Float carbohydrates) {
+        this.fatsecretId = fatsecretId;
+        this.name = name;
+        this.calories = calories;
+        this.proteins = proteins;
+        this.fats = fats;
+        this.carbohydrates = carbohydrates;
+    }
+    
+    public ProductPostDTO(String userLogin, String name, Integer calories, Float proteins,
                       Float fats, Float carbohydrates) {
         this.userLogin = userLogin;
         this.name = name;
@@ -26,7 +38,12 @@ public class ProductPostDTO {
         this.fats = fats;
         this.carbohydrates = carbohydrates;
     }
-    
+
+    public Long getFatsecretId() {
+        return fatsecretId;
+    }
+
+
     public String getUserLogin() {
         return userLogin;
     }
@@ -73,5 +90,9 @@ public class ProductPostDTO {
 
     public void setCarbohydrates(Float carbohydrates) {
         this.carbohydrates = carbohydrates;
+    }
+
+    public void setFatsecretId(Long fatsecretId) {
+        this.fatsecretId = fatsecretId;
     }
 }
