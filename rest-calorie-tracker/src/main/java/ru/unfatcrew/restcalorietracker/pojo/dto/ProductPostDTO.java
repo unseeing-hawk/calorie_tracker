@@ -22,6 +22,7 @@ public class ProductPostDTO {
     public ProductPostDTO(Long fatsecretId, String name, Integer calories, Float proteins,
                       Float fats, Float carbohydrates) {
         this.fatsecretId = fatsecretId;
+        this.userLogin = "";
         this.name = name;
         this.calories = calories;
         this.proteins = proteins;
@@ -31,6 +32,7 @@ public class ProductPostDTO {
     
     public ProductPostDTO(String userLogin, String name, Integer calories, Float proteins,
                       Float fats, Float carbohydrates) {
+        this.fatsecretId = 0L;
         this.userLogin = userLogin;
         this.name = name;
         this.calories = calories;
