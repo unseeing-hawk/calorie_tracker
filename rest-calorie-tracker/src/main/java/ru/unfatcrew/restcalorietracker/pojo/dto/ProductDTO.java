@@ -41,7 +41,9 @@ public class ProductDTO {
     public ProductDTO(Product product) {
         this.id = product.getId();
         this.fatsecretId = product.getFatsecretId();
-        this.userLogin = product.getUser().getLogin();
+        this.userLogin = product.getUser() != null
+                ? product.getUser().getLogin()
+                : null;
         this.name = product.getName();
         this.calories = product.getCalories();
         this.proteins = product.getProteins();

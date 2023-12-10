@@ -19,6 +19,7 @@ import ru.unfatcrew.restcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.restcalorietracker.pojo.entity.User;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.validation.Violation;
+import ru.unfatcrew.restcalorietracker.validation.DateValidationUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -29,8 +30,6 @@ import java.util.Optional;
 @Service
 @Validated
 public class MealService {
-
-    public static final DateTimeFormatter DateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private final UserDAO userDAO;
     private final ProductDAO productDAO;
@@ -63,7 +62,7 @@ public class MealService {
             throw new ResourceNotFoundException(violationList);
         }
 
-        LocalDate date = LocalDate.parse(mealPostDto.getDate(), DateFormat);
+        LocalDate date = LocalDate.parse(mealPostDto.getDate(), DateValidationUtils.DateFormat);
         List<Meal> mealList = new ArrayList<>();
         List<MealPostDataDto> mealPostDataDtoList = mealPostDto.getMealPostDataList();
         for (int i = 0; i < mealPostDataDtoList.size(); i++) {
@@ -88,6 +87,7 @@ public class MealService {
             }
 
             if (product != null
+                    && product.getUser() != null
                     && product.getUser().getId() != user.getId()) {
                 violationList.add(new Violation("addMeals.mealPostDTO.mealPostDataList["
                         + Integer.toString(i)
@@ -104,8 +104,8 @@ public class MealService {
 
         List<MealGetDataDto> mealGetDataList = new ArrayList<>();
         for (Meal meal : mealList) {
-            mealGetDataList.add(new MealGetDataDto(meal));
             mealDAO.save(meal);
+            mealGetDataList.add(new MealGetDataDto(meal));
         }
 
         return new MealGetDto(mealGetDataList, user.getLogin(), date.toString());
