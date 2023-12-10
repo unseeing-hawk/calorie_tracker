@@ -34,15 +34,15 @@ public class ProductRestController {
         return productService.addProduct(product);
     }
 
-    @GetMapping("/userProducts")
+    @GetMapping("/user-products")
     public List<ProductPostDTO> getUserProducts(@RequestParam(name="limit", defaultValue="10")
                                                 @Valid
-                                                @Min(value = 1, message = "Limit should not be less than 1")
-                                                @Max(value = 100, message = "Limit should not exceed 50")
+                                                @Min(value = 1, message = "limit should not be less than 1")
+                                                @Max(value = 100, message = "limit should not exceed 50")
                                                 int limit, 
                                                 @RequestParam(name="offset", defaultValue="0")
                                                 @Valid
-                                                @Min(value = 0, message = "Offset should not be less than 0")
+                                                @Min(value = 0, message = "offset should not be less than 0")
                                                 int offset,
                                                 @RequestParam(name="user-login", defaultValue="")
                                                 @Size(min=8, max=30)

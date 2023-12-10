@@ -80,7 +80,7 @@ public class ProductService {
         
         User user = userDAO.findByLogin(userLogin);
         if (user == null) {
-            violationList.add(new Violation("getUserProducts.productGetDTO.userLogin",
+            violationList.add(new Violation("getUserProducts.productPostDTO.user-login",
                     "not found"));
         }
 
