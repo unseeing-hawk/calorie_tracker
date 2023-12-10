@@ -109,5 +109,8 @@ public class MealService {
         }
 
         return new MealGetDto(mealGetDataList, user.getLogin(), date.toString());
+
+    public List<MealTime> getMealTimes() {
+        return mealTimeDAO.findAll();
     }
 }
