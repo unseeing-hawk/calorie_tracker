@@ -45,7 +45,12 @@ public class ProductService {
                 violationList.add(new Violation("addProduct.productPostDTO.userLogin",
                         "not found"));
             }
-        } 
+        } else {
+            Product fatsecretProduct = productDAO.findByFatsecretId(productPostDTO.getFatsecretId());
+            if (fatsecretProduct != null) {
+                return fatsecretProduct;
+            }
+        }
 
         if (!violationList.isEmpty()) {
             throw new IllegalRequestArgumentException(violationList);
