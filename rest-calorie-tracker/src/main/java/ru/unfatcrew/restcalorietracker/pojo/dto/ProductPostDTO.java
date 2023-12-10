@@ -9,6 +9,7 @@ public class ProductPostDTO {
     private Long id;
 
     @NotNull(message = "fatsecretId cannot be null")
+    @Min(0)
     private Long fatsecretId;
 
     @NotNull(message = "userLogin cannot be null")
