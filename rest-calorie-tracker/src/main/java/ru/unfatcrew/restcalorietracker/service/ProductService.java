@@ -94,6 +94,7 @@ public class ProductService {
         List<ProductPostDTO> productPostDTOList = productsPage.getContent().stream()
         .map(product -> {
             ProductPostDTO productPostDTO = new ProductPostDTO();
+            productPostDTO.setId(product.getId());
             productPostDTO.setUserLogin(userLogin);
             productPostDTO.setName(product.getName());
             productPostDTO.setCalories(product.getCalories());

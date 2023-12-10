@@ -1,8 +1,13 @@
 package ru.unfatcrew.restcalorietracker.pojo.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public class ProductPostDTO {
+    @NotNull(message = "id cannot be null")
+    @Min(0)
+    private Long id;
+
     @NotNull(message = "fatsecretId cannot be null")
     private Long fatsecretId;
 
@@ -25,6 +30,7 @@ public class ProductPostDTO {
     private Float carbohydrates;
 
     public ProductPostDTO() {
+        this.id = 0L;
         this.fatsecretId = 0L;
         this.userLogin = "";
         this.name = "";
@@ -56,10 +62,13 @@ public class ProductPostDTO {
         this.carbohydrates = carbohydrates;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Long getFatsecretId() {
         return fatsecretId;
     }
-
 
     public String getUserLogin() {
         return userLogin;
@@ -111,5 +120,9 @@ public class ProductPostDTO {
 
     public void setFatsecretId(Long fatsecretId) {
         this.fatsecretId = fatsecretId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
