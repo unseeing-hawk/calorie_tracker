@@ -33,17 +33,25 @@ public class ProductService {
     public Product addProduct(@Valid ProductPostDTO productPostDTO) {
         List<Violation> violationList = new ArrayList<>();
         
-        User user = userDAO.findByLogin(productPostDTO.getUserLogin());
-        if (user == null) {
-            violationList.add(new Violation("addProduct.productPostDTO.userLogin",
-                    "not found"));
+        if (productPostDTO.getFatsecretId() == 0L && productPostDTO.getUserLogin() == "") {
+         violationList.add(new Violation("addProduct.productPostDTO.userLoginAndFatsecretId",
+                    "one value mast be non-zero"));
         }
+    
+        User user = null;
+        if (productPostDTO.getFatsecretId() == 0L) {
+            user = userDAO.findByLogin(productPostDTO.getUserLogin());
+            if (user == null) {
+                violationList.add(new Violation("addProduct.productPostDTO.userLogin",
+                        "not found"));
+            }
+        } 
 
         if (!violationList.isEmpty()) {
             throw new IllegalRequestArgumentException(violationList);
         }
 
-        Product product = new Product(null,
+        Product product = new Product(productPostDTO.getFatsecretId(),
                                     user,
                                     productPostDTO.getName(),
                                     productPostDTO.getCalories(),
