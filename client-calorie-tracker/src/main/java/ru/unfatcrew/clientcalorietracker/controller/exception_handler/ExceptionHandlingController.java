@@ -1,5 +1,6 @@
 package ru.unfatcrew.clientcalorietracker.controller.exception_handler;
 
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,6 +11,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import ru.unfatcrew.clientcalorietracker.controller.exception_handler.server_response.ValidationErrorResponse;
+import ru.unfatcrew.clientcalorietracker.controller.exception_handler.server_response.Violation;
+
 @ControllerAdvice
 public class ExceptionHandlingController {
     @ExceptionHandler(ResourceAccessException.class)
@@ -19,9 +23,24 @@ public class ExceptionHandlingController {
     }
 
     @ExceptionHandler(RestClientResponseException.class)
-    public String handleRestClientResponceException(HttpServletRequest request, Exception exception,
+    public String handleRestClientResponseException(HttpServletRequest request, RestClientResponseException exception,
                                                     RedirectAttributes attributes) {
-        attributes.addFlashAttribute("errorMessage", exception.getMessage());
+        StringBuilder errorMessageBuilder = new StringBuilder();
+        
+        try {
+            ValidationErrorResponse response = exception.getResponseBodyAs(ValidationErrorResponse.class);
+            if (response != null) {
+                errorMessageBuilder.append("Error: ").append(response.getStatus()).append('\n');
+                for (Violation violation : response.getViolationList()) {
+                    errorMessageBuilder.append(violation.getFieldName()).append(": ").append(violation.getMessage())
+                            .append('\n');
+                }
+            }
+        } catch (HttpMessageConversionException ex) {
+            errorMessageBuilder.append("Internal Server Error: response conversion error in handleRestClientResponseException");
+        }
+
+        attributes.addFlashAttribute("errorMessage", errorMessageBuilder.toString());
         return "redirect:" + request.getRequestURI();
     }
 
@@ -30,7 +49,7 @@ public class ExceptionHandlingController {
                                                         RedirectAttributes attributes) {
         StringBuilder errorMessageBuilder = new StringBuilder();
         for (FieldError error : exception.getFieldErrors()) {
-            errorMessageBuilder.append(error.getField() + ": " + error.getDefaultMessage() + "\t");
+            errorMessageBuilder.append(error.getField()).append(": ").append(error.getDefaultMessage()).append('\n');
         }
 
         attributes.addFlashAttribute("errorMessage", errorMessageBuilder.toString());
