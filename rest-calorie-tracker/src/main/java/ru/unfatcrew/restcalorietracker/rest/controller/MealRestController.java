@@ -1,10 +1,8 @@
 package ru.unfatcrew.restcalorietracker.rest.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +33,7 @@ public class MealRestController {
     @PostMapping
     public MealGetDto addMeals(@RequestBody MealPostDto mealPostDto) {
         return mealService.addMeals(mealPostDto);
+    }
 
     @GetMapping("/mealtimes")
     public List<MealTime> getMealTimes() {

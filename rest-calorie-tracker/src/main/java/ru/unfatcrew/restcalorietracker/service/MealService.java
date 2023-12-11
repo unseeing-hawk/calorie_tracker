@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static ru.unfatcrew.restcalorietracker.validation.DateValidationUtils.DateFormat;
+
 @Service
 @Validated
 public class MealService {
@@ -62,7 +64,7 @@ public class MealService {
             throw new ResourceNotFoundException(violationList);
         }
 
-        LocalDate date = LocalDate.parse(mealPostDto.getDate(), DateValidationUtils.DateFormat);
+        LocalDate date = LocalDate.parse(mealPostDto.getDate(), DateFormat);
         List<Meal> mealList = new ArrayList<>();
         List<MealPostDataDto> mealPostDataDtoList = mealPostDto.getMealPostDataList();
         for (int i = 0; i < mealPostDataDtoList.size(); i++) {
@@ -109,6 +111,7 @@ public class MealService {
         }
 
         return new MealGetDto(mealGetDataList, user.getLogin(), date.toString());
+    }
 
     public List<MealTime> getMealTimes() {
         return mealTimeDAO.findAll();
