@@ -1,33 +1,19 @@
 package ru.unfatcrew.restcalorietracker.pojo.dto;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 public class ProductPostDTO {
-    @NotNull(message = "id cannot be null")
     @Min(0)
     private Long id;
 
-    @NotNull(message = "fatsecretId cannot be null")
     @Min(0)
     private Long fatsecretId;
 
-    @NotNull(message = "userLogin cannot be null")
     private String userLogin;
-
-    @NotNull(message = "name cannot be null")
     private String name;
-
-    @NotNull(message = "calories cannot be null")
     private Integer calories;
-
-    @NotNull(message = "proteins cannot be null")
     private Float proteins;
-
-    @NotNull(message = "fats cannot be null")
     private Float fats;
-
-    @NotNull(message = "User login cannot be null")
     private Float carbohydrates;
 
     public ProductPostDTO() {
