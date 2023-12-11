@@ -14,11 +14,11 @@ public class Meal {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="meal_user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="product_id")
+    @JoinColumn(name="meal_product_id")
     private Product product;
 
     @Column(name="meal_product_weight")
