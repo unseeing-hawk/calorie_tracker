@@ -186,7 +186,6 @@ a:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    display: none;
 }
 #errorBox p {
     color: #060606;
