@@ -6,4 +6,5 @@ import ru.unfatcrew.restcalorietracker.pojo.entity.Product;
 
 @Repository
 public interface ProductDAO extends JpaRepository<Product, Long> {
+    Product findByFatsecretId(long id);
 }

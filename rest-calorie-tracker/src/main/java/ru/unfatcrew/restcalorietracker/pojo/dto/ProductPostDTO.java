@@ -1,14 +1,31 @@
 package ru.unfatcrew.restcalorietracker.pojo.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class ProductPostDTO {
+    @NotNull(message = "fatsecretId cannot be null")
+    private Long fatsecretId;
+
+    @NotNull(message = "userLogin cannot be null")
     private String userLogin;
+
+    @NotNull(message = "name cannot be null")
     private String name;
+
+    @NotNull(message = "calories cannot be null")
     private Integer calories;
+
+    @NotNull(message = "proteins cannot be null")
     private Float proteins;
+
+    @NotNull(message = "fats cannot be null")
     private Float fats;
+
+    @NotNull(message = "User login cannot be null")
     private Float carbohydrates;
 
     public ProductPostDTO() {
+        this.fatsecretId = 0L;
         this.userLogin = "";
         this.name = "";
         this.calories = 0;
@@ -17,9 +34,10 @@ public class ProductPostDTO {
         this.carbohydrates = 0.0f;
     }
 
-    public ProductPostDTO(Long id, String userLogin, String name, Integer calories, Float proteins,
+    public ProductPostDTO(Long fatsecretId, String name, Integer calories, Float proteins,
                       Float fats, Float carbohydrates) {
-        this.userLogin = userLogin;
+        this.fatsecretId = fatsecretId;
+        this.userLogin = "";
         this.name = name;
         this.calories = calories;
         this.proteins = proteins;
@@ -27,6 +45,22 @@ public class ProductPostDTO {
         this.carbohydrates = carbohydrates;
     }
     
+    public ProductPostDTO(String userLogin, String name, Integer calories, Float proteins,
+                      Float fats, Float carbohydrates) {
+        this.fatsecretId = 0L;
+        this.userLogin = userLogin;
+        this.name = name;
+        this.calories = calories;
+        this.proteins = proteins;
+        this.fats = fats;
+        this.carbohydrates = carbohydrates;
+    }
+
+    public Long getFatsecretId() {
+        return fatsecretId;
+    }
+
+
     public String getUserLogin() {
         return userLogin;
     }
@@ -73,5 +107,9 @@ public class ProductPostDTO {
 
     public void setCarbohydrates(Float carbohydrates) {
         this.carbohydrates = carbohydrates;
+    }
+
+    public void setFatsecretId(Long fatsecretId) {
+        this.fatsecretId = fatsecretId;
     }
 }
