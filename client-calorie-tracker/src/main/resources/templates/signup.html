@@ -48,10 +48,12 @@
                 <button class="btn" type="button">Sign up</button>
             </form>
             <P>Already have an account? <a href="">Sign in</a></P>
-            <div id="errorBox" class="error-box" th:if="${not #strings.isEmpty(errorMessage)}">
-                <p>Error</p>
-                <span class="sever-error" id="error-message" th:text="${errorMessage}"></span>
-                <button >OK</button>
+            <div id="errorContainer" class="errorContainer" th:if="${not #strings.isEmpty(errorMessage)}">
+                <div id="errorBox" class="error-box">
+                    <p>Error</p>
+                    <span class="sever-error" id="error-message" th:text="${errorMessage}"></span>
+                    <button>OK</button>
+                </div>
             </div>
         </div>
         

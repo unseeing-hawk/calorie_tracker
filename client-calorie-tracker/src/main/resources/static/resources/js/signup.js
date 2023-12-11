@@ -258,7 +258,7 @@ passwordElement.oninvalid  = function(e) {
 }
 
 document.querySelector("#errorBox button").onclick = function hideErrorBox(e) {
-    let errorBox = document.getElementById("errorBox");
+    let errorBox = document.getElementById("errorContainer");
     let errorMessage = document.getElementById("error-message");
     errorBox.style.display = "none";
     errorMessage.textContent = ""
