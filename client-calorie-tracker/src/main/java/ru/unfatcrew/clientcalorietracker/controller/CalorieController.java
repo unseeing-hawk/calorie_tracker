@@ -41,7 +41,7 @@ public class CalorieController {
         User userToAdd = new User(user.getName(), user.getLogin(), encodedPassword, user.getWeight());
         restService.registerNewUser(userToAdd);
 
-        return "signup";
+        return "redirect:/login";
     }
 
     @GetMapping("/")
