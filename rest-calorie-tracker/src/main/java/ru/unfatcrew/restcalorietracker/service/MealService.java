@@ -113,4 +113,26 @@ public class MealService {
     public List<MealTime> getMealTimes() {
         return mealTimeDAO.findAll();
     }
+
+    public MealGetDto getMeals(String dateString, String userLogin) {
+        List<Violation> violationList = new ArrayList<>();
+        User user = userDAO.findByLogin(userLogin);
+        if (user == null) {
+            violationList.add(new Violation("getMeals.userLogin", "not found"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new ResourceNotFoundException(violationList);
+        }
+
+        LocalDate date = LocalDate.parse(dateString, DateFormat);
+        List<Meal> mealList = mealDAO.findByDateAndUserLogin(date, userLogin);
+
+        List<MealGetDataDto> mealGetDataDtoList = new ArrayList<>();
+        for (Meal meal : mealList) {
+            mealGetDataDtoList.add(new MealGetDataDto(meal));
+        }
+
+        return new MealGetDto(mealGetDataDtoList, userLogin, dateString);
+    }
 }
