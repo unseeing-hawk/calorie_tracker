@@ -18,7 +18,7 @@ public class User {
     @NotBlank
     @Size(min = 8, max = 50)
     private String password;
-    @Pattern(regexp = "[0-9]{1,3}(\\.[0-9]{1,2})?")
+    @Pattern(regexp = "[0-9]+(\\.[0-9]{1,2})?")
     private String weight;
 
     public User() {
