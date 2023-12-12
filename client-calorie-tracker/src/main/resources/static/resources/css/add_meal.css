@@ -43,6 +43,7 @@ body {
 }
 
 .data-table-container {
+    position: relative;
     max-width: 1000px;
     margin: auto;
     display: flex;
@@ -51,7 +52,7 @@ body {
     background-color: white;
     border-radius: 10px;
     box-sizing: border-box;
-    padding: 15px 60px 10px 20px;
+    padding: 10px 60px 10px 20px;
 }
 
 .data-table-container h1{
@@ -59,7 +60,8 @@ body {
     font-size: 35px;
 }
 .search-box {
-    width: 100%;
+    position: relative;
+    width: 700px;
     height: 45px;
     background-color: white;
     box-sizing: border-box;
@@ -88,6 +90,22 @@ body {
     outline: none;
 }
 
+#search-btn {
+    position: absolute;
+    width: 110px;
+    height: 30px;
+    right: -150px;
+    background-color: rgb(86, 148, 229);
+    border-radius: 5px;
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+#search-btn:hover {
+    background: rgba(14, 107, 229, 0.85);
+}
+
 .table-container {
     display: flex;
     justify-content: space-between;
@@ -106,7 +124,6 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 
 .tb {
     width: 100%;
@@ -176,7 +193,6 @@ thead {
     top: 0;
     background-color: #fff;
     box-shadow:  0px -1px 5px rgba(0, 0, 0, 0.3);
-
 }
 
 tbody tr:hover {
@@ -194,7 +210,6 @@ tbody input[type='checkbox'] {
     display: flex;
     justify-content: space-around;
     align-items: center;
-
 }
 
 .product-container .button-box button {
@@ -215,7 +230,6 @@ button:hover {
 }
 
  #btn-add-product:hover {
-    
     background: rgba(14, 107, 229, 0.85);
 }
 
@@ -258,15 +272,16 @@ button:hover {
 .data-date-container {
     display: none;
     position: absolute;
-    top: 62px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 65px);
+    left: -1px;
+    width: 1000px;
+    height: 625px;
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(5px);
 }
 
 .data-date-container .block-add-date-time {
+    position: relative;
+    left: 220px;
     max-width: 500px;
     max-height: 530px;
     width: 100%;
@@ -355,4 +370,72 @@ button:hover {
 
 .data-date-container .btn ~ .btn:hover {
     background: rgba(14, 107, 229, 0.85);
+}
+
+@keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+      transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+      transform: translateX(2px);
+    }
+}
+
+#client-error-layout {
+    display: none;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    height: 625px;
+    top: 0px;
+    left: 0px;
+}
+
+#client-error-Box {
+    width: 400px;
+    height: auto;
+    background-color: #fefefe;
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow:  0px -1px 15px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#client-error-Box p {
+    color: #060606;
+    font-size: 30px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+#client-error-message{
+    text-align: left;
+    color: #060606;
+    font-size: 17px;
+}
+
+#client-error-Box button {
+    position: relative;
+    background: rgb(0, 102, 238);
+    width: 50px;
+    height: 25px;
+    font-size: 17px;
+    border-radius: 5px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 15px;
+}
+
+#client-error-Box button:hover{
+    cursor: pointer;
+    background: rgba(0, 102, 238, 0.85);
 }

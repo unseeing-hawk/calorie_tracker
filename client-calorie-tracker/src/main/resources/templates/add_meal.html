@@ -17,7 +17,8 @@
         <h1>Add meal</h1>
         <div class="search-box">
             <i class='bx bx-search-alt-2'></i>
-            <input type="text" placeholder="Search">
+            <input id="search-input" type="text" placeholder="Search">
+            <button id="search-btn" class="btn" type="button">Search</button>
         </div>
         <div class="table-container">
             <div class="product-container">
@@ -26,7 +27,7 @@
                         <p>Products</p>
                     </div>
                     <div class="body-tb body-product-table">
-                        <table>
+                        <table id="products-table">
                             <thead>
                                 <tr>
                                     <th class="namme">Name</th>
@@ -40,7 +41,7 @@
                             <tbody>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Apple Red Delicious</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -50,7 +51,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Apple Gala </td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -60,7 +61,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Apple Granny Smith</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -70,7 +71,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Beef</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -80,7 +81,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Pork</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -90,7 +91,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Lamb</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -100,7 +101,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Product name A</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -110,7 +111,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Product name B</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -120,7 +121,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Product name C</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -130,7 +131,7 @@
                                 </tr>
                                 <tr>
                                     <div>
-                                        <td>Product name</td>
+                                        <td>Product name D</td>
                                         <td>120</td>
                                         <td>50</td>
                                         <td>20</td>
@@ -153,7 +154,7 @@
                         <p>List of chosen product</p>
                     </div>
                     <div class="body-chosen-product-table body-tb">
-                        <table>
+                        <table id="list-of-chosen-product-table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -161,15 +162,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>100g</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -187,7 +180,7 @@
                 </div>
                 <div class="input-box">
                     <label for="">Date</label>
-                    <input type="date" placeholder="" autofocus="true" value="2023-10-31">
+                    <input id="date" type="date" placeholder="" autofocus="true">
                 </div>
                 <div class="input-box">
                     <label for="">Meal time</label>
@@ -201,6 +194,13 @@
                     <button id="btn-back-to-add-meal" class="btn" type="button">Back</button>
                     <button id="btn-add" class="btn" type="button">Add</button>
                 </div>
+            </div>
+        </div>
+        <div id="client-error-layout" class="error-layout">
+            <div id="client-error-Box" class="error-box">
+                <p>Error</p>
+                <span id="client-error-message" class="client-error-message"></span>
+                <button >OK</button>
             </div>
         </div>
     </div>
