@@ -48,6 +48,7 @@ body {
     margin: auto;
     display: flex;
     flex-direction: column;
+    align-items: center;
     height: calc(100vh - 65px);
     background-color: white;
     border-radius: 10px;
@@ -61,13 +62,16 @@ body {
 }
 
 .search-box {
-    width: 100%;
+    position: relative;
+    left: -50px;
+    width: 300px;
     height: 45px;
     background-color: white;
     box-sizing: border-box;
     padding-left: 10px;
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-top: 20px;
     margin-bottom: 30px;
     border-radius: 5px;
@@ -75,7 +79,10 @@ body {
 }
 
 .search-box .bx-search-alt-2 {
-    font-size: 25px;
+    position: absolute;
+    left: 15px;
+    top: 9px;
+    font-size: 22px;
     margin-right: 5px;
 }
 
@@ -83,11 +90,26 @@ body {
     width: 100%;
     height: 100%;
     color: black;
-    padding-left: 10px;
+    padding-left: 40px;
     padding-top: 6px;
     padding-bottom: 6px;
+    padding-right: 20px;
     font-size: 17px;
     outline: none;
+    box-sizing: border-box;
+}
+
+#search-btn {
+    position: absolute;
+    width: 110px;
+    height: 30px;
+    right: -150px;
+    /* right: -100px; */
+    background-color: rgb(86, 148, 229);
+    border-radius: 5px;
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
 }
 
 .table-container {
@@ -165,6 +187,10 @@ thead th:first-child {
     text-align: left;
 }
 
+thead th:nth-child(2) {
+    text-align: left;
+}
+
 tbody td {
     text-align: center;
     font-size: 18px;
@@ -175,6 +201,10 @@ tbody td:focus {
   }
 
 tbody td:first-child {
+    text-align: left;
+}
+
+tbody td:nth-child(2) {
     text-align: left;
 }
 
@@ -190,8 +220,8 @@ tbody tr:hover {
 }
 
 tbody input[type='checkbox'] {
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
 }
 
 .button-box {
@@ -238,4 +268,65 @@ button:hover {
 
 .table-container .button-box #btn-delete:hover {
     background: rgba(255, 0, 0, 0.8);
+}
+
+#meal-time {
+    display: none;
+}
+
+
+.error-layout {
+    display: none;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    height: 625px;
+    top: -150px;
+    left: -5px;
+}
+
+.error-box {
+    width: 400px;
+    height: auto;
+    background-color: #fefefe;
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow:  0px -1px 15px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-box p {
+    color: #060606;
+    font-size: 30px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.error-message{
+    text-align: left;
+    color: #060606;
+    font-size: 17px;
+}
+
+.error-box button {
+    position: relative;
+    background: rgb(0, 102, 238);
+    width: 50px;
+    height: 25px;
+    font-size: 17px;
+    border-radius: 5px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 15px;
+}
+
+.error-box button:hover{
+    cursor: pointer;
+    background: rgba(0, 102, 238, 0.85);
 }

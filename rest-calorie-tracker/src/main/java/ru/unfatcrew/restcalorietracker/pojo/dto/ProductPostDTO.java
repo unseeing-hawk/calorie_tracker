@@ -1,19 +1,22 @@
 package ru.unfatcrew.restcalorietracker.pojo.dto;
 
-import ru.unfatcrew.restcalorietracker.pojo.entity.Product;
+import jakarta.validation.constraints.Min;
 
-public class ProductDTO {
+public class ProductPostDTO {
+    @Min(0)
     private Long id;
+
+    @Min(0)
     private Long fatsecretId;
+
     private String userLogin;
     private String name;
     private Integer calories;
     private Float proteins;
     private Float fats;
     private Float carbohydrates;
-    private Boolean isActive;
 
-    public ProductDTO() {
+    public ProductPostDTO() {
         this.id = 0L;
         this.fatsecretId = 0L;
         this.userLogin = "";
@@ -22,44 +25,38 @@ public class ProductDTO {
         this.proteins = 0.0f;
         this.fats = 0.0f;
         this.carbohydrates = 0.0f;
-        this.isActive = false;
     }
 
-    public ProductDTO(Long id, Long fatsecretId, String userLogin, String name, Integer calories, Float proteins,
-                      Float fats, Float carbohydrates, Boolean isActive) {
-        this.id = id;
+    public ProductPostDTO(Long fatsecretId, String name, Integer calories, Float proteins,
+                      Float fats, Float carbohydrates) {
         this.fatsecretId = fatsecretId;
+        this.userLogin = "";
+        this.name = name;
+        this.calories = calories;
+        this.proteins = proteins;
+        this.fats = fats;
+        this.carbohydrates = carbohydrates;
+    }
+    
+    public ProductPostDTO(String userLogin, String name, Integer calories, Float proteins,
+                      Float fats, Float carbohydrates) {
+        this.fatsecretId = 0L;
         this.userLogin = userLogin;
         this.name = name;
         this.calories = calories;
         this.proteins = proteins;
         this.fats = fats;
         this.carbohydrates = carbohydrates;
-        this.isActive = isActive;
-    }
-
-    public ProductDTO(Product product) {
-        this.id = product.getId();
-        this.fatsecretId = product.getFatsecretId();
-        this.userLogin = product.getUser() != null
-                ? product.getUser().getLogin()
-                : null;
-        this.name = product.getName();
-        this.calories = product.getCalories();
-        this.proteins = product.getProteins();
-        this.fats = product.getFats();
-        this.carbohydrates = product.getCarbohydrates();
-        this.isActive = product.isActive();
     }
 
     public Long getId() {
         return id;
     }
-    
+
     public Long getFatsecretId() {
         return fatsecretId;
     }
-    
+
     public String getUserLogin() {
         return userLogin;
     }
@@ -82,18 +79,6 @@ public class ProductDTO {
     
     public Float getCarbohydrates() {
         return carbohydrates;
-    }
-    
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setFatsecretId(Long fatsecretId) {
-        this.fatsecretId = fatsecretId;
     }
 
     public void setUserLogin(String userLogin) {
@@ -120,7 +105,11 @@ public class ProductDTO {
         this.carbohydrates = carbohydrates;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setFatsecretId(Long fatsecretId) {
+        this.fatsecretId = fatsecretId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

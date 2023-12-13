@@ -61,12 +61,12 @@ function saveChange(e) {
         setAnimationError(weightErrorSpan)
         setAnimationError(weightElement)
     }
-    else if(!(/^[0-9]([0-9]+)?.?([0-9]+)?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?[].?([0-9]+)?$/.test(weightElement.value))) {
         weightErrorSpan.innerHTML  = "Please enter a valid weight."
         setAnimationError(weightErrorSpan)
         setAnimationError(weightElement)
     }
-    else if(!(/^[0-9]([0-9]+)?.?([0-9]{1,2})?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(weightElement.value))) {
         weightErrorSpan.innerHTML  = "Please round to 2 decimal places"
         setAnimationError(weightErrorSpan)
         setAnimationError(weightElement)
