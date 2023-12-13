@@ -84,7 +84,7 @@ function changeLayout(e) {
 function checkWeightColums(element) {
     element.innerText = element.innerText.trim()
     if(element.innerText.length == 0
-        || !(/^[0-9]([0-9]+)?.?([0-9]{1,2})?$/.test(element.innerText))
+        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(element.innerText))
         || parseFloat(element.innerText) == 0
         || parseFloat(element.innerText) > (3.4 ** 38))
     {
