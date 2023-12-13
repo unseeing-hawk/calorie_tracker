@@ -15,27 +15,27 @@
 
     <div class="container">
 
-        <div class="block-setting">
+        <div class="inputs-date-layout">
             <h1>Summary table</h1>
             <p>please, enter the dates</p>
             
             <div class="input-box">
                 <label for="">Start Date</label>
-                <input type="date" placeholder="" autofocus="true" value="2023-10-01">
+                <input id="start-date" type="date" placeholder="" autofocus="true">
             </div>
 
             <div class="input-box">
                 <label for="">End Date</label>
-                <input type="date" placeholder="" autofocus="true" value="2023-10-31">
+                <input id="end-date" type="date" placeholder="" autofocus="true">
             </div>
 
             <div class="btns-box">
                 <button id="btn-back-to-main" class="btn" type="button">Back</button>
-                <button id="btn-add" class="btn" type="button">Get summary table</button>
+                <button id="get-summary-table-btn" class="btn" type="button">Get summary table</button>
             </div>
         </div>
 
-        <div class="product-container">
+        <div class="summary-table-layout">
             <h1>Summary table</h1>
             <div class="tb product-table">
                 <div class="header-tb header-product-table">
@@ -182,7 +182,14 @@
             </div>
             <div class="button-box">
                 <button id="btn-back" type="button">Back</button>
-                <button id="btn-apply-changes" type="button">Get table in .csv</button>
+                <button id="get-table-csv-btn" type="button">Get table in .csv</button>
+            </div>
+        </div>
+        <div id="client-error-layout" class="error-layout">
+            <div id="client-error-box" class="error-box">
+                <p>Error</p>
+                <span id="client-error-message" class="error-message"></span>
+                <button>OK</button>
             </div>
         </div>
     </div>
