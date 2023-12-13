@@ -102,14 +102,14 @@ function checkInputInFloatFormat(element, label, errorSpan) {
         setAnimationError(element)
         setAnimationError(label)
     }
-    else if(!(/^[0-9]([0-9]+)?.?([0-9]+)?$/.test(element.value))) {
+    else if(!(/^[0-9]([0-9]+)?[.]?([0-9]+)?$/.test(element.value))) {
         label.style.color = '#C9544D'
         errorSpan.innerHTML  = `Please enter a valid ${label.innerText.toLowerCase()}`
         setAnimationError(errorSpan)
         setAnimationError(element)
         setAnimationError(label)
     }
-    else if(!(/^[0-9]([0-9]+)?.?([0-9]{1,2})?$/.test(element.value))) {
+    else if(!(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(element.value))) {
         label.style.color = '#C9544D'
         errorSpan.innerHTML  = "Please round to 2 decimal places"
         setAnimationError(errorSpan)

@@ -81,7 +81,7 @@ function registerAccount(e) {
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
     }
-    else if(!(/^[0-9]([0-9]+)?.?([0-9]+)?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?[.]?([0-9]+)?$/.test(weightElement.value))) {
         weightErrorSpan.style.display = 'block'
         weightLabel.style.color = '#C9544D'
         weightErrorSpan.innerHTML  = "Please enter a valid weight."
@@ -89,7 +89,7 @@ function registerAccount(e) {
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
     }
-    else if(!(/^[0-9]([0-9]+)?.?([0-9]{1,2})?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(weightElement.value))) {
         weightErrorSpan.style.display = 'block'
         weightLabel.style.color = '#C9544D'
         weightErrorSpan.innerHTML  = "Please round to 2 decimal places"
