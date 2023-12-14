@@ -23,9 +23,7 @@ import ru.unfatcrew.restcalorietracker.validation.DateValidationUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static ru.unfatcrew.restcalorietracker.validation.DateValidationUtils.DateFormat;
 
@@ -116,9 +114,9 @@ public class MealService {
     public ChangeMealsResponse changeMeals(@Valid ChangeMealsRequest changeMealsRequest) {
         List<Violation> violationList = new ArrayList<>();
         List<MealPutDataDto> mealsForChange = changeMealsRequest.getMealsForChange();
-        List<Long> mealsForDeletion = changeMealsRequest.getMealIdsForDeletion();
+        List<Long> mealIdsForDeletion = changeMealsRequest.getMealIdsForDeletion();
 
-        if (mealsForChange.isEmpty() && mealsForDeletion.isEmpty()) {
+        if (mealsForChange.isEmpty() && mealIdsForDeletion.isEmpty()) {
             violationList.add(new Violation("changeMeals.changeMealsRequest.mealsForChange-mealIdsForDeletion",
                     "can not both be empty"));
         }
@@ -127,7 +125,125 @@ public class MealService {
             throw new IllegalRequestArgumentException(violationList);
         }
 
-        return new ChangeMealsResponse();
+        String userLogin = changeMealsRequest.getUserLogin();
+        if (userDAO.findByLogin(userLogin) == null) {
+            violationList.add(new Violation("changeMeals.changeMealsRequest.userLogin",
+                    "not found"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new ResourceNotFoundException(violationList);
+        }
+
+        HashMap<Long, Meal> mealsForDeletionHashMap = new HashMap<>();
+        for (int i = 0; i < mealIdsForDeletion.size(); i++) {
+            if (mealsForDeletionHashMap.containsKey(mealIdsForDeletion.get(i))) {
+                violationList.add(new Violation("changeMeals.changeMealsRequest.mealIdsForDeletion["
+                        + Integer.toString(i)
+                        + "].<list element>"
+                        , "already exists in mealIdsForDeletion"));
+            }
+
+            Optional<Meal> optionalMeal = mealDAO.findById(mealIdsForDeletion.get(i));
+            Meal meal = null;
+            if (optionalMeal.isEmpty()) {
+                violationList.add(new Violation("changeMeals.changeMealsRequest.mealIdsForDeletion["
+                        + Integer.toString(i)
+                        + "].<list element>"
+                        , "not found"));
+            } else {
+                meal = optionalMeal.get();
+            }
+
+            if (meal != null
+                    && !meal.getUser().getLogin().equals(userLogin)) {
+                violationList.add(new Violation("changeMeals.changeMealsRequest.mealIdsForDeletion["
+                        + Integer.toString(i)
+                        + "].<list element>-userLogin"
+                        , "not connected"));
+            }
+
+            if (meal != null) {
+                mealsForDeletionHashMap.put(meal.getId(), meal);
+            }
+        }
+
+        HashMap<Long, Meal> mealsForChangeHashMap = new HashMap<>();
+        for (int i = 0; i < mealsForChange.size(); i++) {
+            MealPutDataDto mealForChange = mealsForChange.get(i);
+            long id = mealForChange.getId();
+            if (mealsForChangeHashMap.containsKey(id)) {
+                violationList.add(new Violation("changeMeals.changeMealsRequest.mealsForChange["
+                        + Integer.toString(i)
+                        + "].id"
+                        , "already exists in mealsForChange"));
+            }
+
+            if (mealsForDeletionHashMap.containsKey(id)) {
+                violationList.add(new Violation("changeMeals.changeMealsRequest.mealsForChange["
+                        + Integer.toString(i)
+                        + "].id"
+                        , "already exists in mealIdsForDeletion"));
+            }
+
+            Optional<Meal> optionalMeal = mealDAO.findById(id);
+            Meal meal = null;
+            if (optionalMeal.isEmpty()) {
+                violationList.add(new Violation("changeMeals.changeMealsRequest.mealsForChange["
+                        + Integer.toString(i)
+                        + "].id"
+                        , "not found"));
+            } else {
+                meal = optionalMeal.get();
+            }
+
+            if (meal != null
+                    && !meal.getUser().getLogin().equals(userLogin)) {
+                violationList.add(new Violation("changeMeals.changeMealsRequest.mealsForChange["
+                        + Integer.toString(i)
+                        + "].id-userLogin"
+                        , "not connected"));
+            }
+
+            String mealTimeString = mealForChange.getMealTime();
+            MealTime mealTime = mealTimeDAO.findByName(mealTimeString);
+            if (mealTime == null) {
+                violationList.add(new Violation("changeMeals.changeMealsRequest.mealsForChange["
+                        + Integer.toString(i)
+                        + "].mealTime"
+                        , "not found"));
+            }
+
+            if (meal != null
+                    && mealTime != null
+                    && !mealsForChangeHashMap.containsKey(id)
+                    && !mealsForDeletionHashMap.containsKey(id)) {
+                meal.setWeight(mealForChange.getWeight());
+                meal.setMealTime(mealTime);
+                mealsForChangeHashMap.put(id, meal);
+            }
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new ResourceNotFoundException(violationList);
+        }
+
+        List<MealGetDataDto> mealsForChangeGetDataDtoList = new ArrayList<>();
+        for (Map.Entry<Long, Meal> entry : mealsForChangeHashMap.entrySet()) {
+            Meal meal = entry.getValue();
+            mealDAO.save(meal);
+            mealsForChangeGetDataDtoList.add(new MealGetDataDto(meal));
+        }
+
+        List<MealGetDataDto> mealsForDeletionGetDataDtoList = new ArrayList<>();
+        for (Map.Entry<Long, Meal> entry : mealsForDeletionHashMap.entrySet()) {
+            Meal meal = entry.getValue();
+            mealDAO.delete(meal);
+            mealsForDeletionGetDataDtoList.add(new MealGetDataDto(meal));
+        }
+
+        return new ChangeMealsResponse(new MealGetDto(mealsForChangeGetDataDtoList, userLogin, null),
+                new MealGetDto(mealsForDeletionGetDataDtoList, userLogin, null));
     }
 
     public List<MealTime> getMealTimes() {
