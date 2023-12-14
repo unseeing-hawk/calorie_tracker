@@ -9,14 +9,14 @@ import ru.unfatcrew.restcalorietracker.dao.MealDAO;
 import ru.unfatcrew.restcalorietracker.dao.MealTimeDAO;
 import ru.unfatcrew.restcalorietracker.dao.ProductDAO;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDataDto;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDto;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealPostDataDto;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealPostDto;
+import ru.unfatcrew.restcalorietracker.pojo.dto.*;
 import ru.unfatcrew.restcalorietracker.pojo.entity.Meal;
 import ru.unfatcrew.restcalorietracker.pojo.entity.MealTime;
 import ru.unfatcrew.restcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.restcalorietracker.pojo.entity.User;
+import ru.unfatcrew.restcalorietracker.pojo.request.ChangeMealsRequest;
+import ru.unfatcrew.restcalorietracker.pojo.response.ChangeMealsResponse;
+import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.IllegalRequestArgumentException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.validation.Violation;
 import ru.unfatcrew.restcalorietracker.validation.DateValidationUtils;
@@ -111,6 +111,23 @@ public class MealService {
         }
 
         return new MealGetDto(mealGetDataList, user.getLogin(), date.toString());
+    }
+
+    public ChangeMealsResponse changeMeals(@Valid ChangeMealsRequest changeMealsRequest) {
+        List<Violation> violationList = new ArrayList<>();
+        List<MealPutDataDto> mealsForChange = changeMealsRequest.getMealsForChange();
+        List<Long> mealsForDeletion = changeMealsRequest.getMealIdsForDeletion();
+
+        if (mealsForChange.isEmpty() && mealsForDeletion.isEmpty()) {
+            violationList.add(new Violation("changeMeals.changeMealsRequest.mealsForChange-mealIdsForDeletion",
+                    "can not both be empty"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new IllegalRequestArgumentException(violationList);
+        }
+
+        return new ChangeMealsResponse();
     }
 
     public List<MealTime> getMealTimes() {

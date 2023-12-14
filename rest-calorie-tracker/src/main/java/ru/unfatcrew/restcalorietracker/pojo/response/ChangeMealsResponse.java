@@ -1,38 +1,37 @@
 package ru.unfatcrew.restcalorietracker.pojo.response;
 
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealDTO;
+import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ChangeMealsResponse {
-    private List<MealDTO> mealsForChange;
-    private List<MealDTO> mealsForDeletion;
+    private MealGetDto mealsForChange;
+    private MealGetDto mealsForDeletion;
 
     public ChangeMealsResponse() {
-        this.mealsForChange = new ArrayList<>();
-        this.mealsForDeletion = new ArrayList<>();
+
     }
 
-    public ChangeMealsResponse(List<MealDTO> mealsForChange, List<MealDTO> mealsForDeletion) {
+    public ChangeMealsResponse(MealGetDto mealsForChange, MealGetDto mealsForDeletion) {
         this.mealsForChange = mealsForChange;
         this.mealsForDeletion = mealsForDeletion;
     }
 
-    public List<MealDTO> getMealsForChange() {
+    public MealGetDto getMealsForChange() {
         return mealsForChange;
     }
 
-    public List<MealDTO> getMealsForDeletion() {
-        return mealsForDeletion;
-    }
-
-    public void setMealsForChange(List<MealDTO> mealsForChange) {
+    public void setMealsForChange(MealGetDto mealsForChange) {
         this.mealsForChange = mealsForChange;
     }
 
-    public void setMealsForDeletion(List<MealDTO> mealsForDeletion) {
+    public MealGetDto getMealsForDeletion() {
+        return mealsForDeletion;
+    }
+
+    public void setMealsForDeletion(MealGetDto mealsForDeletion) {
         this.mealsForDeletion = mealsForDeletion;
     }
 }

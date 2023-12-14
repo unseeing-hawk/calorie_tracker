@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDto;
 import ru.unfatcrew.restcalorietracker.pojo.dto.MealPostDto;
+import ru.unfatcrew.restcalorietracker.pojo.request.ChangeMealsRequest;
+import ru.unfatcrew.restcalorietracker.pojo.response.ChangeMealsResponse;
 import ru.unfatcrew.restcalorietracker.service.MealService;
 import ru.unfatcrew.restcalorietracker.validation.annotation.LessThan10YearOldDate;
 
@@ -33,6 +35,11 @@ public class MealRestController {
     @PostMapping
     public MealGetDto addMeals(@RequestBody MealPostDto mealPostDto) {
         return mealService.addMeals(mealPostDto);
+    }
+
+    @PutMapping
+    public ChangeMealsResponse changeMeals(@RequestBody ChangeMealsRequest changeMealsRequest) {
+        return mealService.changeMeals(changeMealsRequest);
     }
 
     @GetMapping("/mealtimes")
