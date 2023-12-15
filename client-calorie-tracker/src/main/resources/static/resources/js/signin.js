@@ -27,9 +27,9 @@ function registerAccount(e) {
         setAnimationError(usernameElement)
         setAnimationError(usernamErrorLabel)
     }
-    else if(usernameElement.value.length < 8){
+    else if(usernameElement.value.length < 8 || usernameElement.value.length > 30){
         usernamErrorLabel.style.display = 'block'
-        usernamErrorLabel.innerHTML = "Username must contain 8 characters or more"
+        usernamErrorLabel.innerHTML = "Username must contain from 8 to 30 characters"
         setAnimationError(usernameElement)
         setAnimationError(usernamErrorLabel)
     }
@@ -49,9 +49,9 @@ function registerAccount(e) {
         setAnimationError(passwordElement)
         setAnimationError(passwordErrorLabel)
     }
-    else if(passwordElement.value.length < 8){
+    else if(passwordElement.value.length < 8 || passwordElement.value.length > 50){
         passwordErrorLabel.style.display = 'block'
-        passwordErrorLabel.innerHTML = "Password must contain 8 characters or more"
+        passwordErrorLabel.innerHTML = "Password must contain from 8 to 50 characters"
         setAnimationError(passwordElement)
         setAnimationError(passwordErrorLabel)
     }
