@@ -39,6 +39,12 @@ body {
     cursor: pointer;
 }
 
+.main-block-header a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .container {
     /* position: relative; */
     max-width: 1000px;
@@ -156,8 +162,9 @@ a {
     font-weight: 500;
 }
 
-a:hover {
+.block-signup a:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 @keyframes shake {
