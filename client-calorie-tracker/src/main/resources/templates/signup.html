@@ -11,7 +11,7 @@
 <body>
     <header class="header">
         <div class="main-block-header">
-            <button class="name-webapp">nameWebApp</button>
+            <a th:href="@{/}" class="name-webapp">nameWebApp</a>
         </div>
     </header>
 
@@ -47,7 +47,7 @@
     
                 <button class="btn" type="button">Sign up</button>
             </form>
-            <P>Already have an account? <a href="">Sign in</a></P>
+            <P>Already have an account? <a th:href="@{/login}">Sign in</a></P>
             <div id="errorContainer" class="errorContainer" th:if="${not #strings.isEmpty(errorMessage)}">
                 <div id="errorBox" class="error-box">
                     <p>Error</p>
