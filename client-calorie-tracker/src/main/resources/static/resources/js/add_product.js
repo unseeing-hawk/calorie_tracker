@@ -24,6 +24,13 @@ function addProduct() {
         setAnimationError(nameElement)
         nameErrorSpan.innerHTML = ''
     }
+    else if(nameElement.value.length > 100) {
+        nameErrorSpan.innerHTML  = "Name must be limited to 100 characters"
+        nameLabel.style.color = '#C9544D'
+        setAnimationError(nameLabel)
+        setAnimationError(nameErrorSpan)
+        setAnimationError(nameElement)
+    }
     else {
         nameElement.style.color = '#0b0202c3'
         nameLabel.style.color = 'rgba(54, 47, 47, 1)'

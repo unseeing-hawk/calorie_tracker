@@ -124,6 +124,7 @@ body {
 }
 
 .input-box span {
+    display: block;
     font-size: 12px;
     max-width: 370px;
     width: 100%;
