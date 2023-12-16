@@ -10,11 +10,14 @@ var usernameElement = document.querySelector('#username')
 var passwordElement = document.querySelector('#password')
 
 var loginButton = document.querySelector('button[class="btn"]')
-loginButton.onclick = registerAccount
-function registerAccount(e) {
+loginButton.onclick = loginAccount
+function loginAccount(e) {
+    let isCorrectFormatUsername = false
+    let isCorrectFormatPassword = false
+    
     let usernamErrorLabel = document.querySelector('#username-error-label')
     let passwordErrorLabel = document.querySelector("#password-error-label")
-    
+
     // input username
     if(usernameElement.value.length === 0) {
         usernamErrorLabel.style.display = 'none'
@@ -36,6 +39,7 @@ function registerAccount(e) {
     else {
         usernameElement.style.borderColor  = "rgba(54, 47, 47, 0.4)"
         usernamErrorLabel.style.display = 'none'
+        isCorrectFormatUsername = true
     }
 
     // input password
@@ -58,12 +62,17 @@ function registerAccount(e) {
     else {
         passwordErrorLabel.style.display = 'none'
         passwordElement.style.borderColor  = "rgba(54, 47, 47, 0.4)";
+        isCorrectFormatPassword = true
+    }
+
+    if(isCorrectFormatUsername && isCorrectFormatPassword ){
+        document.getElementById('loginForm').submit();
     }
 }
 
 usernameElement.addEventListener('keypress', function(event) {
     if(event.code === "Enter") {
-        registerAccount()
+        loginAccount()
     }
     if(event.target.value.length > 29) {
         event.preventDefault()
@@ -72,7 +81,7 @@ usernameElement.addEventListener('keypress', function(event) {
 
 passwordElement.addEventListener('keypress', function(event) {
     if(event.code === "Enter") {
-        registerAccount()
+        loginAccount()
     }
     if(event.target.value.length > 49) {
         event.preventDefault()
@@ -89,4 +98,11 @@ function changeTypePassword (){
     password.type = password.type === "text" ? "password" : "text"
     let inputPwd = document.querySelector('.input-password #password')
     inputPwd.focus()
+}
+
+document.querySelector("#sever-error-box button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("sever-error-container");
+    let errorMessage = document.getElementById("sever-error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
 }
