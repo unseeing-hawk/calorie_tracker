@@ -107,7 +107,7 @@ document.querySelector('#btn-delete').onclick = function(e) {
 
 function checkNameColumn(nameElement) {
     nameElement.innerText = nameElement.innerText.trim()
-    if(nameElement.innerText.length == 0) {
+    if(nameElement.innerText.length == 0 || nameElement.innerText.length > 100) {
         nameElement.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
         setAnimationError(nameElement.parentNode)
         return false
