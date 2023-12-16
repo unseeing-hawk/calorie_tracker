@@ -29,8 +29,12 @@ function saveChange(e) {
     else if(!(/^[A-Z][a-zA-Z]*(\s*\s[A-Z][a-zA-Z]*)*$/.test(nameElement.value))){
         nameErrorSpan.style.display = 'block'
         nameErrorSpan.innerHTML  = "Format error! The first letters of the name must be capitalized."
-        nameLabel.style.color = '#C9544D'
-        setAnimationError(nameLabel)
+        setAnimationError(nameErrorSpan)
+        setAnimationError(nameElement)
+    }
+    else if(nameElement.value.length > 100) {
+        nameErrorSpan.style.display = 'block'
+        nameErrorSpan.innerHTML  = "Name must be limited to 100 characters"
         setAnimationError(nameErrorSpan)
         setAnimationError(nameElement)
     }
@@ -61,7 +65,7 @@ function saveChange(e) {
         setAnimationError(weightErrorSpan)
         setAnimationError(weightElement)
     }
-    else if(!(/^[0-9]([0-9]+)?[].?([0-9]+)?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?[.]?([0-9]+)?$/.test(weightElement.value))) {
         weightErrorSpan.innerHTML  = "Please enter a valid weight."
         setAnimationError(weightErrorSpan)
         setAnimationError(weightElement)
@@ -85,6 +89,7 @@ function saveChange(e) {
     else {
         weightElement.style.borderColor = "rgba(54, 47, 47, 0.4)"
         weightErrorSpan.innerHTML = ''
+        weightElement.value = parseFloat(weightElement.value).toString()
     }
 
     // input password
@@ -98,8 +103,8 @@ function saveChange(e) {
         setAnimationError(passwordErrorSpan)
         setAnimationError(passwordElement)
     }
-    else if(passwordElement.value.length < 8) {
-        passwordErrorSpan.innerHTML  = "Password must contain 8 characters or more"
+    else if(passwordElement.value.length < 8 || passwordElement.value.length > 50) {
+        passwordErrorSpan.innerHTML  = "Password must contain from 8 to 50 characters"
         setAnimationError(passwordErrorSpan)
         setAnimationError(passwordElement)
     }
