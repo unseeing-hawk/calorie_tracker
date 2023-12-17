@@ -9,20 +9,16 @@ import ru.unfatcrew.restcalorietracker.dao.MealDAO;
 import ru.unfatcrew.restcalorietracker.dao.MealTimeDAO;
 import ru.unfatcrew.restcalorietracker.dao.ProductDAO;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDataDto;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDto;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealPostDataDto;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealPostDto;
+import ru.unfatcrew.restcalorietracker.pojo.dto.*;
 import ru.unfatcrew.restcalorietracker.pojo.entity.Meal;
 import ru.unfatcrew.restcalorietracker.pojo.entity.MealTime;
 import ru.unfatcrew.restcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.restcalorietracker.pojo.entity.User;
+import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.IllegalRequestArgumentException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.validation.Violation;
-import ru.unfatcrew.restcalorietracker.validation.DateValidationUtils;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -137,5 +133,30 @@ public class MealService {
         }
 
         return new MealGetDto(mealGetDataDtoList, userLogin, dateString);
+    }
+
+    public List<DaySummaryDTO> getSummary(String startDateString, String endDateString, String userLogin) {
+        List<Violation> violationList = new ArrayList<>();
+        LocalDate startDate = LocalDate.parse(startDateString, DateFormat);
+        LocalDate endDate = LocalDate.parse(endDateString, DateFormat);
+
+        if (endDate.isBefore(startDate)) {
+            violationList.add(new Violation("getSummary.startDate-endDate", "incorrect chronology"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new IllegalRequestArgumentException(violationList);
+        }
+
+        User user = userDAO.findByLogin(userLogin);
+        if (user == null) {
+            violationList.add(new Violation("getSummary.userLogin", "not found"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new ResourceNotFoundException(violationList);
+        }
+
+        return mealDAO.findSummary(startDate, endDate, userLogin);
     }
 }
