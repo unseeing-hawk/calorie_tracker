@@ -11,13 +11,19 @@ public class HttpRequestInitializer implements ClientHttpRequestInitializer {
     @Override
     public void initialize(ClientHttpRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return;
+        }
+
         String username = auth.getPrincipal().toString();
         String password = auth.getCredentials().toString();
 
-        if (!password.isEmpty()) {
-            HttpHeaders headers = request.getHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBasicAuth(username, password);
+        if (password.isEmpty()) {
+            return;
         }
+
+        HttpHeaders headers = request.getHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBasicAuth(username, password);
     }
 }
