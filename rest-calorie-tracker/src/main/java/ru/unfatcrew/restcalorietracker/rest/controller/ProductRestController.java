@@ -69,6 +69,6 @@ public class ProductRestController {
                                                 @Size(min=1, max=100)
                                                 @Valid
                                                 String pattern) {
-        return productService.getUserProducts(limit, offset, userLogin);
+        return productService.searchProducts(limit, offset, userLogin, pattern);
     }
 }

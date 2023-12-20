@@ -112,6 +112,35 @@ public class ProductService {
                                                 @Valid int offset, 
                                                 @Valid String userLogin,
                                                 @Valid String pattern) {
+        List<Violation> violationList = new ArrayList<>();
         
+        User user = userDAO.findByLogin(userLogin);
+        if (user == null) {
+            violationList.add(new Violation("getUserProducts.productPostDTO.user-login",
+                    "not found"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new IllegalRequestArgumentException(violationList);
+        }
+
+        Pageable pageable = PageRequest.of(offset, limit);
+        Page<Product> productsPage = productDAO.findByUserLoginAndNameContainingIgnoreCaseAndIsActiveTrue(userLogin, pattern, pageable);
+        
+        List<ProductPostDTO> productPostDTOList = productsPage.getContent().stream()
+        .map(product -> {
+            ProductPostDTO productPostDTO = new ProductPostDTO();
+            productPostDTO.setId(product.getId());
+            productPostDTO.setUserLogin(userLogin);
+            productPostDTO.setName(product.getName());
+            productPostDTO.setCalories(product.getCalories());
+            productPostDTO.setProteins(product.getProteins());
+            productPostDTO.setFats(product.getFats());
+            productPostDTO.setCarbohydrates(product.getCarbohydrates());
+            return productPostDTO;
+        })
+        .collect(Collectors.toList());
+
+        return productPostDTOList;
     }
 }
