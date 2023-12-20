@@ -39,8 +39,14 @@ body {
     cursor: pointer;
 }
 
+.main-block-header a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .container {
-    position: unset;
+    /* position: relative; */
     max-width: 1000px;
     margin: auto;
     display: flex;
@@ -50,6 +56,7 @@ body {
 }
 
 .block-signup {
+    position: relative;
     max-width: 500px;
     max-height: 600px;
     width: 100%;
@@ -122,7 +129,7 @@ p {
     color: rgba(54, 47, 47, 1);
 }
 
-.block-signup span {
+.block-signup .client-error {
     display: none;
     font-size: 12px;
     max-width: 370px;
@@ -155,8 +162,9 @@ a {
     font-weight: 500;
 }
 
-a:hover {
+.block-signup a:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 @keyframes shake {
@@ -169,4 +177,60 @@ a:hover {
     20%, 40%, 60%, 80% {
       transform: translateX(2px);
     }
+}
+
+#errorContainer {
+    display: flex;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 600px;
+    top: 0px;
+    left: 0px;
+}
+
+#errorBox {
+    width: 400px;
+    height: auto;
+    background-color: #fefefe;
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow:  0px -1px 15px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#errorBox p {
+    color: #060606;
+    font-size: 30px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+#error-message{
+    text-align: left;
+    color: #060606;
+    font-size: 17px;
+}
+
+#errorBox button {
+    position: relative;
+    background: rgb(0, 102, 238);
+    width: 50px;
+    height: 25px;
+    font-size: 17px;
+    border-radius: 5px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 15px;
+}
+
+#errorBox button:hover{
+    cursor: pointer;
+    background: rgba(0, 102, 238, 0.85);
 }

@@ -46,6 +46,14 @@ function registerAccount(e) {
         setAnimationError(nameErrorSpan)
         setAnimationError(nameElement)
     }
+    else if(nameElement.value.length > 100) {
+        nameErrorSpan.style.display = 'block'
+        nameErrorSpan.innerHTML  = "Name must be limited to 100 characters"
+        nameLabel.style.color = '#C9544D'
+        setAnimationError(nameLabel)
+        setAnimationError(nameErrorSpan)
+        setAnimationError(nameElement)
+    }
     else {
         nameElement.style.color = '#0b0202c3'
         nameLabel.style.color = 'rgba(54, 47, 47, 1)'
@@ -81,7 +89,7 @@ function registerAccount(e) {
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
     }
-    else if(!(/^[0-9]([0-9]+)?.?([0-9]+)?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?[.]?([0-9]+)?$/.test(weightElement.value))) {
         weightErrorSpan.style.display = 'block'
         weightLabel.style.color = '#C9544D'
         weightErrorSpan.innerHTML  = "Please enter a valid weight."
@@ -89,7 +97,7 @@ function registerAccount(e) {
         setAnimationError(weightElement)
         setAnimationError(weightLabel)
     }
-    else if(!(/^[0-9]([0-9]+)?.?([0-9]{1,2})?$/.test(weightElement.value))) {
+    else if(!(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(weightElement.value))) {
         weightErrorSpan.style.display = 'block'
         weightLabel.style.color = '#C9544D'
         weightErrorSpan.innerHTML  = "Please round to 2 decimal places"
@@ -137,10 +145,10 @@ function registerAccount(e) {
         setAnimationError(usernameElement)
         setAnimationError(usernameLabel)
     }
-    else if(usernameElement.value.length < 8){
+    else if(usernameElement.value.length < 8 || usernameElement.value.length > 30){
         usernameErrorSpan.style.display = 'block'
         usernameLabel.style.color = '#C9544D'
-        usernameErrorSpan.innerHTML  = "Username must contain 8 characters or more"
+        usernameErrorSpan.innerHTML  = "Username must contain from 8 to 30 characters"
         setAnimationError(usernameErrorSpan)
         setAnimationError(usernameElement)
         setAnimationError(usernameLabel)
@@ -169,10 +177,10 @@ function registerAccount(e) {
         setAnimationError(passwordElement)
         setAnimationError(passwordLabel)
     }
-    else if(passwordElement.value.length < 8) {
+    else if(passwordElement.value.length < 8 || passwordElement.value.length > 50) {
         passwordErrorSpan.style.display = 'block'
         passwordLabel.style.color = '#C9544D'
-        passwordErrorSpan.innerHTML  = "Password must contain 8 characters or more"
+        passwordErrorSpan.innerHTML  = "Password must contain from 8 to 50 characters"
         setAnimationError(passwordErrorSpan)
         setAnimationError(passwordElement)
         setAnimationError(passwordLabel)
@@ -255,4 +263,11 @@ passwordElement.addEventListener('keypress', function(e) {
 
 passwordElement.oninvalid  = function(e) {
     e.preventDefault()
+}
+
+document.querySelector("#errorBox button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("errorContainer");
+    let errorMessage = document.getElementById("error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
 }

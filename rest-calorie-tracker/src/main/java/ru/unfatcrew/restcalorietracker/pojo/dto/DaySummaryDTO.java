@@ -1,4 +1,4 @@
-package ru.unfatcrew.restcalorietracker.dto;
+package ru.unfatcrew.restcalorietracker.pojo.dto;
 
 import java.time.LocalDate;
 

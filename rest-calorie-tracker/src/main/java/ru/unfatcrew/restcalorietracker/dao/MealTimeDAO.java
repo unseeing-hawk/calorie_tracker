@@ -6,4 +6,6 @@ import ru.unfatcrew.restcalorietracker.pojo.entity.MealTime;
 
 @Repository
 public interface MealTimeDAO extends JpaRepository<MealTime, Long> {
+
+    MealTime findByName(String name);
 }
