@@ -15,20 +15,16 @@
                 <button class="name-webapp">nameWebApp</button>
             </div>
             <div class="btn-box">
-
-                <div class="profiles-setting-box">
+                <div id="setting-box" class="profiles-setting-box">
                     <i class='bx bx-cog' style='color:#0066EE'></i>
                     <a href="">Profile settings</a>
                 </div>
-
-                <div class="signout-box">
+                <form id="signout-box" class="signout-box" th:action="@{/logout}" method="post">
                     <i class='bx bx-log-out bx-rotate-180' style='color:#0066EE'></i>
-                    <a th:href="@{/logout}">Sign out</a>
-                </div>
-
+                    <button type="submit">Sign out</button>
+                </form>
             </div>
         </div>
-        
     </header>
     <div class="container">
         <div class="buttons-box">
@@ -58,9 +54,14 @@
                 <p>Track meals, learn about your habits, and reach your goals with us.</p>
             </div>
         </div>
+        <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
+            <div id="sever-error-box" class="error-box">
+                <p>Error</p>
+                <span class="error-message" id="sever-error-message" th:text="${errorMessage}"></span>
+                <button>OK</button>
+            </div>
+        </div>
     </div>
-    
     <script src="/resources/js/main.js"></script>
-
 </body>
 </html>
