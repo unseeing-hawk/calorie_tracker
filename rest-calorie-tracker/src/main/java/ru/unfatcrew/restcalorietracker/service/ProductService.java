@@ -108,4 +108,10 @@ public class ProductService {
         return productPostDTOList;
     }
 
+    public List<ProductPostDTO> searchProducts(@Valid int limit, 
+                                                @Valid int offset, 
+                                                @Valid String userLogin,
+                                                @Valid String pattern) {
+        
+    }
 }
