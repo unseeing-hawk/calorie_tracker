@@ -38,7 +38,14 @@ body {
     color: #0066EE;
 }
 
-.name-webapp:hover {
+a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a:hover {
     cursor: pointer;
 }
 
@@ -212,7 +219,7 @@ tbody input[type='checkbox'] {
     align-items: center;
 }
 
-.product-container .button-box button {
+.product-container .button-box .btn {
     height: 40%;
     width: 20%;
     border-radius: 5px;

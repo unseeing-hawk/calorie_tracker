@@ -10,7 +10,7 @@
 <body>
     <header class="header">
         <div class="main-block-header">
-            <button class="name-webapp">nameWebApp</button>
+            <a th:href="@{/}" class="name-webapp">nameWebApp</a>
         </div>
     </header>
     <div class="data-table-container">
@@ -144,8 +144,8 @@
                     </div>
                 </div>
                 <div class="button-box">
-                    <button id="btn-back-to-main" type="button">Back</button>
-                    <button id="btn-add-product" type="button">Add product</button>
+                    <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
+                    <button id="btn-add-product" type="button" class="btn">Add product</button>
                 </div>
             </div>
             <div class="chosen-product-container">
