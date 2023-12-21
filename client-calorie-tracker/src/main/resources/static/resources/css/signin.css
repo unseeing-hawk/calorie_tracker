@@ -114,7 +114,6 @@ p {
 }
 
 .block-signin label {
-    display: none;
     font-size: 14px;
     max-width: 325px;
     width: 100%;

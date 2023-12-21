@@ -24,15 +24,15 @@
                 <p>Sign in to your account to continue</p>
                 <form id="loginForm" th:action="@{/login}" method="post">
                     <div class="input-box">
-                        <input id="username" name="username" type="text" placeholder="Username"  class="form-control" autofocus="true" th:value="${username}">
+                        <input id="username" name="username" type="text" placeholder="Username"  class="form-control" autofocus="true">
                         <Label id="username-error-label"></Label>
                         <i class='bx bxs-user'></i>
                     </div>
                     
                     <div class="input-box input-password">
-                        <input id="password" name="password" type="password" class="form-control" placeholder="Password" th:value="${password}">
+                        <input id="password" name="password" type="password" class="form-control" placeholder="Password">
                         <i class='bx bxs-lock-alt'></i>
-                        <Label id="password-error-label">Incorrect username or password!</Label>
+                        <Label id="password-error-label" th:text="${loginError}"></Label>
                         <i class='bx bx-show showhide'></i>
                         <i class='bx bx-hide showhide'></i>
                     </div>
@@ -45,7 +45,7 @@
                 <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
                     <div id="sever-error-box" class="error-box">
                         <p>Error</p>
-                        <span class="error-message" id="sever-error-message" th:text="${errorMessage}"></span>
+                        <span class="error-message" id="sever-error-message" th:text="${loginError}"></span>
                         <button>OK</button>
                     </div>
                 </div>
