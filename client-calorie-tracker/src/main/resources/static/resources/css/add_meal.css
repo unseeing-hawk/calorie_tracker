@@ -44,11 +44,11 @@ body {
 
 .data-table-container {
     position: relative;
-    max-width: 1000px;
+    width: 1000px;
     margin: auto;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 65px);
+    height: 640px;
     background-color: white;
     border-radius: 10px;
     box-sizing: border-box;
@@ -384,8 +384,7 @@ button:hover {
     }
 }
 
-#client-error-layout {
-    display: none;
+.error-container {
     position: absolute;
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(2px);
@@ -397,7 +396,15 @@ button:hover {
     left: 0px;
 }
 
-#client-error-Box {
+#client-error-container {
+    display: none;
+}
+
+#sever-error-container {
+    display: flex;
+}
+
+.error-box {
     width: 400px;
     height: auto;
     background-color: #fefefe;
@@ -410,20 +417,20 @@ button:hover {
     justify-content: center;
 }
 
-#client-error-Box p {
+.error-box p {
     color: #060606;
     font-size: 30px;
     margin-bottom: 10px;
     font-weight: 600;
 }
 
-#client-error-message{
+.error-message{
     text-align: left;
     color: #060606;
     font-size: 17px;
 }
 
-#client-error-Box button {
+.error-box button {
     position: relative;
     background: rgb(0, 102, 238);
     width: 50px;
@@ -435,7 +442,7 @@ button:hover {
     margin-top: 15px;
 }
 
-#client-error-Box button:hover{
+.error-box button:hover{
     cursor: pointer;
     background: rgba(0, 102, 238, 0.85);
 }
