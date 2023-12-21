@@ -19,9 +19,11 @@ import ru.unfatcrew.restcalorietracker.pojo.response.ChangeMealsResponse;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.IllegalRequestArgumentException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.validation.Violation;
-import ru.unfatcrew.restcalorietracker.validation.DateValidationUtils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -270,5 +272,30 @@ public class MealService {
         }
 
         return new MealGetDto(mealGetDataDtoList, userLogin, dateString);
+    }
+
+    public List<DaySummaryDTO> getSummary(String startDateString, String endDateString, String userLogin) {
+        List<Violation> violationList = new ArrayList<>();
+        LocalDate startDate = LocalDate.parse(startDateString, DateFormat);
+        LocalDate endDate = LocalDate.parse(endDateString, DateFormat);
+
+        if (endDate.isBefore(startDate)) {
+            violationList.add(new Violation("getSummary.startDate-endDate", "incorrect chronology"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new IllegalRequestArgumentException(violationList);
+        }
+
+        User user = userDAO.findByLogin(userLogin);
+        if (user == null) {
+            violationList.add(new Violation("getSummary.userLogin", "not found"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new ResourceNotFoundException(violationList);
+        }
+
+        return mealDAO.findSummary(startDate, endDate, userLogin);
     }
 }

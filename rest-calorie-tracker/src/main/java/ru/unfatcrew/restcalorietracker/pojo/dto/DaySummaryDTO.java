@@ -4,23 +4,27 @@ import java.time.LocalDate;
 
 public class DaySummaryDTO {
     private LocalDate date;
-    private Float weight;
-    private Integer calories;
-    private Float proteins;
-    private Float fats;
-    private Float carbohydrates;
+    private Double weight;
+    private Double calories;
+    private Double proteins;
+    private Double fats;
+    private Double carbohydrates;
 
     public DaySummaryDTO() {
         this.date = LocalDate.now();
-        this.weight = 0.0f;
-        this.calories = 0;
-        this.proteins = 0.0f;
-        this.fats = 0.0f;
-        this.carbohydrates = 0.0f;
+        this.weight = 0.0;
+        this.calories = 0.0;
+        this.proteins = 0.0;
+        this.fats = 0.0;
+        this.carbohydrates = 0.0;
     }
     
-    public DaySummaryDTO(LocalDate date, Float weight, Integer calories, Float proteins, Float fats,
-            Float carbohydrates) {
+    public DaySummaryDTO(LocalDate date,
+                         Double weight,
+                         Double calories,
+                         Double proteins,
+                         Double fats,
+                         Double carbohydrates) {
         this.date = date;
         this.weight = weight;
         this.calories = calories;
@@ -33,23 +37,23 @@ public class DaySummaryDTO {
         return date;
     }
 
-    public Float getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public Integer getCalories() {
+    public Double getCalories() {
         return calories;
     }
 
-    public Float getProteins() {
+    public Double getProteins() {
         return proteins;
     }
 
-    public Float getFats() {
+    public Double getFats() {
         return fats;
     }
 
-    public Float getCarbohydrates() {
+    public Double getCarbohydrates() {
         return carbohydrates;
     }
 
@@ -57,26 +61,23 @@ public class DaySummaryDTO {
         this.date = date;
     }
 
-    public void setWeight(Float weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
-    public void setCalories(Integer calories) {
+    public void setCalories(Double calories) {
         this.calories = calories;
     }
 
-    public void setProteins(Float proteins) {
+    public void setProteins(Double proteins) {
         this.proteins = proteins;
     }
 
-    public void setFats(Float fats) {
+    public void setFats(Double fats) {
         this.fats = fats;
     }
 
-    public void setCarbohydrates(Float carbohydrates) {
+    public void setCarbohydrates(Double carbohydrates) {
         this.carbohydrates = carbohydrates;
     }
-    
-
-    
 }
