@@ -175,3 +175,10 @@ function changeTypePassword (){
     let inputPwd = document.querySelector('.input-password #password')
     inputPwd.focus()
 }
+
+document.querySelector("#sever-error-box button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("sever-error-container");
+    let errorMessage = document.getElementById("sever-error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
+}

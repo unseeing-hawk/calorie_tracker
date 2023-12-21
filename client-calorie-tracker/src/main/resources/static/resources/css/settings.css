@@ -39,17 +39,26 @@ body {
     cursor: pointer;
 }
 
+a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .container {
     position: unset;
-    max-width: 1000px;
+    width: 1000px;
+    height: 645px;
     margin: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 60px);
+    
 }
 
 .block-setting {
+    position: relative;
     max-width: 500px;
     max-height: 530px;
     width: 100%;
@@ -162,4 +171,60 @@ h1 {
     20%, 40%, 60%, 80% {
       transform: translateX(2px);
     }
+}
+
+.error-container {
+    display: flex;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 530px;
+    top: 0px;
+    left: 0px;
+}
+
+.error-box {
+    width: 400px;
+    height: auto;
+    background-color: #fefefe;
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow:  0px -1px 15px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-box p {
+    color: #060606;
+    font-size: 30px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.error-message{
+    text-align: left;
+    color: #060606;
+    font-size: 17px;
+}
+
+.error-box button {
+    position: relative;
+    background: rgb(0, 102, 238);
+    width: 50px;
+    height: 25px;
+    font-size: 17px;
+    border-radius: 5px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 15px;
+}
+
+.error-box button:hover{
+    cursor: pointer;
+    background: rgba(0, 102, 238, 0.85);
 }
