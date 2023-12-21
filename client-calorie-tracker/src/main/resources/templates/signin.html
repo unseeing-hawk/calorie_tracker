@@ -45,7 +45,7 @@
                 <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
                     <div id="sever-error-box" class="error-box">
                         <p>Error</p>
-                        <span class="error-message" id="sever-error-message" th:text="${loginError}"></span>
+                        <span class="error-message" id="sever-error-message" th:text="${errorMessage}"></span>
                         <button>OK</button>
                     </div>
                 </div>
