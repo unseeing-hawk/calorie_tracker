@@ -1,13 +1,18 @@
 package ru.unfatcrew.clientcalorietracker.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.rest_service.RestApiService;
 
@@ -24,6 +29,22 @@ public class CalorieController {
     @GetMapping("/login")
     public String getLoginPage() {
         return "signin";
+    }
+
+    @GetMapping("/login-error")
+    public String getLoginPageWithError(HttpServletRequest request, RedirectAttributes attributes) {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            return "redirect:/login";
+        }
+
+        AuthenticationException ex = (AuthenticationException) session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        if (ex == null) {
+            return "redirect:/login";
+        }
+
+        attributes.addFlashAttribute("loginError", ex.getMessage());
+        return "redirect:/login";
     }
 
     @GetMapping("/register")

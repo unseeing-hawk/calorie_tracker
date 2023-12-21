@@ -7,6 +7,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 
 @Service
@@ -28,7 +29,12 @@ public class RestApiService {
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(username, password);
 
-        RequestEntity<Void> request = RequestEntity.get(restURL + "/users")
+        String uri = UriComponentsBuilder.fromHttpUrl(restURL)
+                .path("/users")
+                .queryParam("login", username)
+                .toUriString();
+
+        RequestEntity<Void> request = RequestEntity.get(uri)
                 .headers(headers)
                 .build();
 
