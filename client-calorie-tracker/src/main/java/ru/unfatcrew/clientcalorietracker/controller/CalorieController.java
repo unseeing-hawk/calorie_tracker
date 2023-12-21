@@ -1,13 +1,21 @@
 package ru.unfatcrew.clientcalorietracker.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.rest_service.RestApiService;
 
@@ -23,11 +31,35 @@ public class CalorieController {
 
     @GetMapping("/login")
     public String getLoginPage() {
+        if (!isAnonymous()) {
+            return "redirect:/";
+        }
+
         return "signin";
+    }
+
+    @GetMapping("/login-error")
+    public String getLoginPageWithError(HttpServletRequest request, RedirectAttributes attributes) {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            return "redirect:/login";
+        }
+
+        AuthenticationException exception = (AuthenticationException) session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        if (exception == null) {
+            return "redirect:/login";
+        }
+
+        attributes.addFlashAttribute("loginError", exception.getMessage());
+        return "redirect:/login";
     }
 
     @GetMapping("/register")
     public String getRegisterPage(Model model) {
+        if (!isAnonymous()) {
+            return "redirect:/";
+        }
+
         model.addAttribute("user", new User());
         return "signup";
     }
@@ -77,5 +109,10 @@ public class CalorieController {
     @GetMapping("/summary-form")
     public String getSummaryFormPage() {
         return "get_summary";
+    }
+
+    private static boolean isAnonymous() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return (auth == null) || (auth instanceof AnonymousAuthenticationToken);
     }
 }
