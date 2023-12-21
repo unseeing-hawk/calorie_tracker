@@ -18,23 +18,25 @@
     <div class="container">
         <div class="block-setting">
             <h1>Settings</h1>
-            <div class="input-box">
-                <label for="">Name</label>
-                <input id="name" type="text" autofocus="true" value="Pham Van Nhan">
-                <span id="name-error-span" for=""></span>
-            </div>
-            <div class="input-box">
-                <label for="">Weight</label>
-                <input id="weight" type="text" autofocus="true" value="60">
-                <span id="weight-error-span" for=""></span>
-            </div>
-            <div class="input-box input-password">
-                <label for="">Password</label>
-                <input id="password" type="password" autofocus="true">
-                <i class='bx bx-show showhide'></i>
-                <i class='bx bx-hide showhide'></i>
-                <span id="password-error-span" for=""></span>
-            </div>
+            <form id="settingsForm" action="@{/settings/save}" th:object="${user}" method="post">
+                <div class="input-box">
+                    <label for="">Name</label>
+                    <input id="name" type="text" th:field="*{name}" th:value="${user.name}" autofocus="true">
+                    <span id="name-error-span" for=""></span>
+                </div>
+                <div class="input-box">
+                    <label for="">Weight</label>
+                    <input id="weight" type="text" th:field="*{weight}" th:value="${user.weight}" autofocus="true">
+                    <span id="weight-error-span" for=""></span>
+                </div>
+                <div class="input-box input-password">
+                    <label for="">Password</label>
+                    <input id="password" type="password" th:field="*{password}" th:value="${user.password}" autofocus="true">
+                    <i class='bx bx-show showhide'></i>
+                    <i class='bx bx-hide showhide'></i>
+                    <span id="password-error-span" for=""></span>
+                </div>
+            </form>
             <div class="btns-box">
                 <a th:href="@{/}" class="btn">Back</a>
                 <button id="btn-save" class="btn" type="button">Save change</button>
