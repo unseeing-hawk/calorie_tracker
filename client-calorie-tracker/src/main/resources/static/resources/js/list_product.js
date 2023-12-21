@@ -6,8 +6,8 @@ function setAnimationError(el) {
     }, 510);
 }
 
-var errorContainer = document.getElementById('errorContainer')
-var errorMessage = document.getElementById("error-message");
+var clientErrorContainer = document.getElementById('client-error-container')
+var errorMessage = document.getElementById("client-error-message");
 
 document.getElementById('btn-apply-changes').onclick = function(e) {
     let isCorrectAllName = true
@@ -91,7 +91,7 @@ document.getElementById('btn-apply-changes').onclick = function(e) {
     }
     errorMessage.innerText = contentError
     if(contentError.length != 0) {
-        errorContainer.style.display = 'flex'
+        clientErrorContainer.style.display = 'flex'
     }
 }
 
@@ -162,8 +162,8 @@ function checkProteinFatsCarbohydratesColums(element) {
     }
 }
 
-document.querySelector("#errorBox button").onclick = function hideErrorBox(e) {
-    errorContainer.style.display = "none";
+document.querySelector("#client-error-box button").onclick = function hideErrorBox(e) {
+    clientErrorContainer.style.display = "none";
     errorMessage.innerHTML = ""
 }
 
@@ -187,3 +187,10 @@ document.querySelectorAll('tbody tr').forEach(el => {
         })
     }
 })
+
+document.querySelector("#sever-error-box button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("sever-error-container");
+    let errorMessage = document.getElementById("sever-error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
+}
