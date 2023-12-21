@@ -1,7 +1,7 @@
 var inputsDateLayout = document.querySelector('.inputs-date-layout')
 var summaryTableLayout = document.querySelector('.summary-table-layout')
 
-var clientErrorLayout = document.getElementById('client-error-layout')
+var clientErrorContainer = document.getElementById('client-error-container')
 var clientErrorMessage = document.getElementById("client-error-message")
 
 
@@ -75,7 +75,7 @@ document.querySelector('#get-summary-table-btn').onclick = function(e) {
     }
     if(contentError != '') {
         clientErrorMessage.innerText = contentError
-        clientErrorLayout.style.display = 'flex'
+        clientErrorContainer.style.display = 'flex'
     }
     else {
         summaryTableLayout.style.display = "flex";
@@ -84,7 +84,7 @@ document.querySelector('#get-summary-table-btn').onclick = function(e) {
 }
 
 document.querySelector("#client-error-box button").onclick = function(e) {
-    clientErrorLayout.style.display = "none";
+    clientErrorContainer.style.display = "none";
     clientErrorMessage.innerHTML = ''
 }
 
@@ -94,4 +94,11 @@ function setAnimationError(el) {
     setTimeout(() => {
         el.style.animation = ''
     }, 510);
+}
+
+document.querySelector("#sever-error-box button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("sever-error-container");
+    let errorMessage = document.getElementById("sever-error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
 }

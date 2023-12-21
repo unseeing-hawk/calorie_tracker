@@ -1,5 +1,5 @@
 var dateElement = document.querySelector('#date')
-var clientErrorLayout = document.getElementById('client-error-layout')
+var clientErrorLayout = document.getElementById('client-error-container')
 var clientErrorMessage = document.getElementById("client-error-message");
 
 var productTbody = document.querySelector('#products-table tbody')
@@ -104,7 +104,7 @@ backToAddMeal.onclick = function(e) {
     dataDateContainer.style.display = "none";
 }
 
-document.querySelector("#client-error-Box button").onclick = function hideErrorBox(e) {
+document.querySelector("#client-error-box button").onclick = function hideErrorBox(e) {
     clientErrorLayout.style.display = "none";
     clientErrorMessage.innerHTML = ""
 }
@@ -163,4 +163,11 @@ function setAnimationError(el) {
     setTimeout(() => {
         el.style.animation = ''
     }, 510);
+}
+
+document.querySelector("#sever-error-box button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("sever-error-container");
+    let errorMessage = document.getElementById("sever-error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
 }
