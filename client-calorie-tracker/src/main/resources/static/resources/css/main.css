@@ -5,13 +5,11 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-
 body {
     /* display: flex;
     align-items: center;
     justify-content: center; */
 }
-
 
 .header {
     display: flex;
@@ -20,17 +18,15 @@ body {
     justify-content: center;
     box-shadow:  0px -1px 12px rgba(0, 0, 0, 0.1);
     margin-bottom: 12px;
-
 }
-
 
 .header-box{
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 1000px;
+    width: 1000px;
     height: 60px;
-    width: 100%;
     background-color: white;
 }
 
@@ -39,16 +35,21 @@ body {
     font-weight: 700;
     background-color: white;
     color: #0066EE;
+    text-decoration: none;
 }
 
-.btn-box {
+.name-webapp:hover {
+    cursor: pointer;
+}
+
+.header-box .a-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-right: 3px;
 }
 
-.btn-box div {
+#setting-box, #signout-box{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,12 +59,20 @@ body {
     box-shadow:  0px -1px 6px rgba(0, 0, 0, 0.2);
 }
 
-.btn-box .bx {
+.header-box .a-box .bx {
     font-size: 26px;
     color: #0066EE;
 }
 
-.btn-box a {
+.header-box .a-box a {
+    font-size: 16px;
+    display: none;
+    font-weight: 500;
+    text-decoration: none;
+    color: #0066EE;
+}
+
+.header-box .a-box button {
     font-size: 16px;
     display: none;
     font-weight: 500;
@@ -72,18 +81,18 @@ body {
 }
 
 .container {
-    position: unset;
-    max-width: 1000px;
+    position: relative;
+    width: 1000px;
+    height: 620px;
     margin: auto;
-    height: calc(100vh - 60px - 12px);
     display: flex;
     flex-direction: column;
     background-color: transparent;
 }
 
-.buttons-box {
+.menu-box {
     height: 250px; 
-    width: 100%;
+    width: 1000px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -91,7 +100,7 @@ body {
     padding: 0 40px;
 }
 
-.buttons-box .btn-box {
+.menu-box .a-box {
     width: 100px;
     height: 100px;
     background-color: rgb(104, 161, 235);
@@ -101,12 +110,12 @@ body {
     justify-content: center;
 }
 
-.buttons-box .btn-box:hover {
+.menu-box .a-box:hover {
     width: 110px;
     height: 110px;
 }
 
-.buttons-box .btn-box button {
+.menu-box .a-box a {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -115,21 +124,25 @@ body {
     font-size: 17px;
     font-weight: 600;
     color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
 }
 
-.buttons-box .btn-box button:hover {
+.menu-box .a-box a:hover {
     cursor: pointer;
 }
 
 .content-box {
     display: flex;
-    height: calc(100vh - 60px - 250px - 12px);
-
+    height: 355px;
 }
 
 .image-box {
-    width: 50%;
-    height: 100%;
+    width: 500px;
+    height: 385px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -144,8 +157,8 @@ body {
 }
 
 .text-content-box {
-    height: 100%;
-    width: 50%;
+    height: 385px;
+    width: 500px;
     display: flex;
     flex-direction: column;
     padding-top: 30px;
@@ -163,4 +176,60 @@ body {
     font-size: 23px;
     font-weight: 500;
     padding-top: 30px;
+}
+
+.error-container {
+    display: flex;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    height: 600px;
+    top: 0px;
+    left: 0px;
+}
+
+.error-box {
+    width: 400px;
+    height: auto;
+    background-color: #fefefe;
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow:  0px -1px 15px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-box p {
+    color: #060606;
+    font-size: 30px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.error-message{
+    text-align: left;
+    color: #060606;
+    font-size: 17px;
+}
+
+.error-box button {
+    position: relative;
+    background: rgb(0, 102, 238);
+    width: 50px;
+    height: 25px;
+    font-size: 17px;
+    border-radius: 5px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 15px;
+}
+
+.error-box button:hover{
+    cursor: pointer;
+    background: rgba(0, 102, 238, 0.85);
 }
