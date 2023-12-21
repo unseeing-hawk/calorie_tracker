@@ -39,17 +39,24 @@ body {
     color: #0066EE;
 }
 
-.name-webapp:hover {
+a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a:hover {
     cursor: pointer;
 }
 
 .data-table-container {
-    max-width: 1000px;
+    width: 1000px;
     margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: calc(100vh - 65px);
+    height: 640px;
     background-color: white;
     border-radius: 10px;
     box-sizing: border-box;
@@ -232,7 +239,7 @@ tbody input[type='checkbox'] {
     align-items: center;
 }
 
-.product-container .button-box button {
+.product-container .button-box .btn {
     height: 40%;
     width: 20%;
     border-radius: 5px;
@@ -250,7 +257,6 @@ button:hover {
 }
 
 .table-container #btn-apply-changes:hover {
-    
     background: rgba(14, 107, 229, 0.85);
 }
 
@@ -274,9 +280,7 @@ button:hover {
     display: none;
 }
 
-
-.error-layout {
-    display: none;
+.error-container {
     position: absolute;
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(2px);
@@ -286,6 +290,14 @@ button:hover {
     height: 625px;
     top: -150px;
     left: -5px;
+}
+
+#client-error-container {
+    display: none;
+}
+
+#sever-error-container {
+    display: flex;
 }
 
 .error-box {
