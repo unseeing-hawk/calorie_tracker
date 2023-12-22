@@ -17,35 +17,37 @@
             <h1>Create your own product</h1>
             <p>some desscription</p>
 
-            <div class="input-box">
-                <input id="name" type="text" autofocus="true" required>
-                <label id="name-label" for="">Name</label>
-                <span id="name-error-span" class="error-label" for=""></span>
-            </div>
-
-            <div class="input-box">
-                <input id="calories" type="text" autofocus="true" required>
-                <label id="calories-label" for="">Calories</label>
-                <span id="calories-error-span" class="error-label" for=""></span>
-            </div>
-
-            <div class="input-box">
-                <input id="proteins" type="text" autofocus="true" required>
-                <label id="proteins-label" for="">Proteins</label>
-                <span id="proteins-error-span" class="error-label" for=""></span>
-            </div>
-
-            <div class="input-box">
-                <input id="fats" type="text" autofocus="true" required>
-                <label id="fats-label" for="">Fats</label>
-                <span id="fats-error-span" class="error-label" for=""></span>
-            </div>
-
-            <div class="input-box">
-                <input id="carbohydrates" type="text" autofocus="true" required>
-                <label id="carbohydrates-label" for="">Carbohydrates</label>
-                <span id="carbohydrates-error-span" class="error-label" for=""></span>
-            </div>
+            <form id="createProductForm" th:action="@{/create-product}" th:object="${product}" method="post">
+                <div class="input-box">
+                    <input id="name" type="text" th:field="*{name}" autofocus="true" required>
+                    <label id="name-label" for="">Name</label>
+                    <span id="name-error-span" class="error-label" for=""></span>
+                </div>
+    
+                <div class="input-box">
+                    <input id="calories" type="text" th:field="*{calories}" autofocus="true" required>
+                    <label id="calories-label" for="">Calories</label>
+                    <span id="calories-error-span" class="error-label" for=""></span>
+                </div>
+    
+                <div class="input-box">
+                    <input id="proteins" type="text" th:field="*{proteins}" autofocus="true" required>
+                    <label id="proteins-label" for="">Proteins</label>
+                    <span id="proteins-error-span" class="error-label" for=""></span>
+                </div>
+    
+                <div class="input-box">
+                    <input id="fats" type="text" th:field="*{fats}" autofocus="true" required>
+                    <label id="fats-label" for="">Fats</label>
+                    <span id="fats-error-span" class="error-label" for=""></span>
+                </div>
+    
+                <div class="input-box">
+                    <input id="carbohydrates" type="text" th:field="*{carbohydrates}" autofocus="true" required>
+                    <label id="carbohydrates-label" for="">Carbohydrates</label>
+                    <span id="carbohydrates-error-span" class="error-label" for=""></span>
+                </div>
+            </form>
 
             <div class="btns-box">
                 <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
