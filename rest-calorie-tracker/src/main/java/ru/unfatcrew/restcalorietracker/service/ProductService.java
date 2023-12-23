@@ -116,14 +116,55 @@ public class ProductService {
             throw new IllegalRequestArgumentException(violationList);
         }
 
-        Pageable pageable = PageRequest.of(offset, limit);
-        Page<Product> userProductsPage = productDAO.findByUserLoginAndNameContainingIgnoreCaseAndIsActiveTrue(userLogin, pattern, pageable);
-        List<ProductPostDTO> userProducts = convertPageToProductPostDTOList(userProductsPage, userLogin);
+        List<ProductPostDTO> products = new ArrayList<>();
+        int startIndex = limit * offset;
+        int endIndex = limit * offset + limit; //includ last element
+
+        List<Product> userProductsDB = productDAO.findByUserLoginAndNameContainingIgnoreCaseAndIsActiveTrue(userLogin, pattern);
+        int countUserProducts = userProductsDB.size();
+
+        if (startIndex < countUserProducts){
+            int userEndIndex = endIndex;
+
+            if (endIndex > countUserProducts) {
+                userEndIndex = countUserProducts;
+            }
+
+            for (int i = startIndex; i < userEndIndex; i++) {
+                Product userProduct = userProductsDB.get(i);
+
+                products.add(new ProductPostDTO(
+                    userProduct.getUser().getLogin(),
+                    userProduct.getName(),
+                    userProduct.getCalories(),
+                    userProduct.getProteins(),
+                    userProduct.getFats(),
+                    userProduct.getCarbohydrates()
+                ));
+            }
+        } 
         
-        String fatsecretRequestBody = FatsecretService.searchInFatsecretByPattern(pattern, "0");
-        List<ProductPostDTO> fatsecretProducts = convertJsonToProductPostDTO(fatsecretRequestBody);
-        
-        return userProducts;
+        final int FS_LIMIT = 20;
+        if (countUserProducts < endIndex) {
+            startIndex -= countUserProducts;
+            if (startIndex < 0) startIndex = 0;
+            endIndex -= countUserProducts;
+
+            int pageNumber_first = startIndex / FS_LIMIT;
+            int pageNumber_last = (int) Math.ceil((double) endIndex / FS_LIMIT); 
+
+            List<ProductPostDTO> fatsecretProducts = new ArrayList<>();
+            for (int i = pageNumber_first; i <= pageNumber_last; i++) {
+                String fatsecretRequestBody = FatsecretService.searchInFatsecretByPattern(pattern, String.valueOf(i));
+                fatsecretProducts.addAll(convertJsonToProductPostDTO(fatsecretRequestBody));
+            }
+
+            for (int i = startIndex % FS_LIMIT; i < (fatsecretProducts.size() - (FS_LIMIT - endIndex % FS_LIMIT)); i++) {
+                products.add(fatsecretProducts.get(i));
+            }
+        }
+
+        return products;
     }
 
     private static List<ProductPostDTO> convertJsonToProductPostDTO(String jsonString) {
