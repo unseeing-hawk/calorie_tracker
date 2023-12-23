@@ -116,13 +116,16 @@ public class ProductService {
                         , "already exists in productsIdsForDeletion"));
             }
 
-            Product product = productDAO.findById(productsIdsForDeletion.get(i));
-            if (product == null) {
+            Optional<Product> optionalProduct = productDAO.findById(productsIdsForDeletion.get(i));
+            Product product = null;
+            if (optionalProduct.isEmpty()) {
                 violationList.add(new Violation("changeProducts.changeProductsRequest.productsIdsForDeletion["
                         + Integer.toString(i)
                         + "].<list element>"
                         , "not found"));
-            } 
+            }  else {
+                product = optionalProduct.get();
+            }
 
             if (product != null
                     && !product.getUser().getLogin().equals(userLogin)) {
@@ -156,12 +159,15 @@ public class ProductService {
                         , "already exists in productsForDeletion"));
             }
 
-            Product product = productDAO.findById(id);
-            if (product == null) {
+            Optional<Product> optionalProduct = productDAO.findById(id);
+            Product product = null;
+            if (optionalProduct.isEmpty()) {
                 violationList.add(new Violation("changeProducts.changeProductsRequest.productsForChange["
                         + Integer.toString(i)
                         + "].id"
                         , "not found"));
+            } else {
+                product = optionalProduct.get();
             }
 
             if (product != null
