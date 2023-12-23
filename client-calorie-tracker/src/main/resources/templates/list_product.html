@@ -22,130 +22,32 @@
                         <p>Products</p>
                     </div>
                     <div class="body-tb body-product-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="namme">Name</th>
-                                    <th>Calories</th>
-                                    <th>Proteins</th>
-                                    <th>Fats</th>
-                                    <th>Carbohydrates</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name A</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name B</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td contenteditable="true">Product name</td>
-                                        <td contenteditable="true">120</td>
-                                        <td contenteditable="true">50</td>
-                                        <td contenteditable="true">20</td>
-                                        <td contenteditable="true">80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <form id="applyChangesMyProduct" th:action="@{/my-products/apply}" method="post">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="namme">Name</th>
+                                        <th>Calories</th>
+                                        <th>Proteins</th>
+                                        <th>Fats</th>
+                                        <th>Carbohydrates</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="product : ${products}">
+                                        <div>
+                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].name}" th:value="${product.name}"></td>
+                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].calories}" th:value="${product.calories}"></td>
+                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].proteins}" th:value="${product.proteins}"></td>
+                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].fats}" th:value="${product.fats}"></td>
+                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].carbohydrates}" th:value="${product.carbohydrates}"></td>
+                                            <td><input type="checkbox" name="" id=""></td>
+                                        </div>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
                 </div>
                 <div class="button-box">

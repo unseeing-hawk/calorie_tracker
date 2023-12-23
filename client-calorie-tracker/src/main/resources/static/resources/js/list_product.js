@@ -93,6 +93,9 @@ document.getElementById('btn-apply-changes').onclick = function(e) {
     if(contentError.length != 0) {
         clientErrorContainer.style.display = 'flex'
     }
+    else {
+        document.getElementById('applyChangesMyProduct').submit();
+    }
 }
 
 document.querySelector('#btn-delete').onclick = function(e) {
