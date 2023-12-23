@@ -18,20 +18,20 @@
     <div class="container">
         <div class="block-setting">
             <h1>Settings</h1>
-            <form id="settingsForm" action="@{/settings/save}" th:object="${user}" method="post">
+            <form id="settingsForm" th:action="@{/settings/save}" th:object="${user}" method="post">
                 <div class="input-box">
                     <label for="">Name</label>
-                    <input id="name" type="text" th:field="*{name}" th:value="${user.name}" autofocus="true">
+                    <input id="name" type="text" th:field="*{name}" autofocus="true">
                     <span id="name-error-span" for=""></span>
                 </div>
                 <div class="input-box">
                     <label for="">Weight</label>
-                    <input id="weight" type="text" th:field="*{weight}" th:value="${user.weight}" autofocus="true">
+                    <input id="weight" type="text" th:field="*{weight}" autofocus="true">
                     <span id="weight-error-span" for=""></span>
                 </div>
                 <div class="input-box input-password">
                     <label for="">Password</label>
-                    <input id="password" type="password" th:field="*{password}" th:value="${user.password}" autofocus="true">
+                    <input id="password" type="password" th:field="*{password}" autofocus="true">
                     <i class='bx bx-show showhide'></i>
                     <i class='bx bx-hide showhide'></i>
                     <span id="password-error-span" for=""></span>
