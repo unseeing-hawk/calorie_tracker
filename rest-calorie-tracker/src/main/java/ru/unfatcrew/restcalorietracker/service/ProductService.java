@@ -1,5 +1,6 @@
 package ru.unfatcrew.restcalorietracker.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.validation.Valid;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
@@ -125,22 +129,62 @@ public class ProductService {
         }
 
         Pageable pageable = PageRequest.of(offset, limit);
-        Page<Product> productsPage = productDAO.findByUserLoginAndNameContainingIgnoreCaseAndIsActiveTrue(userLogin, pattern, pageable);
+        Page<Product> userProductsPage = productDAO.findByUserLoginAndNameContainingIgnoreCaseAndIsActiveTrue(userLogin, pattern, pageable);
         
-        List<ProductPostDTO> productPostDTOList = productsPage.getContent().stream()
-        .map(product -> {
-            ProductPostDTO productPostDTO = new ProductPostDTO();
-            productPostDTO.setId(product.getId());
-            productPostDTO.setUserLogin(userLogin);
-            productPostDTO.setName(product.getName());
-            productPostDTO.setCalories(product.getCalories());
-            productPostDTO.setProteins(product.getProteins());
-            productPostDTO.setFats(product.getFats());
-            productPostDTO.setCarbohydrates(product.getCarbohydrates());
-            return productPostDTO;
-        })
-        .collect(Collectors.toList());
+        String fatsecretRequestBody = FatsecretService.searchInFatsecretByPattern(pattern, "0");
+        List<ProductPostDTO> fatsecretProducts = convertJsonToProductPostDTO(fatsecretRequestBody);
+        
+        return fatsecretProducts;
+    }
+
+    private static List<ProductPostDTO> convertJsonToProductPostDTO(String jsonString) {
+        List<ProductPostDTO> productPostDTOList = new ArrayList<>();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(jsonString);
+
+            JsonNode foodsNode = jsonNode.path("foods").path("food");
+            for (JsonNode foodNode : foodsNode) {
+                Long fatsecretId = foodNode.path("food_id").asLong();
+                String name = foodNode.path("food_name").asText();
+
+                Integer calories = foodNode.path("food_description").asText().contains("Calories") ?
+                        Math.round(extractValue("Calories", foodNode.path("food_description"))) : 0;
+               
+                Float proteins = extractValue("Protein", foodNode.path("food_description"));
+                Float fats = extractValue("Fat", foodNode.path("food_description"));
+                Float carbohydrates = extractValue("Carbs", foodNode.path("food_description"));
+
+                ProductPostDTO productPostDTO = new ProductPostDTO(
+                        fatsecretId, name, calories, proteins, fats, carbohydrates
+                );
+
+                productPostDTOList.add(productPostDTO);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return productPostDTOList;
     }
+
+    private static Float extractValue(String key, JsonNode descriptionNode) {
+        String description = descriptionNode.asText();
+        String valueString = "";
+
+        int startIdx = description.indexOf(key + ":");
+        if (startIdx != -1) {
+            int endIdx = (key == "Calories") ? description.indexOf("k", startIdx) : description.indexOf("g", startIdx);
+            if (endIdx != -1) {
+                valueString = description.substring(startIdx + key.length() + 1, endIdx).trim();
+    
+                valueString = valueString.replaceAll("[^\\d.]", "");
+            }
+        }
+    
+        return valueString.isEmpty() ? 0.0f : Float.parseFloat(valueString);
+    }
+    
+
 }
