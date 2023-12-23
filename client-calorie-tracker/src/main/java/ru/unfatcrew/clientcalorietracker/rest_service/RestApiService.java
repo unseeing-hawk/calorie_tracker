@@ -1,9 +1,12 @@
 package ru.unfatcrew.clientcalorietracker.rest_service;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +15,7 @@ import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 
 @Service
 public class RestApiService {
+    private static final String PASSWORD_PREFIX = "{bcrypt}";
     @Value("${application.rest.api.url}")
     private String restURL;
     private RestTemplate rest;
@@ -22,7 +26,8 @@ public class RestApiService {
     }
 
     public void registerNewUser(User user) throws RestClientException {
-        rest.postForEntity(restURL + "/users", user, User.class);
+        User userToAdd = new User(user.getName(), user.getLogin(), encodePassword(user.getPassword()), user.getWeight());
+        rest.postForEntity(restURL + "/users", userToAdd, User.class);
     }
 
     public void loginUser(String username, String password) throws RestClientException {
@@ -39,5 +44,32 @@ public class RestApiService {
                 .build();
 
         rest.exchange(request, String.class);
+    }
+
+    public User getUserData() throws RestClientException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        String uri = UriComponentsBuilder.fromHttpUrl(restURL)
+                .path("/users")
+                .queryParam("login", username)
+                .toUriString();
+
+        return rest.getForObject(uri, User.class);
+    }
+
+    public void saveUserSettings(User user) throws RestClientException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        long userId = getUserData().getId();
+
+        @Valid
+        User userToAdd = new User(userId, user.getName(), username, user.getPassword(), user.getWeight());
+        userToAdd.setPassword(encodePassword(userToAdd.getPassword()));
+
+        rest.put(restURL + "/users", userToAdd);
+    }
+
+    private static String encodePassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return PASSWORD_PREFIX + passwordEncoder.encode(password);
     }
 }
