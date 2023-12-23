@@ -95,19 +95,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(offset, limit);
         Page<Product> productsPage = productDAO.findByUserLoginAndIsActiveTrue(userLogin, pageable);
         
-        List<ProductPostDTO> productPostDTOList = productsPage.getContent().stream()
-        .map(product -> {
-            ProductPostDTO productPostDTO = new ProductPostDTO();
-            productPostDTO.setId(product.getId());
-            productPostDTO.setUserLogin(userLogin);
-            productPostDTO.setName(product.getName());
-            productPostDTO.setCalories(product.getCalories());
-            productPostDTO.setProteins(product.getProteins());
-            productPostDTO.setFats(product.getFats());
-            productPostDTO.setCarbohydrates(product.getCarbohydrates());
-            return productPostDTO;
-        })
-        .collect(Collectors.toList());
+        List<ProductPostDTO> productPostDTOList = convertPageToProductPostDTOList(productsPage, userLogin);
 
         return productPostDTOList;
     }
@@ -130,11 +118,12 @@ public class ProductService {
 
         Pageable pageable = PageRequest.of(offset, limit);
         Page<Product> userProductsPage = productDAO.findByUserLoginAndNameContainingIgnoreCaseAndIsActiveTrue(userLogin, pattern, pageable);
+        List<ProductPostDTO> userProducts = convertPageToProductPostDTOList(userProductsPage, userLogin);
         
         String fatsecretRequestBody = FatsecretService.searchInFatsecretByPattern(pattern, "0");
         List<ProductPostDTO> fatsecretProducts = convertJsonToProductPostDTO(fatsecretRequestBody);
         
-        return fatsecretProducts;
+        return userProducts;
     }
 
     private static List<ProductPostDTO> convertJsonToProductPostDTO(String jsonString) {
@@ -185,6 +174,21 @@ public class ProductService {
     
         return valueString.isEmpty() ? 0.0f : Float.parseFloat(valueString);
     }
-    
 
+    private static  List<ProductPostDTO> convertPageToProductPostDTOList(Page<Product> productsPage, String userLogin) {
+        return productsPage.getContent().stream()
+                .map(product -> {
+                    ProductPostDTO productPostDTO = new ProductPostDTO();
+                    productPostDTO.setId(product.getId());
+                    productPostDTO.setUserLogin(userLogin);
+                    productPostDTO.setName(product.getName());
+                    productPostDTO.setCalories(product.getCalories());
+                    productPostDTO.setProteins(product.getProteins());
+                    productPostDTO.setFats(product.getFats());
+                    productPostDTO.setCarbohydrates(product.getCarbohydrates());
+                    return productPostDTO;
+                })
+                .collect(Collectors.toList());
+    }
+    
 }
