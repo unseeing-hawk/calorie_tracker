@@ -57,7 +57,6 @@ public class FatsecretService {
                 responseBody = response.getBody();
             } 
         }
-        System.out.println("responseBody = " + responseBody);
 
         return responseBody;
     }
