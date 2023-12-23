@@ -41,11 +41,19 @@ public class ChangeProductsRequest {
         return productIdsForDeletion;
     }
 
+    public String getUserLogin() {
+        return userLogin;
+    }
+
     public void setProductsForChange(List<ProductPutDTO> productsForChange) {
         this.productsForChange = productsForChange;
     }
 
     public void setProductIdsForDeletion(List<Long> productIdsForDeletion) {
         this.productIdsForDeletion = productIdsForDeletion;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 }
