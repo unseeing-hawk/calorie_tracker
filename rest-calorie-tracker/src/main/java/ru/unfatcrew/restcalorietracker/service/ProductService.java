@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
 
+import org.springframework.validation.annotation.Validated;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
 import ru.unfatcrew.restcalorietracker.dao.ProductDAO;
 import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDataDto;
@@ -29,6 +30,7 @@ import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.Illegal
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.validation.Violation;
 
+@Validated
 @Service
 public class ProductService {
 

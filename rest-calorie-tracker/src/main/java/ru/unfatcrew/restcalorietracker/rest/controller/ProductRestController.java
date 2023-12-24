@@ -3,6 +3,7 @@ package ru.unfatcrew.restcalorietracker.rest.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import ru.unfatcrew.restcalorietracker.pojo.request.ChangeProductsRequest;
 import ru.unfatcrew.restcalorietracker.pojo.response.ChangeProductsResponse;
 import ru.unfatcrew.restcalorietracker.service.ProductService;
 
+@Validated
 @RestController
 @RequestMapping("/products")
 public class ProductRestController {
