@@ -27,32 +27,32 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th class="namme">Name</th>
-                                        <th>Calories</th>
-                                        <th>Proteins</th>
-                                        <th>Fats</th>
-                                        <th>Carbohydrates</th>
+                                        <th class="nameType">Name</th>
+                                        <th class="numberType">Calories</th>
+                                        <th class="numberType">Proteins</th>
+                                        <th class="numberType">Fats</th>
+                                        <th class="numberType">Carbohydrates</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="product, iter : *{products}">
-                                        <div>
-                                            <input type="hidden" th:field="*{products[__${iter.index}__].id}" th:value="${product.id}" />
+                                        <div class="">
+                                            <input type="hidden" th:field="*{products[__${iter.index}__].id}"  th:text="${product.id}"/>
                                             <td>
-                                                <input th:field="*{products[__${iter.index}__].name}" th:value="${product.name}"/>
+                                                <span contenteditable="true" th:field="*{products[__${iter.index}__].name}" th:text="${product.name}"></span>
                                             </td>
                                             <td>
-                                                <input th:field="*{products[__${iter.index}__].calories}" th:value="${product.calories}" />
+                                                <span contenteditable="true" th:field="*{products[__${iter.index}__].calories}" th:text="${product.calories}"></span>
                                             </td>
                                             <td>
-                                                <input th:field="*{products[__${iter.index}__].proteins}" th:value="${product.proteins}" />
+                                                <span contenteditable="true" th:field="*{products[__${iter.index}__].proteins}" th:text="${product.proteins}"></span>
                                             </td>
                                             <td>
-                                                <input th:field="*{products[__${iter.index}__].fats}" th:value="${product.fats}" />
+                                                <span contenteditable="true" th:field="*{products[__${iter.index}__].fats}" th:text="${product.fats}"></span>
                                             </td>
                                             <td>
-                                                <input th:field="*{products[__${iter.index}__].carbohydrates}" th:value="${product.carbohydrates}" />
+                                                <span contenteditable="true" th:field="*{products[__${iter.index}__].carbohydrates}" th:text="${product.carbohydrates}" ></span>
                                             </td>
                                             <td>
                                                 <input type="checkbox" th:field="*{idsToDelete}" th:value="${product.id}" />
