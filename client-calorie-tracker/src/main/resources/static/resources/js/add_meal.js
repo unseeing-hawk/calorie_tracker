@@ -18,12 +18,18 @@ buttonAddProducts.onclick = function(){
         var newRow = listOfChosenProductTbody.insertRow();
         // add name
         newRow.insertCell().innerHTML = cells[0].innerHTML
-        // add weight      
-        let weightCell = newRow.insertCell()
-        weightCell.setAttribute("contenteditable", 'true')
+        // add weight  
+        let newInputEL = document.createElement('input')
+        newInputEL.type = 'text'
+        newInputEL.setAttribute('th:field', '*{weight}')
+        let weightCell = newRow.insertCell().appendChild(newInputEL)
         weightCell.style.outline = "none"
-        // add checkbox
-        newRow.insertCell().innerHTML = '<input type="checkbox" name="" id="">'
+        // add checkbox with value is ID of Product
+        let newCheckboxEl = document.createElement('input')
+        newCheckboxEl.type = 'checkbox'
+        newCheckboxEl.value = checkbox.value
+        newCheckboxEl.setAttribute('th:field','*{idsToSelect}')
+        newRow.insertCell().appendChild(newCheckboxEl)
         checkbox.checked = false
     })
 }
@@ -45,12 +51,12 @@ function changeLayout(e) {
         let isCorrectWeightInRow = true
         listOfChosenProductTbody.querySelectorAll('tr').forEach(row => {
             // check weight
-            if(checkWeightColums(row.cells[1]) == false){
+            if(checkWeightColums(row.cells[1].querySelector('input')) == false){
                 isCorrectWeightInRow = false
             }
             else {
                 row.cells[1].parentNode.style.backgroundColor = '#fff'
-                row.cells[1].setAttribute("contenteditable", 'false')
+                // row.cells[1].setAttribute("contenteditable", 'false')
             }
         })
         
@@ -65,8 +71,10 @@ function changeLayout(e) {
             clientErrorLayout.style.display = 'flex'
         }
         else {
+            
             let dataDateContainer = document.querySelector('.data-date-container')
             dataDateContainer.style.display = "flex"
+            console.log("chjsdcbjhb")
             dataDateContainer.style. sjustifyContent= "center"
             dataDateContainer.style.alignItems = "center"
 
@@ -82,18 +90,19 @@ function changeLayout(e) {
 }
 
 function checkWeightColums(element) {
-    element.innerText = element.innerText.trim()
-    if(element.innerText.length == 0
-        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(element.innerText))
-        || parseFloat(element.innerText) == 0
-        || parseFloat(element.innerText) > (3.4 ** 38))
+    element.value = element.value.trim()
+    let weight = element.value
+    if(weight.length == 0
+        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(weight))
+        || parseFloat(weight) == 0
+        || parseFloat(weight) > (3.4 ** 38))
     {
-        element.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
-        setAnimationError(element.parentNode)
+        element.parentNode.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
+        setAnimationError(element.parentNode.parentNode)
         return false
     }
     else {
-        element.innerText = parseFloat(element.innerText).toString()
+        element.value = parseFloat(weight).toString()
         return true
     }
 }

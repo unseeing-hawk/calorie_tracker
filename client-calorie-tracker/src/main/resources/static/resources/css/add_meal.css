@@ -114,6 +114,7 @@ a:hover {
 }
 
 .table-container {
+    position: relative;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -249,7 +250,9 @@ button:hover {
 }
 
 .chosen-product-container {
-    width: 30%;
+    width: 276px;
+    height: 495px;
+    /* width: 30%; */
 }
 
 .chosen-product-table {
@@ -276,10 +279,18 @@ button:hover {
     background: rgba(14, 107, 229, 0.85);
 }
 
+.chosen-product-container input {
+    width: 80px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 17px;
+    text-align: center;
+}
+
 .data-date-container {
     display: none;
     position: absolute;
     left: -1px;
+    top: -140px;
     width: 1000px;
     height: 625px;
     background: rgba(255, 255, 255, 0.4);
