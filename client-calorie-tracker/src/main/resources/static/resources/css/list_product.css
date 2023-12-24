@@ -171,37 +171,24 @@ table, th, td {
 }
 
 thead th {
-    text-align: center;
-    font-size: 18px;
-}
-
-thead th:first-child {
     text-align: left;
+    font-size: 18px;
 }
 
 tbody input {
     font-size: 18px;
     background-color: transparent;
     outline: transparent;
+    width: 100%;
 }
 
 tbody td {
-    text-align: center;
-}
-
-tbody td:first-child {
-    max-width: 200px;
-    min-width: 150px;
+    text-align: left;
 }
 
 tbody td:focus {
     outline: none;
 }
-
-tbody td:first-child {
-    text-align: left;
-}
-
 
 thead {
     position: sticky;
