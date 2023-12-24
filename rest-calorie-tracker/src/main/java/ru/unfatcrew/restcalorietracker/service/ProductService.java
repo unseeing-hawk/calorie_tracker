@@ -134,6 +134,7 @@ public class ProductService {
                 Product userProduct = userProductsDB.get(i);
 
                 products.add(new ProductPostDTO(
+                    userProduct.getId(),
                     userProduct.getUser().getLogin(),
                     userProduct.getName(),
                     userProduct.getCalories(),
