@@ -160,7 +160,7 @@ a {
 }
 
 .summary-table-layout {
-    display: none;
+    display: flex;
     max-width: 1000px;
     width: 99%;
     margin: auto;
