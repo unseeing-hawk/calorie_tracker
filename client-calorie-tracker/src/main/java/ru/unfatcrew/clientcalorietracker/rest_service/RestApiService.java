@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
@@ -94,6 +95,13 @@ public class RestApiService {
         request.setUserLogin(username);
 
         rest.put(restURL + "/products", request);
+    }
+
+    public void addUserProduct(ProductPostDTO product) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        product.setUserLogin(username);
+
+        rest.postForObject(restURL + "/products", product, ProductPostDTO.class);
     }
 
     private static String encodePassword(String password) {

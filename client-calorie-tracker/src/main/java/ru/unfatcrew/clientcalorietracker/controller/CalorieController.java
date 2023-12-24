@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
@@ -101,8 +102,15 @@ public class CalorieController {
     }
 
     @GetMapping("/create-product")
-    public String getCreateProductPage() {
+    public String getCreateProductPage(Model model) {
+        model.addAttribute("product", new ProductPostDTO());
         return "add_product";
+    }
+
+    @PostMapping("/create-product")
+    public String createUserProduct(@Valid @ModelAttribute ProductPostDTO product) {
+        restService.addUserProduct(product);
+        return "redirect:/create-product";
     }
 
     @GetMapping("/my-products")
