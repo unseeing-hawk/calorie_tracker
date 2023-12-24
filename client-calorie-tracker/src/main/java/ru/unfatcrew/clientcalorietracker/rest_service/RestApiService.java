@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.DaySummaryDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class RestApiService {
@@ -104,8 +113,28 @@ public class RestApiService {
         rest.postForObject(restURL + "/products", product, ProductPostDTO.class);
     }
 
+    public List<DaySummaryDTO> getDaySummary(String startDate, String endDate) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        String url = UriComponentsBuilder.fromHttpUrl(restURL)
+                .path("/meals/summary")
+                .queryParam("start-date", formatDate(startDate))
+                .queryParam("end-date", formatDate(endDate))
+                .queryParam("user-login", username)
+                .toUriString();
+
+        RequestEntity<Void> request = RequestEntity.get(url).build();
+        ResponseEntity<List<DaySummaryDTO>> response = rest.exchange(request, new ParameterizedTypeReference<>() { });
+        return response.getBody();
+    }
+
     private static String encodePassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return PASSWORD_PREFIX + passwordEncoder.encode(password);
+    }
+
+    private static String formatDate(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return LocalDate.parse(dateStr).format(formatter);
     }
 }

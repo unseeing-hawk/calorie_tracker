@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.DaySummaryDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
@@ -27,6 +28,7 @@ import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.RestApiService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -149,7 +151,17 @@ public class CalorieController {
     }
 
     @GetMapping("/summary-form")
-    public String getSummaryFormPage() {
+    public String getSummaryFormPage(Model model) {
+        model.addAttribute("showTable", false);
+        return "get_summary";
+    }
+
+    @PostMapping("/summary-form")
+    public String getSummary(@ModelAttribute("startDate") String startDate,
+                             @ModelAttribute("endDate") String endDate,
+                             Model model) {
+        model.addAttribute("summaryDTO", restService.getDaySummary(startDate, endDate));
+        model.addAttribute("showTable", true);
         return "get_summary";
     }
 
