@@ -14,6 +14,12 @@ var carbohydratesElement = document.querySelector("#carbohydrates")
 
 document.querySelector('#btn-add').onclick = addProduct
 function addProduct() {
+    let isCorrectFormatName = false
+    let isCorrectFormatCalories = false
+    let isCorrectFormatProteins = false
+    let isCorrectFormatFats = false
+    let isCorrectFormatCarbohydrates = false
+
     // input name
     nameElement.value = nameElement.value.trim()
     let nameLabel =  document.querySelector('#name-label') 
@@ -46,6 +52,7 @@ function addProduct() {
                 nameElement.value += arrayNames[i]
             }
         }
+        isCorrectFormatName = true
     }
 
     // input calories
@@ -76,26 +83,30 @@ function addProduct() {
         caloriesElement.style.borderColor = "rgba(54, 47, 47, 0.4)"
         caloriesErrorSpan.innerHTML = ''
         caloriesElement.value = parseInt(caloriesElement.value).toString()
+        isCorrectFormatCalories = true
     }
 
     // input proteins
     let proteinsLabel = document.querySelector('#proteins-label')
     let proteinsErrorSpan = document.querySelector('#proteins-error-span')
-    checkInputInFloatFormat(proteinsElement, proteinsLabel, proteinsErrorSpan)
+    isCorrectFormatProteins = checkInputInFloatFormat(proteinsElement, proteinsLabel, proteinsErrorSpan)
 
     // input fats 
     let fatsLabel = document.querySelector('#fats-label')
     let fatsErrorSpan = document.querySelector('#fats-error-span')
-    checkInputInFloatFormat(fatsElement, fatsLabel, fatsErrorSpan)
+    isCorrectFormatFats = checkInputInFloatFormat(fatsElement, fatsLabel, fatsErrorSpan)
 
     // input carbohydrates carbohydratesElement
     let carbohydratesLabel = document.querySelector('#carbohydrates-label')
     let carbohydratesErrorSpan = document.querySelector('#carbohydrates-error-span')
-    checkInputInFloatFormat(carbohydratesElement, carbohydratesLabel, carbohydratesErrorSpan)
-    
+    isCorrectFormatCarbohydrates = checkInputInFloatFormat(carbohydratesElement, carbohydratesLabel, carbohydratesErrorSpan)
+    if(isCorrectFormatName && isCorrectFormatCalories && isCorrectFormatProteins && isCorrectFormatFats && isCorrectFormatCarbohydrates){
+        document.getElementById('createProductForm').submit();
+    }
 }
 
 function checkInputInFloatFormat(element, label, errorSpan) {
+    let isCorrectFormat = false
     if(element.value.length == 0) {
         label.style.color = '#C9544D'
         setAnimationError(label)
@@ -142,7 +153,9 @@ function checkInputInFloatFormat(element, label, errorSpan) {
         element.style.borderColor = "rgba(54, 47, 47, 0.4)"
         errorSpan.innerHTML = ''
         element.value = parseFloat(element.value).toString()
+        isCorrectFormat = true
     }
+    return isCorrectFormat
 }
 
 nameElement.addEventListener("keypress", function(e) {
