@@ -31,9 +31,11 @@ public class ExceptionHandlingController {
             ValidationErrorResponse response = exception.getResponseBodyAs(ValidationErrorResponse.class);
             if (response != null) {
                 errorMessageBuilder.append("Error: ").append(response.getStatus()).append('\n');
-                for (Violation violation : response.getViolationList()) {
-                    errorMessageBuilder.append(violation.getFieldName()).append(": ").append(violation.getMessage())
-                            .append('\n');
+                if (response.getViolationList() != null) {
+                    for (Violation violation : response.getViolationList()) {
+                        errorMessageBuilder.append(violation.getFieldName()).append(": ").append(violation.getMessage())
+                                .append('\n');
+                    }
                 }
             }
         } catch (HttpMessageConversionException ex) {
