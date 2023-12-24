@@ -18,12 +18,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
+import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.RestApiService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class CalorieController {
     private RestApiService restService;
+    private List<Long> idsProductsToDelete;
 
     @Autowired
     public CalorieController(RestApiService restService) {
@@ -97,7 +106,27 @@ public class CalorieController {
     }
 
     @GetMapping("/my-products")
-    public String getMyProductsPage() {
+    public String getMyProductsPage(HttpServletRequest request, Model model) {
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+        List<Product> products = (flashMap == null || flashMap.isEmpty()) ?
+                restService.getUserProducts() : new ArrayList<>();
+
+        idsProductsToDelete = new ArrayList<>();
+
+        model.addAttribute("productDTO", new ProductDTO(products));
+        return "list_product";
+    }
+
+    @PostMapping(value = "/my-products", params = {"apply"})
+    public String applyProductsChanges(@ModelAttribute ProductDTO productDTO) {
+        restService.changeUserProducts(new ChangeProductsRequest(productDTO.getProducts(), idsProductsToDelete));
+        return "redirect:/my-products";
+    }
+
+    @PostMapping(value = "/my-products", params = {"remove"})
+    public String addToProductsToDelete(@ModelAttribute ProductDTO productDTO) {
+        idsProductsToDelete.addAll(productDTO.getIdsToDelete());
+        productDTO.getProducts().removeIf(product -> idsProductsToDelete.contains(product.getId()));
         return "list_product";
     }
 

@@ -3,15 +3,21 @@ package ru.unfatcrew.clientcalorietracker.rest_service;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
+import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
+
+import java.util.List;
 
 @Service
 public class RestApiService {
@@ -66,6 +72,28 @@ public class RestApiService {
         userToAdd.setPassword(encodePassword(userToAdd.getPassword()));
 
         rest.put(restURL + "/users", userToAdd);
+    }
+
+    public List<Product> getUserProducts() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        String url = UriComponentsBuilder.fromHttpUrl(restURL)
+                .path("/products/user-products")
+                .queryParam("user-login", username)
+                .toUriString();
+
+        RequestEntity<Void> request = RequestEntity.get(url).build();
+
+        ResponseEntity<List<Product>> response = rest.exchange(request, new ParameterizedTypeReference<>() {});
+
+        return response.getBody();
+    }
+
+    public void changeUserProducts(ChangeProductsRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        request.setUserLogin(username);
+
+        rest.put(restURL + "/products", request);
     }
 
     private static String encodePassword(String password) {
