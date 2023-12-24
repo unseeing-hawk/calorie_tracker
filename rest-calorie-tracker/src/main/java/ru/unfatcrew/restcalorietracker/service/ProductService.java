@@ -137,6 +137,14 @@ public class ProductService {
                         , "not connected"));
             }
 
+            if (product != null
+                    && !product.isActive()) {
+                violationList.add(new Violation("changeProducts.changeProductsRequest.productsIdsForDeletion["
+                        + Integer.toString(i)
+                        + "].<list element>-isActive"
+                        , "already deleted"));
+            }
+
             if (product != null) {
                 product.setActive(false);
                 productsForDeletionHashMap.put(product.getId(), product);
@@ -178,6 +186,13 @@ public class ProductService {
                         + Integer.toString(i)
                         + "].id-userLogin"
                         , "not connected"));
+            }
+             if (product != null
+                    && !product.isActive()) {
+                violationList.add(new Violation("changeProducts.changeProductsRequest.productsForChange["
+                        + Integer.toString(i)
+                        + "].<list element>-isActive"
+                        , "this product deleted"));
             }
 
             if (product != null) {
