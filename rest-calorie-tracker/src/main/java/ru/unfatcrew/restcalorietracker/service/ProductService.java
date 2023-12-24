@@ -1,5 +1,8 @@
 package ru.unfatcrew.restcalorietracker.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,8 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.validation.Valid;
 
+import org.springframework.validation.annotation.Validated;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
 import ru.unfatcrew.restcalorietracker.dao.ProductDAO;
 import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDataDto;
@@ -29,6 +36,7 @@ import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.Illegal
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.validation.Violation;
 
+@Validated
 @Service
 public class ProductService {
 
@@ -135,6 +143,14 @@ public class ProductService {
                         , "not connected"));
             }
 
+            if (product != null
+                    && !product.isActive()) {
+                violationList.add(new Violation("changeProducts.changeProductsRequest.productsIdsForDeletion["
+                        + Integer.toString(i)
+                        + "].<list element>-isActive"
+                        , "already deleted"));
+            }
+
             if (product != null) {
                 product.setActive(false);
                 productsForDeletionHashMap.put(product.getId(), product);
@@ -176,6 +192,13 @@ public class ProductService {
                         + Integer.toString(i)
                         + "].id-userLogin"
                         , "not connected"));
+            }
+             if (product != null
+                    && !product.isActive()) {
+                violationList.add(new Violation("changeProducts.changeProductsRequest.productsForChange["
+                        + Integer.toString(i)
+                        + "].<list element>-isActive"
+                        , "this product deleted"));
             }
 
             if (product != null) {
@@ -232,21 +255,142 @@ public class ProductService {
         Pageable pageable = PageRequest.of(offset, limit);
         Page<Product> productsPage = productDAO.findByUserLoginAndIsActiveTrue(userLogin, pageable);
         
-        List<ProductPostDTO> productPostDTOList = productsPage.getContent().stream()
-        .map(product -> {
-            ProductPostDTO productPostDTO = new ProductPostDTO();
-            productPostDTO.setId(product.getId());
-            productPostDTO.setUserLogin(userLogin);
-            productPostDTO.setName(product.getName());
-            productPostDTO.setCalories(product.getCalories());
-            productPostDTO.setProteins(product.getProteins());
-            productPostDTO.setFats(product.getFats());
-            productPostDTO.setCarbohydrates(product.getCarbohydrates());
-            return productPostDTO;
-        })
-        .collect(Collectors.toList());
+        List<ProductPostDTO> productPostDTOList = convertPageToProductPostDTOList(productsPage, userLogin);
 
         return productPostDTOList;
     }
 
+    public List<ProductPostDTO> searchProducts(@Valid int limit, 
+                                                @Valid int offset, 
+                                                @Valid String userLogin,
+                                                @Valid String pattern) {
+        List<Violation> violationList = new ArrayList<>();
+        
+        User user = userDAO.findByLogin(userLogin);
+        if (user == null) {
+            violationList.add(new Violation("getUserProducts.productPostDTO.user-login",
+                    "not found"));
+        }
+
+        if (!violationList.isEmpty()) {
+            throw new IllegalRequestArgumentException(violationList);
+        }
+
+        List<ProductPostDTO> products = new ArrayList<>();
+        int startIndex = limit * offset;
+        int endIndex = limit * offset + limit; //includ last element
+
+        List<Product> userProductsDB = productDAO.findByUserLoginAndNameContainingIgnoreCaseAndIsActiveTrue(userLogin, pattern);
+        int countUserProducts = userProductsDB.size();
+
+        if (startIndex < countUserProducts){
+            int userEndIndex = endIndex;
+
+            if (endIndex > countUserProducts) {
+                userEndIndex = countUserProducts;
+            }
+
+            for (int i = startIndex; i < userEndIndex; i++) {
+                Product userProduct = userProductsDB.get(i);
+
+                products.add(new ProductPostDTO(
+                    userProduct.getId(),
+                    userProduct.getUser().getLogin(),
+                    userProduct.getName(),
+                    userProduct.getCalories(),
+                    userProduct.getProteins(),
+                    userProduct.getFats(),
+                    userProduct.getCarbohydrates()
+                ));
+            }
+        } 
+        
+        final int FS_LIMIT = 20;
+        if (countUserProducts < endIndex) {
+            startIndex -= countUserProducts;
+            if (startIndex < 0) startIndex = 0;
+            endIndex -= countUserProducts;
+
+            int pageNumber_first = startIndex / FS_LIMIT;
+            int pageNumber_last = (int) Math.ceil((double) endIndex / FS_LIMIT); 
+
+            List<ProductPostDTO> fatsecretProducts = new ArrayList<>();
+            for (int i = pageNumber_first; i <= pageNumber_last; i++) {
+                String fatsecretRequestBody = FatsecretService.searchInFatsecretByPattern(pattern, String.valueOf(i));
+                fatsecretProducts.addAll(convertJsonToProductPostDTO(fatsecretRequestBody));
+            }
+
+            for (int i = startIndex % FS_LIMIT; i < (fatsecretProducts.size() - (FS_LIMIT - endIndex % FS_LIMIT)); i++) {
+                products.add(fatsecretProducts.get(i));
+            }
+        }
+
+        return products;
+    }
+
+    private static List<ProductPostDTO> convertJsonToProductPostDTO(String jsonString) {
+        List<ProductPostDTO> productPostDTOList = new ArrayList<>();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(jsonString);
+
+            JsonNode foodsNode = jsonNode.path("foods").path("food");
+            for (JsonNode foodNode : foodsNode) {
+                Long fatsecretId = foodNode.path("food_id").asLong();
+                String name = foodNode.path("food_name").asText();
+
+                Integer calories = foodNode.path("food_description").asText().contains("Calories") ?
+                        Math.round(extractValue("Calories", foodNode.path("food_description"))) : 0;
+               
+                Float proteins = extractValue("Protein", foodNode.path("food_description"));
+                Float fats = extractValue("Fat", foodNode.path("food_description"));
+                Float carbohydrates = extractValue("Carbs", foodNode.path("food_description"));
+
+                ProductPostDTO productPostDTO = new ProductPostDTO(
+                        fatsecretId, name, calories, proteins, fats, carbohydrates
+                );
+
+                productPostDTOList.add(productPostDTO);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return productPostDTOList;
+    }
+
+    private static Float extractValue(String key, JsonNode descriptionNode) {
+        String description = descriptionNode.asText();
+        String valueString = "";
+
+        int startIdx = description.indexOf(key + ":");
+        if (startIdx != -1) {
+            int endIdx = (key == "Calories") ? description.indexOf("k", startIdx) : description.indexOf("g", startIdx);
+            if (endIdx != -1) {
+                valueString = description.substring(startIdx + key.length() + 1, endIdx).trim();
+    
+                valueString = valueString.replaceAll("[^\\d.]", "");
+            }
+        }
+    
+        return valueString.isEmpty() ? 0.0f : Float.parseFloat(valueString);
+    }
+
+    private static  List<ProductPostDTO> convertPageToProductPostDTOList(Page<Product> productsPage, String userLogin) {
+        return productsPage.getContent().stream()
+                .map(product -> {
+                    ProductPostDTO productPostDTO = new ProductPostDTO();
+                    productPostDTO.setId(product.getId());
+                    productPostDTO.setUserLogin(userLogin);
+                    productPostDTO.setName(product.getName());
+                    productPostDTO.setCalories(product.getCalories());
+                    productPostDTO.setProteins(product.getProteins());
+                    productPostDTO.setFats(product.getFats());
+                    productPostDTO.setCarbohydrates(product.getCarbohydrates());
+                    return productPostDTO;
+                })
+                .collect(Collectors.toList());
+    }
+    
 }
