@@ -3,6 +3,8 @@ package ru.unfatcrew.restcalorietracker.rest.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +18,11 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
 import ru.unfatcrew.restcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.restcalorietracker.pojo.entity.Product;
+import ru.unfatcrew.restcalorietracker.pojo.request.ChangeProductsRequest;
+import ru.unfatcrew.restcalorietracker.pojo.response.ChangeProductsResponse;
 import ru.unfatcrew.restcalorietracker.service.ProductService;
 
+@Validated
 @RestController
 @RequestMapping("/products")
 public class ProductRestController {
@@ -32,6 +37,11 @@ public class ProductRestController {
     @PostMapping
     public Product addProduct(@RequestBody ProductPostDTO product) {
         return productService.addProduct(product);
+    }
+
+    @PutMapping
+    public ChangeProductsResponse changeProducts(@RequestBody ChangeProductsRequest changeProductsRequest) {
+        return productService.changeProducts(changeProductsRequest);
     }
 
     @GetMapping("/user-products")

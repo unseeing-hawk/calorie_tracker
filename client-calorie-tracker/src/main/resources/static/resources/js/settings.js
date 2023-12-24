@@ -13,6 +13,10 @@ var btnElement = document.querySelector('#btn-save')
 
 btnElement.onclick = saveChange
 function saveChange(e) {
+    let isCorrectFormatName = false
+    let isCorrectFormatWeight = false
+    let isCorrectFormatPassword = false
+
     // input name
     nameElement.value = nameElement.value.trim()
     let nameErrorSpan = document.querySelector("#name-error-span")
@@ -52,6 +56,7 @@ function saveChange(e) {
                 nameElement.value += arrayNames[i]
             }
         }
+        isCorrectFormatName = true
     }
 
     // input weight
@@ -90,6 +95,7 @@ function saveChange(e) {
         weightElement.style.borderColor = "rgba(54, 47, 47, 0.4)"
         weightErrorSpan.innerHTML = ''
         weightElement.value = parseFloat(weightElement.value).toString()
+        isCorrectFormatWeight = true
     }
 
     // input password
@@ -111,6 +117,10 @@ function saveChange(e) {
     else {
         passwordElement.style.borderColor = "rgba(54, 47, 47, 0.4)"
         passwordErrorSpan.innerHTML = ''
+        isCorrectFormatPassword = true
+    }
+    if(isCorrectFormatName && isCorrectFormatWeight && isCorrectFormatPassword ){
+        document.getElementById('settingsForm').submit();
     }
 }
 
@@ -174,4 +184,11 @@ function changeTypePassword (){
     password.type = password.type === "text" ? "password" : "text"
     let inputPwd = document.querySelector('.input-password #password')
     inputPwd.focus()
+}
+
+document.querySelector("#sever-error-box button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("sever-error-container");
+    let errorMessage = document.getElementById("sever-error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
 }

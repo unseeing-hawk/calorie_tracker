@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
 <body>
     <header class="header">
         <div class="main-block-header">
-            <button class="name-webapp">nameWebApp</button>
+            <a th:href="@{/}" class="name-webapp">Calorie Tracker</a>
         </div>
     </header>
     <div class="data-table-container">
@@ -144,8 +144,8 @@
                     </div>
                 </div>
                 <div class="button-box">
-                    <button id="btn-back-to-main" type="button">Back</button>
-                    <button id="btn-add-product" type="button">Add product</button>
+                    <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
+                    <button id="btn-add-product" type="button" class="btn">Add product</button>
                 </div>
             </div>
             <div class="chosen-product-container">
@@ -196,11 +196,20 @@
                 </div>
             </div>
         </div>
-        <div id="client-error-layout" class="error-layout">
-            <div id="client-error-Box" class="error-box">
+
+        <div id="client-error-container" class="error-container">
+            <div id="client-error-box" class="error-box">
                 <p>Error</p>
-                <span id="client-error-message" class="client-error-message"></span>
+                <span id="client-error-message" class="error-message"></span>
                 <button >OK</button>
+            </div>
+        </div>
+
+        <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
+            <div id="sever-error-box" class="error-box">
+                <p>Error</p>
+                <span id="sever-error-message" class="error-message" th:text="${errorMessage}"></span>
+                <button>OK</button>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
 <body>
     <header class="header">
         <div class="main-block-header">
-            <button class="name-webapp">nameWebApp</button>
+            <a th:href="@{/}" class="name-webapp">Calorie Tracker</a>
         </div>
     </header>
     <div class="container">
@@ -48,8 +48,15 @@
             </div>
 
             <div class="btns-box">
-                <button id="btn-back" class="btn" type="button">Back</button>
+                <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
                 <button id="btn-add" class="btn" type="button">Add</button>
+            </div>
+            <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
+                <div id="sever-error-box" class="error-box">
+                    <p>Error</p>
+                    <span id="sever-error-message" class="error-message" th:text="${errorMessage}"></span>
+                    <button>OK</button>
+                </div>
             </div>
         </div>
     </div>

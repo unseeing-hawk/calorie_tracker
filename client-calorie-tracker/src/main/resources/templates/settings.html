@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,33 +11,42 @@
 <body>
     <header class="header">
         <div class="main-block-header">
-            <button class="name-webapp">nameWebApp</button>
+            <a th:href="@{/}" class="name-webapp">Calorie Tracker</a>
         </div>
     </header>
 
     <div class="container">
         <div class="block-setting">
             <h1>Settings</h1>
-            <div class="input-box">
-                <label for="">Name</label>
-                <input id="name" type="text" autofocus="true" value="Pham Van Nhan">
-                <span id="name-error-span" for=""></span>
-            </div>
-            <div class="input-box">
-                <label for="">Weight</label>
-                <input id="weight" type="text" autofocus="true" value="60">
-                <span id="weight-error-span" for=""></span>
-            </div>
-            <div class="input-box input-password">
-                <label for="">Password</label>
-                <input id="password" type="password" autofocus="true">
-                <i class='bx bx-show showhide'></i>
-                <i class='bx bx-hide showhide'></i>
-                <span id="password-error-span" for=""></span>
-            </div>
+            <form id="settingsForm" th:action="@{/settings/save}" th:object="${user}" method="post">
+                <div class="input-box">
+                    <label for="">Name</label>
+                    <input id="name" type="text" th:field="*{name}" autofocus="true">
+                    <span id="name-error-span" for=""></span>
+                </div>
+                <div class="input-box">
+                    <label for="">Weight</label>
+                    <input id="weight" type="text" th:field="*{weight}" autofocus="true">
+                    <span id="weight-error-span" for=""></span>
+                </div>
+                <div class="input-box input-password">
+                    <label for="">Password</label>
+                    <input id="password" type="password" th:field="*{password}" autofocus="true">
+                    <i class='bx bx-show showhide'></i>
+                    <i class='bx bx-hide showhide'></i>
+                    <span id="password-error-span" for=""></span>
+                </div>
+            </form>
             <div class="btns-box">
-                <button id="btn-back" class="btn" type="button">Back</button>
+                <a th:href="@{/}" class="btn">Back</a>
                 <button id="btn-save" class="btn" type="button">Save change</button>
+            </div>
+            <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
+                <div id="sever-error-box" class="error-box">
+                    <p>Error</p>
+                    <span class="error-message" id="sever-error-message" th:text="${errorMessage}"></span>
+                    <button>OK</button>
+                </div>
             </div>
         </div>
     </div>

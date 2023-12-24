@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>my-webapp</title>
     <link rel="stylesheet" href="/resources/css/signin.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
-
 </head>
 <body>
     <header class="header">
         <div class="main-block-header">
-            <button class="name-webapp">nameWebApp</button>
+            <a th:href="@{/}" class="name-webapp">Calorie Tracker</a>
         </div>
     </header>
     <div class="container">
@@ -23,25 +22,34 @@
             <div class="block-signin">
                 <h1>Welcome!</h1>
                 <p>Sign in to your account to continue</p>
-                <div class="input-box">
-                    <input id="username" name="username" type="text" placeholder="Username"  class="form-control" autofocus="true">
-                    <Label id="username-error-label"></Label>
-                    <i class='bx bxs-user'></i>
-                </div>
-                
-                <div class="input-box input-password">
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Password">
-                    <i class='bx bxs-lock-alt'></i>
-                    <Label id="password-error-label">Incorrect username or password!</Label>
-                    <i class='bx bx-show showhide'></i>
-                    <i class='bx bx-hide showhide'></i>
-                </div>
-
-                <button type="submit" class="btn">Login</button>
+                <form id="loginForm" th:action="@{/login}" method="post">
+                    <div class="input-box">
+                        <input id="username" name="username" type="text" placeholder="Username"  class="form-control" autofocus="true">
+                        <Label id="username-error-label"></Label>
+                        <i class='bx bxs-user'></i>
+                    </div>
+                    
+                    <div class="input-box input-password">
+                        <input id="password" name="password" type="password" class="form-control" placeholder="Password">
+                        <i class='bx bxs-lock-alt'></i>
+                        <Label id="password-error-label" th:text="${loginError}"></Label>
+                        <i class='bx bx-show showhide'></i>
+                        <i class='bx bx-hide showhide'></i>
+                    </div>
+    
+                    <button type="button" class="btn">Login</button>
+                </form>
                 <div class="register-link">
-                    <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+                    <p>Don't have an account? <a th:href="@{/register}">Sign up</a></p>
                 </div>
+                <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
+                    <div id="sever-error-box" class="error-box">
+                        <p>Error</p>
+                        <span class="error-message" id="sever-error-message" th:text="${errorMessage}"></span>
+                        <button>OK</button>
+                    </div>
                 </div>
+            </div>
         </div>
         
     </div>

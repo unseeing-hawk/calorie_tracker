@@ -19,7 +19,7 @@ public class ExceptionHandlingController {
     @ExceptionHandler(ResourceAccessException.class)
     public String handleResourceAccessException(HttpServletRequest request, RedirectAttributes attributes) {
         attributes.addFlashAttribute("errorMessage", "Failed to establish a connection with the server");
-        return "redirect:" + request.getRequestURI();
+        return "redirect:" + getPathToGetEndpoint(request.getRequestURI()) + "?server-error";
     }
 
     @ExceptionHandler(RestClientResponseException.class)
@@ -41,7 +41,7 @@ public class ExceptionHandlingController {
         }
 
         attributes.addFlashAttribute("errorMessage", errorMessageBuilder.toString());
-        return "redirect:" + request.getRequestURI();
+        return "redirect:" + getPathToGetEndpoint(request.getRequestURI());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -53,6 +53,10 @@ public class ExceptionHandlingController {
         }
 
         attributes.addFlashAttribute("errorMessage", errorMessageBuilder.toString());
-        return "redirect:" + request.getRequestURI();
+        return "redirect:" + getPathToGetEndpoint(request.getRequestURI());
+    }
+
+    private static String getPathToGetEndpoint(String uri) {
+        return "/" + uri.split("/")[1];
     }
 }

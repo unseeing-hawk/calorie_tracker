@@ -180,3 +180,10 @@ carbohydratesElement.addEventListener("keypress", function(e) {
         addProduct()
     }
 })
+
+document.querySelector("#sever-error-box button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("sever-error-container");
+    let errorMessage = document.getElementById("sever-error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
+}

@@ -17,7 +17,7 @@ document.querySelectorAll('.body-product-table tbody tr').forEach(row => {
     }
 })
 
-var clientErrorLayout = document.getElementById('client-error-layout')
+var clientErrorContainer = document.getElementById('client-error-container')
 var clientErrorMessage = document.getElementById("client-error-message")
 var tbodyTableMeal = document.querySelector('.body-product-table tbody')
 document.querySelector('#btn-apply-changes').onclick = function(e) {
@@ -65,7 +65,7 @@ document.querySelector('#btn-apply-changes').onclick = function(e) {
 
     clientErrorMessage.innerText = contentClientError
     if(contentClientError.length > 0) {
-        clientErrorLayout.style.display = 'flex'
+        clientErrorContainer.style.display = 'flex'
     }
 }
 
@@ -94,7 +94,7 @@ document.querySelector("#btn-delete").onclick = function() {
 }
 
 document.querySelector("#client-error-box button").onclick = function(e) {
-    clientErrorLayout.style.display = "none";
+    clientErrorContainer.style.display = "none";
     clientErrorMessage.innerHTML = ''
 }
 
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
 document.querySelector('#search-btn').onclick = function(e) {
     if(dateElement.value == '') {
         clientErrorMessage.innerText = 'Please enter date!'
-        clientErrorLayout.style.display = 'flex'
+        clientErrorContainer.style.display = 'flex'
     }
     else {
         let selectedDate = new Date(dateElement.value);
@@ -130,9 +130,14 @@ document.querySelector('#search-btn').onclick = function(e) {
         let maxDate = new Date(maxDateString);
         if (selectedDate < minDate || selectedDate > maxDate) {
             clientErrorMessage.innerText = 'The minimum value of the date is 10 years ago.\nThe maximum value of the date is today.'
-            clientErrorLayout.style.display = 'flex'
+            clientErrorContainer.style.display = 'flex'
         }
     }
-    
-    
+}
+
+document.querySelector("#sever-error-box button").onclick = function hideErrorBox(e) {
+    let errorBox = document.getElementById("sever-error-container");
+    let errorMessage = document.getElementById("sever-error-message");
+    errorBox.style.display = "none";
+    errorMessage.textContent = ""
 }

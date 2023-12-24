@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,41 +12,37 @@
     <header class="header">
         <div class="header-box">
             <div class="name-header">
-                <button class="name-webapp">nameWebApp</button>
+                <a th:href="@{/}" class="name-webapp">Calorie Tracker</a>
             </div>
-            <div class="btn-box">
-
-                <div class="profiles-setting-box">
-                    <i class='bx bx-cog' style='color:#0066EE' ></i>
-                    <a href="">Profile settings</a>
+            <div class="a-box">
+                <div id="setting-box" class="profiles-setting-box">
+                    <i class='bx bx-cog' style='color:#0066EE'></i>
+                    <a th:href="@{/settings}">Profile settings</a>
                 </div>
-
-                <div class="signout-box">
-                    <i class='bx bx-log-out bx-rotate-180' style='color:#0066EE' ></i>
-                    <a href="">Sign out</a>
-                </div>
-
+                <form id="signout-box" class="signout-box" th:action="@{/logout}" method="post">
+                    <i class='bx bx-log-out bx-rotate-180' style='color:#0066EE'></i>
+                    <button type="submit">Sign out</button>
+                </form>
             </div>
         </div>
-        
     </header>
     <div class="container">
-        <div class="buttons-box">
-            <div class="btn-box">
-                <button id="add-product-btn" type="button">Add <br> product</button>
+        <div class="menu-box">
+            <div class="a-box">
+                <a id="add-product-link" th:href="@{/create-product}">Add <br> product</a>
             </div>
-            <div class="btn-box">
-                <button id="list-my-product-btn" type="button">List of <br> my products</button>
+            <div class="a-box">
+                <a id="list-my-product-btn" th:href="@{/my-products}">List of my<br> products</a>
             </div>
-            <div class="btn-box">
-               <button id="Add-meal-btn" type="button">Add meal</button>
+            <div class="a-box">
+               <a id="Add-meal-link" th:href="@{/add-meal}">Add meal</a>
             </div>
             
-            <div class="btn-box">
-                <button id="change-meals-btn" type="button">Change <br> meal</button>
+            <div class="a-box">
+                <a id="change-meals-link" th:href="@{/change-meal}">Change <br> meal</a>
             </div>
-            <div class="btn-box">
-                <button id="get-summary-btn" type="button">Get <br> summary</button>
+            <div class="a-box">
+                <a id="get-summary-link" th:href="@{/summary-form}">Get <br> summary</a>
             </div>
         </div>
         <div class="content-box">
@@ -58,9 +54,14 @@
                 <p>Track meals, learn about your habits, and reach your goals with us.</p>
             </div>
         </div>
+        <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
+            <div id="sever-error-box" class="error-box">
+                <p>Error</p>
+                <span class="error-message" id="sever-error-message" th:text="${errorMessage}"></span>
+                <button>OK</button>
+            </div>
+        </div>
     </div>
-    
     <script src="/resources/js/main.js"></script>
-
 </body>
 </html>
