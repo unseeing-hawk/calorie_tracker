@@ -22,7 +22,8 @@
                         <p>Products</p>
                     </div>
                     <div class="body-tb body-product-table">
-                        <form id="applyChangesMyProduct" th:action="@{/my-products/apply}" method="post">
+                        <form id="applyChangesMyProduct" th:object="${productDTO}" th:action="@{/my-products}"
+                              onsubmit="return validateApplyForm();" method="post">
                             <table>
                                 <thead>
                                     <tr>
@@ -35,14 +36,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="product : ${products}">
+                                    <tr th:each="product, iter : *{products}">
                                         <div>
-                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].name}" th:value="${product.name}"></td>
-                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].calories}" th:value="${product.calories}"></td>
-                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].proteins}" th:value="${product.proteins}"></td>
-                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].fats}" th:value="${product.fats}"></td>
-                                            <td contenteditable="true" th:field="*{products[__${rowStat.index}__].carbohydrates}" th:value="${product.carbohydrates}"></td>
-                                            <td><input type="checkbox" name="" id=""></td>
+                                            <input type="hidden" th:field="*{products[__${iter.index}__].id}" th:value="${product.id}" />
+                                            <td>
+                                                <input th:field="*{products[__${iter.index}__].name}" th:value="${product.name}"/>
+                                            </td>
+                                            <td>
+                                                <input th:field="*{products[__${iter.index}__].calories}" th:value="${product.calories}" />
+                                            </td>
+                                            <td>
+                                                <input th:field="*{products[__${iter.index}__].proteins}" th:value="${product.proteins}" />
+                                            </td>
+                                            <td>
+                                                <input th:field="*{products[__${iter.index}__].fats}" th:value="${product.fats}" />
+                                            </td>
+                                            <td>
+                                                <input th:field="*{products[__${iter.index}__].carbohydrates}" th:value="${product.carbohydrates}" />
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" th:field="*{idsToDelete}" th:value="${product.id}" />
+                                            </td>
                                         </div>
                                     </tr>
                                 </tbody>
@@ -52,8 +66,8 @@
                 </div>
                 <div class="button-box">
                     <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
-                    <button id="btn-apply-changes" type="button" class="btn">Apply changes</button>
-                    <button id="btn-delete" type="button" class="btn">Delete</button>
+                    <button id="btn-apply-changes" form="applyChangesMyProduct" name="apply" type="submit" class="btn">Apply changes</button>
+                    <button id="btn-delete" form="applyChangesMyProduct" name="remove" type="submit" class="btn">Delete</button>
                 </div>
                 <div id="client-error-container" class="error-container">
                     <div id="client-error-box" class="error-box">
