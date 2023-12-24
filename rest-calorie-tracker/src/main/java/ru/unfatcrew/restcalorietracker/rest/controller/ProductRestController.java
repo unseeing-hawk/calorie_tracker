@@ -60,4 +60,25 @@ public class ProductRestController {
                                                 String userLogin) {
         return productService.getUserProducts(limit, offset, userLogin);
     }
+
+    @GetMapping("/search-products")
+    public List<ProductPostDTO> searchProducts(@RequestParam(name="limit", defaultValue="10")
+                                                @Valid
+                                                @Min(value = 1, message = "limit should not be less than 1")
+                                                @Max(value = 100, message = "limit should not exceed 50")
+                                                int limit, 
+                                                @RequestParam(name="offset", defaultValue="0")
+                                                @Valid
+                                                @Min(value = 0, message = "offset should not be less than 0")
+                                                int offset,
+                                                @RequestParam(name="user-login", defaultValue="")
+                                                @Size(min=8, max=30)
+                                                @Valid
+                                                String userLogin,
+                                                @RequestParam(name="pattern", defaultValue="")
+                                                @Size(min=1, max=100)
+                                                @Valid
+                                                String pattern) {
+        return productService.searchProducts(limit, offset, userLogin, pattern);
+    }
 }
