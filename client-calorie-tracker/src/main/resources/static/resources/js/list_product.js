@@ -9,7 +9,7 @@ function setAnimationError(el) {
 var clientErrorContainer = document.getElementById('client-error-container')
 var errorMessage = document.getElementById("client-error-message");
 
-document.getElementById('btn-apply-changes').onclick = function(e) {
+function validateApplyForm() {
     let isCorrectAllName = true
     let isCorrectAllCalories = true
     let isCorrectAllProteins = true
@@ -23,27 +23,27 @@ document.getElementById('btn-apply-changes').onclick = function(e) {
         let isCorrectFatsInRow = true
         let isCorrectCarbohydratesInRow = true
         // check name
-        if (checkNameColumn(row.cells[0]) == false) {
+        if (checkNameColumn(row.cells[0].querySelector("input"), row.cells[0]) == false) {
             isCorrectAllName = false
             isCorrectNameInRow = false
         }
         // check Calories
-        if(checkCaloriesColums(row.cells[1]) == false) {
+        if(checkCaloriesColums(row.cells[1].querySelector("input"), row.cells[1]) == false) {
             isCorrectAllCalories = false
             isCorrectCaloriesInRow = false
         }
         // check Proteins
-        if(checkProteinFatsCarbohydratesColums(row.cells[2]) == false){
+        if(checkProteinFatsCarbohydratesColums(row.cells[2].querySelector("input"), row.cells[2]) == false) {
             isCorrectAllProteins = false
             isCorrectProteinsInRow = false
         }
         // check Fats
-        if(checkProteinFatsCarbohydratesColums(row.cells[3]) == false){
+        if(checkProteinFatsCarbohydratesColums(row.cells[3].querySelector("input"), row.cells[3]) == false){
             isCorrecAlltFats = false
             isCorrectFatsInRow = false
         }
         // check Carbohydrates
-        if(checkProteinFatsCarbohydratesColums(row.cells[4]) == false){
+        if(checkProteinFatsCarbohydratesColums(row.cells[4].querySelector("input"), row.cells[4]) == false){
             isCorrectAllCarbohydrates = false
             isCorrectCarbohydratesInRow = false
         }
@@ -94,30 +94,31 @@ document.getElementById('btn-apply-changes').onclick = function(e) {
         clientErrorContainer.style.display = 'flex'
     }
     else {
-        document.getElementById('applyChangesMyProduct').submit();
+        return true
     }
+    return false
 }
 
-document.querySelector('#btn-delete').onclick = function(e) {
-    let checkboxes = document.querySelectorAll('tbody input[type="checkbox"]')
-    checkboxes.forEach(checkbox => {
-        if(checkbox.checked) {
-            let row = checkbox.parentNode.parentNode
-            row.parentNode.removeChild(row)
-        }
-    })
-}
+// document.querySelector('#btn-delete').onclick = function(e) {
+//     let checkboxes = document.querySelectorAll('tbody input[type="checkbox"]')
+//     checkboxes.forEach(checkbox => {
+//         if(checkbox.checked) {
+//             let row = checkbox.parentNode.parentNode
+//             row.parentNode.removeChild(row)
+//         }
+//     })
+// }
 
-function checkNameColumn(nameElement) {
-    nameElement.innerText = nameElement.innerText.trim()
-    if(nameElement.innerText.length == 0 || nameElement.innerText.length > 100) {
-        nameElement.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
-        setAnimationError(nameElement.parentNode)
+function checkNameColumn(elementToCheck, elementToAnimate) {
+    elementToCheck.value = elementToCheck.value.trim()
+    if(elementToCheck.value.length == 0 || elementToCheck.value.length > 100) {
+        elementToAnimate.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
+        setAnimationError(elementToAnimate.parentNode)
         return false
     }
     else {
-        arrayNames = nameElement.innerText.split(/\s+/)
-        nameElement.innerText = ""
+        arrayNames = elementToCheck.value.split(/\s+/)
+        elementToCheck.value = ""
         let standardFormatName = ''
         for(var i in arrayNames) {
             if(i != (arrayNames.length - 1)) {
@@ -127,40 +128,40 @@ function checkNameColumn(nameElement) {
                 standardFormatName += arrayNames[i]
             }
         }
-        nameElement.innerText = standardFormatName
+        elementToCheck.value = standardFormatName
         return true
     }
 }
 
-function checkCaloriesColums(caloriesElement) {
-    caloriesElement.innerText = caloriesElement.innerText.trim()
-    if(caloriesElement.innerText.length == 0 
-        || (/[^0-9]/.test(caloriesElement.innerText)) 
-        || parseInt(caloriesElement.innerText) > 2147483647)
+function checkCaloriesColums(elementToCheck, elementToAnimate) {
+    elementToCheck.value = elementToCheck.value.trim()
+    if(elementToCheck.value.length == 0
+        || (/[^0-9]/.test(elementToCheck.value))
+        || parseInt(elementToCheck.value) > 2147483647)
     {
-        caloriesElement.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
-        setAnimationError(caloriesElement.parentNode)
+        elementToAnimate.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
+        setAnimationError(elementToAnimate.parentNode)
         return false
     }
     else {
-        caloriesElement.innerText = parseInt(caloriesElement.innerText).toString()
+        elementToCheck.value = parseInt(elementToCheck.value).toString()
         return true
     }
 }
 
-function checkProteinFatsCarbohydratesColums(element) {
-    element.innerText = element.innerText.trim()
-    if(element.innerText.length == 0
-        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(element.innerText))
-        || parseFloat(element.innerText) == 0
-        || parseFloat(element.innerText) > (3.4 ** 38))
+function checkProteinFatsCarbohydratesColums(elementToCheck, elementToAnimate) {
+    elementToCheck.value = elementToCheck.value.trim()
+    if(elementToCheck.value.length == 0
+        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(elementToCheck.value))
+        || parseFloat(elementToCheck.value) == 0
+        || parseFloat(elementToCheck.value) > (3.4 ** 38))
     {
-        element.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
-        setAnimationError(element.parentNode)
+        elementToAnimate.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
+        setAnimationError(elementToAnimate.parentNode)
         return false
     }
     else {
-        element.innerText = parseFloat(element.innerText).toString()
+        elementToCheck.value = parseFloat(elementToCheck.value).toString()
         return true
     }
 }

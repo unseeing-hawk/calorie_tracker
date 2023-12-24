@@ -179,9 +179,14 @@ thead th:first-child {
     text-align: left;
 }
 
+tbody input {
+    font-size: 18px;
+    background-color: transparent;
+    outline: transparent;
+}
+
 tbody td {
     text-align: center;
-    font-size: 18px;
 }
 
 tbody td:first-child {
