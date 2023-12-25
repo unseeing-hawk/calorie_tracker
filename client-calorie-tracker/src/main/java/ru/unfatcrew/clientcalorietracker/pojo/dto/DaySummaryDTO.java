@@ -1,9 +1,10 @@
 package ru.unfatcrew.clientcalorietracker.pojo.dto;
 
+import static ru.unfatcrew.clientcalorietracker.utils.DateUtils.dateFormatter;
 import java.time.LocalDate;
 
 public class DaySummaryDTO {
-    private LocalDate date;
+    private String date;
     private Double weight;
     private Double calories;
     private Double proteins;
@@ -11,7 +12,7 @@ public class DaySummaryDTO {
     private Double carbohydrates;
 
     public DaySummaryDTO() {
-        this.date = LocalDate.now();
+        this.date = LocalDate.now().format(dateFormatter);
         this.weight = 0.0;
         this.calories = 0.0;
         this.proteins = 0.0;
@@ -19,7 +20,7 @@ public class DaySummaryDTO {
         this.carbohydrates = 0.0;
     }
 
-    public DaySummaryDTO(LocalDate date,
+    public DaySummaryDTO(String date,
                          Double weight,
                          Double calories,
                          Double proteins,
@@ -33,7 +34,7 @@ public class DaySummaryDTO {
         this.carbohydrates = carbohydrates;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -57,7 +58,7 @@ public class DaySummaryDTO {
         return carbohydrates;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

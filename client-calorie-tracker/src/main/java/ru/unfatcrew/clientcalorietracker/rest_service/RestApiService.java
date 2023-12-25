@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +19,7 @@ import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class RestApiService {
@@ -119,8 +111,8 @@ public class RestApiService {
 
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/meals/summary")
-                .queryParam("start-date", formatDate(startDate))
-                .queryParam("end-date", formatDate(endDate))
+                .queryParam("start-date", startDate)
+                .queryParam("end-date", endDate)
                 .queryParam("user-login", username)
                 .toUriString();
 
@@ -132,10 +124,5 @@ public class RestApiService {
     private static String encodePassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return PASSWORD_PREFIX + passwordEncoder.encode(password);
-    }
-
-    private static String formatDate(String dateStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        return LocalDate.parse(dateStr).format(formatter);
     }
 }

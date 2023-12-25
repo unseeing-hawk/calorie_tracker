@@ -1,11 +1,14 @@
 package ru.unfatcrew.clientcalorietracker.controller;
 
+import static ru.unfatcrew.clientcalorietracker.utils.DateUtils.dateFormatter;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -34,15 +37,15 @@ import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.RestApiService;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 public class CalorieController {
     private RestApiService restService;
-    String csvFileName = "summary.csv";
+    private static final String csvFileName = "summary.csv";
     private List<Long> idsProductsToDelete;
     private List<DaySummaryDTO> summaryList;
 
@@ -170,7 +173,9 @@ public class CalorieController {
     public String getSummary(@ModelAttribute("startDate") String startDate,
                              @ModelAttribute("endDate") String endDate,
                              Model model) {
-        summaryList = restService.getDaySummary(startDate, endDate);
+        summaryList = restService.getDaySummary(LocalDate.parse(startDate).format(dateFormatter),
+                LocalDate.parse(endDate).format(dateFormatter));
+        summaryList.forEach(value -> value.setDate(LocalDate.parse(value.getDate()).format(dateFormatter)));
         model.addAttribute("summaryDTO", summaryList);
         model.addAttribute("showTable", true);
         return "get_summary";
@@ -187,8 +192,8 @@ public class CalorieController {
 
         try (CSVPrinter printer = new CSVPrinter(strBuilder, csvFormat)) {
             for (DaySummaryDTO row : summaryList) {
-                printer.printRecord(row.getDate(), row.getWeight(), row.getCalories(),
-                        row.getProteins(), row.getFats(), row.getCarbohydrates());
+                printer.printRecord(row.getDate(), row.getWeight(), row.getCalories(), row.getProteins(),
+                        row.getFats(), row.getCarbohydrates());
             }
         }
         Resource resource = new ByteArrayResource(strBuilder.toString().getBytes());
