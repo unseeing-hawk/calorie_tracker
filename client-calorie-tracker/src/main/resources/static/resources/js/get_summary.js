@@ -5,10 +5,10 @@ var clientErrorContainer = document.getElementById('client-error-container')
 var clientErrorMessage = document.getElementById("client-error-message")
 
 
-document.querySelector('#btn-back').onclick = function(e) {
-    summaryTableLayout.style.display = "none";
-    inputsDateLayout.style.display = "block";
-}
+// document.querySelector('#btn-back').onclick = function(e) {
+//     summaryTableLayout.style.display = "none";
+//     inputsDateLayout.style.display = "block";
+// }
 
 var startDateElement = document.getElementById('start-date')
 var endDateElement = document.getElementById('end-date')
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
 })
 
 
-document.querySelector('#get-summary-table-btn').onclick = function(e) {
+function checkDate() {
     let contentError = ''
     if(startDateElement.value == '' || endDateElement.value == '') {
         contentError = 'Please enter date!'
@@ -76,11 +76,12 @@ document.querySelector('#get-summary-table-btn').onclick = function(e) {
     if(contentError != '') {
         clientErrorMessage.innerText = contentError
         clientErrorContainer.style.display = 'flex'
+        return false
     }
-    else {
-        summaryTableLayout.style.display = "flex";
-        inputsDateLayout.style.display = "none";
-    }
+
+    // summaryTableLayout.style.display = "flex"
+    // inputsDateLayout.style.display = "none"
+    return true
 }
 
 document.querySelector("#client-error-box button").onclick = function(e) {

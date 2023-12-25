@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.DaySummaryDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
@@ -81,6 +82,7 @@ public class RestApiService {
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/products/user-products")
                 .queryParam("user-login", username)
+                .queryParam("limit", 100)
                 .toUriString();
 
         RequestEntity<Void> request = RequestEntity.get(url).build();
@@ -102,6 +104,21 @@ public class RestApiService {
         product.setUserLogin(username);
 
         rest.postForObject(restURL + "/products", product, ProductPostDTO.class);
+    }
+
+    public List<DaySummaryDTO> getDaySummary(String startDate, String endDate) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        String url = UriComponentsBuilder.fromHttpUrl(restURL)
+                .path("/meals/summary")
+                .queryParam("start-date", startDate)
+                .queryParam("end-date", endDate)
+                .queryParam("user-login", username)
+                .toUriString();
+
+        RequestEntity<Void> request = RequestEntity.get(url).build();
+        ResponseEntity<List<DaySummaryDTO>> response = rest.exchange(request, new ParameterizedTypeReference<>() { });
+        return response.getBody();
     }
 
     private static String encodePassword(String password) {

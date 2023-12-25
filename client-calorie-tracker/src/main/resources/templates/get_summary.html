@@ -15,27 +15,30 @@
 
     <div class="container">
 
-        <div class="inputs-date-layout">
+        <form id="getSummaryFrom" class="inputs-date-layout" th:unless="${showTable}" th:action="@{/summary-form}"
+              method="post" onsubmit="return checkDate();">
             <h1>Summary table</h1>
             <p>please, enter the dates</p>
-            
+
             <div class="input-box">
                 <label for="">Start Date</label>
-                <input id="start-date" type="date" placeholder="" autofocus="true">
+                <input id="start-date" name="startDate" type="date" placeholder="" autofocus="true">
             </div>
 
             <div class="input-box">
                 <label for="">End Date</label>
-                <input id="end-date" type="date" placeholder="" autofocus="true">
+                <input id="end-date" name="endDate" type="date" placeholder="" autofocus="true">
             </div>
 
             <div class="btns-box">
                 <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
-                <button id="get-summary-table-btn" class="btn" type="button">Get summary table</button>
+                <button id="get-summary-table-btn" name="getTable" form="getSummaryFrom" class="btn" type="submit">Get
+                    summary table
+                </button>
             </div>
-        </div>
+        </form>
 
-        <div class="summary-table-layout">
+        <div class="summary-table-layout" th:if="${showTable}">
             <h1>Summary table</h1>
             <div class="tb product-table">
                 <div class="header-tb header-product-table">
@@ -55,135 +58,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr th:each="summary : ${summaryDTO}">
                                 <div>
-                                    <td>01/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>03/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>05/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>07/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>10/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>12/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>15/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>17/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>19/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>20/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
-                                </div>
-                            </tr>
-                            <tr>
-                                <div>
-                                    <td>23/10/2023</td>
-                                    <td>500g</td>
-                                    <td>120</td>
-                                    <td>50</td>
-                                    <td>20</td>
-                                    <td>80</td>
-
+                                    <td th:text="${summary.date}"></td>
+                                    <td th:text="${summary.weight}"></td>
+                                    <td th:text="${summary.calories}"></td>
+                                    <td th:text="${summary.proteins}"></td>
+                                    <td th:text="${summary.fats}"></td>
+                                    <td th:text="${summary.carbohydrates}"></td>
                                 </div>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="button-box">
-                <button id="btn-back" type="button">Back</button>
-                <button id="get-table-csv-btn" type="button">Get table in .csv</button>
-            </div>
+            <form class="button-box" th:action="@{/summary-form}" method="post">
+                <a id="btn-back" th:href="@{/}">Back</a>
+                <button id="get-table-csv-btn" name="csv" type="submit">Get table in .csv</button>
+            </form>
         </div>
         <div id="client-error-container" class="error-container">
             <div id="client-error-box" class="error-box">

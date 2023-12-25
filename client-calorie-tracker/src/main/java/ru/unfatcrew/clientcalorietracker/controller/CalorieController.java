@@ -1,9 +1,18 @@
 package ru.unfatcrew.clientcalorietracker.controller;
 
+import static ru.unfatcrew.clientcalorietracker.utils.DateUtils.dateFormatter;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.DaySummaryDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
@@ -26,6 +36,8 @@ import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.RestApiService;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +45,9 @@ import java.util.Map;
 @Controller
 public class CalorieController {
     private RestApiService restService;
+    private static final String csvFileName = "summary.csv";
     private List<Long> idsProductsToDelete;
+    private List<DaySummaryDTO> summaryList;
 
     @Autowired
     public CalorieController(RestApiService restService) {
@@ -149,8 +163,46 @@ public class CalorieController {
     }
 
     @GetMapping("/summary-form")
-    public String getSummaryFormPage() {
+    public String getSummaryFormPage(Model model) {
+        summaryList = new ArrayList<>();
+        model.addAttribute("showTable", false);
         return "get_summary";
+    }
+
+    @PostMapping(value = "/summary-form", params = {"getTable"})
+    public String getSummary(@ModelAttribute("startDate") String startDate,
+                             @ModelAttribute("endDate") String endDate,
+                             Model model) {
+        summaryList = restService.getDaySummary(LocalDate.parse(startDate).format(dateFormatter),
+                LocalDate.parse(endDate).format(dateFormatter));
+        summaryList.forEach(value -> value.setDate(LocalDate.parse(value.getDate()).format(dateFormatter)));
+        model.addAttribute("summaryDTO", summaryList);
+        model.addAttribute("showTable", true);
+        return "get_summary";
+    }
+
+    @PostMapping(value = "/summary-form", params = {"csv"})
+    public ResponseEntity<Resource> getSummaryCsv() throws IOException {
+        String[] headers = {"Date", "Weight", "Calories", "Proteins", "Fats", "Carbohydrates"};
+        StringBuilder strBuilder = new StringBuilder();
+
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                .setHeader(headers)
+                .build();
+
+        try (CSVPrinter printer = new CSVPrinter(strBuilder, csvFormat)) {
+            for (DaySummaryDTO row : summaryList) {
+                printer.printRecord(row.getDate(), row.getWeight(), row.getCalories(), row.getProteins(),
+                        row.getFats(), row.getCarbohydrates());
+            }
+        }
+        Resource resource = new ByteArrayResource(strBuilder.toString().getBytes());
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=" + csvFileName)
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 
     private static boolean isAnonymous() {
