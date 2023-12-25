@@ -14,9 +14,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.DaySummaryDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.MealGetDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
+import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeMealsRequest;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 
 import java.util.List;
@@ -119,6 +121,24 @@ public class RestApiService {
         RequestEntity<Void> request = RequestEntity.get(url).build();
         ResponseEntity<List<DaySummaryDTO>> response = rest.exchange(request, new ParameterizedTypeReference<>() { });
         return response.getBody();
+    }
+
+    public MealGetDTO getMeals(String date) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        String url = UriComponentsBuilder.fromHttpUrl(restURL)
+                .path("/meals")
+                .queryParam("user-login", username)
+                .queryParam("date", date)
+                .toUriString();
+
+        return rest.getForObject(url, MealGetDTO.class);
+    }
+
+    public void changeMeals(ChangeMealsRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        request.setUserLogin(username);
+        rest.put(restURL + "/meals", request);
     }
 
     private static String encodePassword(String password) {

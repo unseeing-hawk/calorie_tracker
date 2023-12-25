@@ -214,6 +214,8 @@ tbody td input {
     outline: none;
     font-size: 17px;
     text-align: center;
+    outline: transparent;
+    background-color: transparent;
 }
 
 tbody td:first-child input {

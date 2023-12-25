@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -28,11 +27,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.DaySummaryDTO;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.*;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ChangeMealDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ProductDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
+import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeMealsRequest;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.RestApiService;
 
@@ -48,6 +48,7 @@ public class CalorieController {
     private static final String csvFileName = "summary.csv";
     private List<Long> idsProductsToDelete;
     private List<DaySummaryDTO> summaryList;
+    private List<Long> idsMealsToDelete;
 
     @Autowired
     public CalorieController(RestApiService restService) {
@@ -158,7 +159,36 @@ public class CalorieController {
     }
 
     @GetMapping("/change-meal")
-    public String getChangeMealPage() {
+    public String getChangeMealPage(Model model) {
+        idsMealsToDelete = new ArrayList<>();
+        model.addAttribute("changeDTO", new ChangeMealDTO());
+        return "change_meal";
+    }
+
+    @PostMapping(value = "/change-meal", params = {"search"})
+    public String searchMeals(@ModelAttribute("date") String date,
+                              @ModelAttribute("changeDTO") ChangeMealDTO changeDTO) {
+        MealGetDTO mealGetDto = restService.getMeals(LocalDate.parse(date).format(dateFormatter));
+        idsMealsToDelete = new ArrayList<>();
+
+        changeDTO.setMealsToChange(mealGetDto.getMealGetDataList());
+        return "change_meal";
+    }
+
+    @PostMapping(value = "/change-meal", params = {"apply"})
+    public String applyMealsChanges(@ModelAttribute("changeDTO") ChangeMealDTO changeDTO) {
+        List<MealPutDataDTO> mealsToChange = new ArrayList<>();
+        changeDTO.getMealsToChange().forEach(meal -> mealsToChange.add(new MealPutDataDTO(meal.getId(),
+                meal.getWeight(), meal.getMealTime())));
+        restService.changeMeals(new ChangeMealsRequest(mealsToChange, idsMealsToDelete));
+        idsMealsToDelete = new ArrayList<>();
+        return "change_meal";
+    }
+
+    @PostMapping(value = "/change-meal", params = {"remove"})
+    public String addMealsToDeleteList(@ModelAttribute("changeDTO") ChangeMealDTO changeDTO) {
+        idsMealsToDelete.addAll(changeDTO.getIdsMealsToDelete());
+        changeDTO.getMealsToChange().removeIf(value -> idsMealsToDelete.contains(value.getId()));
         return "change_meal";
     }
 

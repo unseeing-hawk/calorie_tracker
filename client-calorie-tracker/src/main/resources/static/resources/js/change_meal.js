@@ -1,4 +1,3 @@
-
 document.querySelectorAll('.body-product-table tbody tr').forEach(row => {
     let mealtimeElement = row.cells[1]
     mealtimeElement.onclick = function(e) {
@@ -15,6 +14,9 @@ document.querySelectorAll('.body-product-table tbody tr').forEach(row => {
             let inputEl = document.createElement('input')
             inputEl.type = 'text'
             inputEl.value = valueSelected
+            inputEl.setAttribute('id', `mealsToChange${row.rowIndex - 1}.mealTime`)
+            inputEl.setAttribute('name', `mealsToChange[${row.rowIndex - 1}].mealTime`)
+            inputEl.setAttribute('value', valueSelected)
             mealtimeElement.innerHTML = ''
             mealtimeElement.appendChild(inputEl)
         }
