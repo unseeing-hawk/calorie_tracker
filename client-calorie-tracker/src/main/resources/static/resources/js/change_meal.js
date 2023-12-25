@@ -12,7 +12,11 @@ document.querySelectorAll('.body-product-table tbody tr').forEach(row => {
         selectElment.onchange = function (e){
             let indexSelected = selectElment.selectedIndex
             let valueSelected = selectElment.options[indexSelected].text
-            mealtimeElement.innerHTML = valueSelected
+            let inputEl = document.createElement('input')
+            inputEl.type = 'text'
+            inputEl.value = valueSelected
+            mealtimeElement.innerHTML = ''
+            mealtimeElement.appendChild(inputEl)
         }
     }
 })
@@ -20,7 +24,8 @@ document.querySelectorAll('.body-product-table tbody tr').forEach(row => {
 var clientErrorContainer = document.getElementById('client-error-container')
 var clientErrorMessage = document.getElementById("client-error-message")
 var tbodyTableMeal = document.querySelector('.body-product-table tbody')
-document.querySelector('#btn-apply-changes').onclick = function(e) {
+// document.querySelector('#btn-apply-changes').onclick = validateApplyChangesForm
+function validateApplyChangesForm(){
     let isCorrectAllMealTime = true
     let isCorrectAllWeight = true
 
@@ -29,13 +34,13 @@ document.querySelector('#btn-apply-changes').onclick = function(e) {
         let isCorrectWeightInRow = true
 
         // check meal time
-        if(row.cells[1].innerHTML.includes('select')) {
+        if(!row.cells[1].querySelector('input') || row.cells[1].querySelector('input').value.length == 0) {
             isCorrectMealTimeInRow = false
             isCorrectAllMealTime = false
         }
 
         // check weight
-        if(checkWeightColums(row.cells[2]) == false){
+        if(checkWeightColums(row.cells[2].querySelector('input')) == false){
             isCorrectWeightInRow = false
             isCorrectAllWeight = false
         }
@@ -66,32 +71,36 @@ document.querySelector('#btn-apply-changes').onclick = function(e) {
     clientErrorMessage.innerText = contentClientError
     if(contentClientError.length > 0) {
         clientErrorContainer.style.display = 'flex'
-    }
-}
-
-function checkWeightColums(element) {
-    element.innerText = element.innerText.trim()
-    if(element.innerText.length == 0
-        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(element.innerText))
-        || parseFloat(element.innerText) == 0
-        || parseFloat(element.innerText) > (3.4 ** 38))
-    {
         return false
     }
     else {
-        element.innerText = parseFloat(element.innerText).toString()
         return true
     }
 }
 
-document.querySelector("#btn-delete").onclick = function() {
-    let checkboxs = tbodyTableMeal.querySelectorAll('input[type="checkbox"]')
-    checkboxs.forEach(checkbox => {
-        if(checkbox.checked){
-            tbodyTableMeal.removeChild(checkbox.parentNode.parentNode);
-        }
-    })
+function checkWeightColums(element) {
+    element.value = element.value.trim()
+    let weight = element.value
+    if(weight.length == 0
+        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(weight))
+        || parseFloat(weight) == 0
+        || parseFloat(weight) > (3.4 ** 38))
+    {
+        return false
+    }
+    else {
+        return true
+    }
 }
+
+// document.querySelector("#btn-delete").onclick = function() {
+//     let checkboxs = tbodyTableMeal.querySelectorAll('input[type="checkbox"]')
+//     checkboxs.forEach(checkbox => {
+//         if(checkbox.checked){
+//             tbodyTableMeal.removeChild(checkbox.parentNode.parentNode);
+//         }
+//     })
+// }
 
 document.querySelector("#client-error-box button").onclick = function(e) {
     clientErrorContainer.style.display = "none";
@@ -117,10 +126,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
     dateElement.setAttribute('max', maxDateString)
 })
 
-document.querySelector('#search-btn').onclick = function(e) {
+// document.querySelector('#search-btn').onclick = validateSearchForm
+function validateSearchForm(e) {
     if(dateElement.value == '') {
         clientErrorMessage.innerText = 'Please enter date!'
         clientErrorContainer.style.display = 'flex'
+        return false
     }
     else {
         let selectedDate = new Date(dateElement.value);
@@ -132,6 +143,7 @@ document.querySelector('#search-btn').onclick = function(e) {
             clientErrorMessage.innerText = 'The minimum value of the date is 10 years ago.\nThe maximum value of the date is today.'
             clientErrorContainer.style.display = 'flex'
         }
+        return true
     }
 }
 
