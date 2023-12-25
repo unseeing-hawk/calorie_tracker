@@ -300,6 +300,7 @@ public class ProductService {
         
         final String REGEX = "^[A-Za-z]*$";
         final int FS_LIMIT = 20;
+        pattern = pattern.replace("\\s", "");
         if (countUserProducts < endIndex && pattern.matches(REGEX)) {
             startIndex -= countUserProducts;
             if (startIndex < 0) startIndex = 0;
