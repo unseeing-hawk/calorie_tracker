@@ -169,6 +169,7 @@ public class CalorieController {
     public String searchMeals(@ModelAttribute("date") String date,
                               @ModelAttribute("changeDTO") ChangeMealDTO changeDTO) {
         MealGetDTO mealGetDto = restService.getMeals(LocalDate.parse(date).format(dateFormatter));
+        idsMealsToDelete = new ArrayList<>();
 
         changeDTO.setMealsToChange(mealGetDto.getMealGetDataList());
         return "change_meal";
@@ -181,7 +182,7 @@ public class CalorieController {
                 meal.getWeight(), meal.getMealTime())));
         restService.changeMeals(new ChangeMealsRequest(mealsToChange, idsMealsToDelete));
 
-        return "redirect:/change-meal";
+        return "change_meal";
     }
 
     @PostMapping(value = "/change-meal", params = {"remove"})
