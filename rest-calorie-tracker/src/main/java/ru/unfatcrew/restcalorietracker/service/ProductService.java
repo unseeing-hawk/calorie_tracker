@@ -298,7 +298,7 @@ public class ProductService {
             }
         } 
         
-        final String REGEX = "^[A-Za-z ]*$";
+        final String REGEX = "^[A-Za-z]*$";
         final int FS_LIMIT = 20;
         if (countUserProducts < endIndex && pattern.matches(REGEX)) {
             startIndex -= countUserProducts;
