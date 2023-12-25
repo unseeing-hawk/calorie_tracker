@@ -14,9 +14,9 @@ document.querySelectorAll('.body-product-table tbody tr').forEach(row => {
             let valueSelected = selectElment.options[indexSelected].text
             let inputEl = document.createElement('input')
             inputEl.type = 'text'
-            inputEl.setAttribute('th:field', '{meals[__${iter.index}__].mealTime}')
-            
-            mealtimeElement.innerHTML = valueSelected
+            inputEl.value = valueSelected
+            mealtimeElement.innerHTML = ''
+            mealtimeElement.appendChild(inputEl)
         }
     }
 })
@@ -25,7 +25,7 @@ var clientErrorContainer = document.getElementById('client-error-container')
 var clientErrorMessage = document.getElementById("client-error-message")
 var tbodyTableMeal = document.querySelector('.body-product-table tbody')
 // document.querySelector('#btn-apply-changes').onclick = validateApplyChangesForm
-function validateApplyChangesForm(e){
+function validateApplyChangesForm(){
     let isCorrectAllMealTime = true
     let isCorrectAllWeight = true
 
@@ -34,13 +34,13 @@ function validateApplyChangesForm(e){
         let isCorrectWeightInRow = true
 
         // check meal time
-        if(row.cells[1].innerHTML.includes('select')) {
+        if(!row.cells[1].querySelector('input') || row.cells[1].querySelector('input').value.length == 0) {
             isCorrectMealTimeInRow = false
             isCorrectAllMealTime = false
         }
 
         // check weight
-        if(checkWeightColums(row.cells[2]) == false){
+        if(checkWeightColums(row.cells[2].querySelector('input')) == false){
             isCorrectWeightInRow = false
             isCorrectAllWeight = false
         }
@@ -76,23 +76,21 @@ function validateApplyChangesForm(e){
     else {
         return true
     }
-    return false
 }
 
 function checkWeightColums(element) {
-    element.innerText = element.innerText.trim()
-    if(element.innerText.length == 0
-        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(element.innerText))
-        || parseFloat(element.innerText) == 0
-        || parseFloat(element.innerText) > (3.4 ** 38))
+    element.value = element.value.trim()
+    let weight = element.value
+    if(weight.length == 0
+        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(weight))
+        || parseFloat(weight) == 0
+        || parseFloat(weight) > (3.4 ** 38))
     {
         return false
     }
     else {
-        element.innerText = parseFloat(element.innerText).toString()
         return true
     }
-    return false
 }
 
 // document.querySelector("#btn-delete").onclick = function() {

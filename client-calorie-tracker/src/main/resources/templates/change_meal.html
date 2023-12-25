@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change meal</title>
-    <link rel="stylesheet" href="/static/resources/css/change_meal.css">
+    <link rel="stylesheet" href="/resources/css/change_meal.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 <body>
@@ -41,7 +41,7 @@
                     <div class="body-tb body-product-table">
                         <!-- FORM /change-meal/apply -->
                         <form id="applyChangesMeals" th:object="${mealsDTO}" th:action="@{/change-meal/apply}"
-                                onsubmit="return validateApplyForm();" method="post">
+                                onsubmit="return validateApplyChangesForm();" method="post">
                             <table>
                                 <thead>
                                     <tr>
@@ -56,23 +56,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <div>
-                                            <td>Product name</td>
-                                            <td>Dinner</td>
-                                            <td contenteditable="true">500</td>
-                                            <td>120</td>
-                                            <td>50</td>
-                                            <td>20</td>
-                                            <td>80</td>
-                                            <td><input type="checkbox" name="" id=""></td>
-                                        </div>
-                                    </tr>
                                     <tr th:each="meal, iter : *{meals}">
                                         <div>
                                             <input type="hidden" th:field="*{meals[__${iter.index}__].id}" th:value="${meal.id}" />
                                             <td>
-                                                <input th:field="*{meals[__${iter.index}__].name}" th:value="${meal.name}"/>
+                                                <input th:field="*{meals[__${iter.index}__].name}" th:value="${meal.name}" readonly/>
                                             </td>
                                             <td>
                                                 <input th:field="*{meals[__${iter.index}__].mealTime}" th:value="${meal.mealTime}"/>
@@ -81,16 +69,16 @@
                                                 <input th:field="*{meals[__${iter.index}__].weight}" th:value="${meal.weight}"/>
                                             </td>
                                             <td>
-                                                <input th:field="*{meals[__${iter.index}__].calories}" th:value="${meal.calories}" />
+                                                <input th:field="*{meals[__${iter.index}__].calories}" th:value="${meal.calories}" readonly/>
                                             </td>
                                             <td>
-                                                <input th:field="*{meals[__${iter.index}__].proteins}" th:value="${meal.proteins}" />
+                                                <input th:field="*{meals[__${iter.index}__].proteins}" th:value="${meal.proteins}" readonly/>
                                             </td>
                                             <td>
-                                                <input th:field="*{meals[__${iter.index}__].fats}" th:value="${meal.fats}" />
+                                                <input th:field="*{meals[__${iter.index}__].fats}" th:value="${meal.fats}" readonly/>
                                             </td>
                                             <td>
-                                                <input th:field="*{meals[__${iter.index}__].carbohydrates}" th:value="${meal.carbohydrates}" />
+                                                <input th:field="*{meals[__${iter.index}__].carbohydrates}" th:value="${meal.carbohydrates}" readonly/>
                                             </td>
                                             <td>
                                                 <input type="checkbox" th:field="*{idsToDelete}" th:value="${meal.id}" />
@@ -107,7 +95,6 @@
                     <button id="btn-apply-changes" form="applyChangesMeals" name="apply" type="submit" class="btn">Apply changes</button>
                     <button id="btn-delete" form="applyChangesMeals" name="remove" type="submit" class="btn">Delete</button>
                 </div>
-
                 <div id="client-error-container" class="error-container">
                     <div id="client-error-box" class="error-box">
                         <p>Error</p>
@@ -115,7 +102,6 @@
                         <button >OK</button>
                     </div>
                 </div>
-
                 <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
                     <div id="sever-error-box" class="error-box">
                         <p>Error</p>
@@ -127,5 +113,5 @@
         </div>
     </div>
 </body>
-<script src="/static/resources/js/change_meal.js"></script>
+<script src="/resources/js/change_meal.js"></script>
 </html>

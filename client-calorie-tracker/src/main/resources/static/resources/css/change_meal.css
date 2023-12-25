@@ -200,6 +200,10 @@ thead th:nth-child(2) {
     text-align: left;
 }
 
+thead th:last-child {
+    width: 60px;
+}
+
 tbody td {
     text-align: center;
     font-size: 18px;
@@ -208,7 +212,12 @@ tbody td {
 tbody td input {
     max-width: 100px;
     outline: none;
-    font-size: 18px;
+    font-size: 17px;
+    text-align: center;
+}
+
+tbody td:first-child input {
+    text-align: left;
 }
 
 tbody td:focus {
