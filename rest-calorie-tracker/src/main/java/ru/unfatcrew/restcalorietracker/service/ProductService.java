@@ -1,8 +1,6 @@
 package ru.unfatcrew.restcalorietracker.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,16 +19,11 @@ import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
 import ru.unfatcrew.restcalorietracker.dao.ProductDAO;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDataDto;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealGetDto;
-import ru.unfatcrew.restcalorietracker.pojo.dto.MealPutDataDto;
 import ru.unfatcrew.restcalorietracker.pojo.dto.ProductPostDTO;
 import ru.unfatcrew.restcalorietracker.pojo.dto.ProductPutDTO;
-import ru.unfatcrew.restcalorietracker.pojo.entity.Meal;
 import ru.unfatcrew.restcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.restcalorietracker.pojo.entity.User;
 import ru.unfatcrew.restcalorietracker.pojo.request.ChangeProductsRequest;
-import ru.unfatcrew.restcalorietracker.pojo.response.ChangeMealsResponse;
 import ru.unfatcrew.restcalorietracker.pojo.response.ChangeProductsResponse;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.IllegalRequestArgumentException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
@@ -305,8 +298,9 @@ public class ProductService {
             }
         } 
         
+        final String REGEX = "^[A-Za-z ]*$";
         final int FS_LIMIT = 20;
-        if (countUserProducts < endIndex) {
+        if (countUserProducts < endIndex && pattern.matches(REGEX)) {
             startIndex -= countUserProducts;
             if (startIndex < 0) startIndex = 0;
             endIndex -= countUserProducts;
