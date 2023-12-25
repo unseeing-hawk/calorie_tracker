@@ -48,7 +48,7 @@ public class ProductRestController {
     public List<ProductPostDTO> getUserProducts(@RequestParam(name="limit", defaultValue="10")
                                                 @Valid
                                                 @Min(value = 1, message = "limit should not be less than 1")
-                                                @Max(value = 100, message = "limit should not exceed 50")
+                                                @Max(value = 100, message = "limit should not exceed 100")
                                                 int limit, 
                                                 @RequestParam(name="offset", defaultValue="0")
                                                 @Valid
@@ -65,7 +65,7 @@ public class ProductRestController {
     public List<ProductPostDTO> searchProducts(@RequestParam(name="limit", defaultValue="10")
                                                 @Valid
                                                 @Min(value = 1, message = "limit should not be less than 1")
-                                                @Max(value = 100, message = "limit should not exceed 50")
+                                                @Max(value = 100, message = "limit should not exceed 100")
                                                 int limit, 
                                                 @RequestParam(name="offset", defaultValue="0")
                                                 @Valid

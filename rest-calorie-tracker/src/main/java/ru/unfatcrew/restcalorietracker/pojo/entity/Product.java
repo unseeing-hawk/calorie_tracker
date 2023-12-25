@@ -2,6 +2,7 @@ package ru.unfatcrew.restcalorietracker.pojo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import ru.unfatcrew.restcalorietracker.validation.annotation.FiniteFloat;
 
 @Entity
 @Table(name="products")
@@ -28,15 +29,18 @@ public class Product {
     @Column(name="product_calories")
     private int calories;
 
-    @DecimalMin(value = "0.00", inclusive = false, message = "Proteins must be a positive number with precision up to two decimal places")
+    @Positive
+    @FiniteFloat
     @Column(name="product_proteins")
     private float proteins;
     
-    @DecimalMin(value = "0.00", inclusive = false, message = "Fats must be a positive number with precision up to two decimal places")
+    @Positive
+    @FiniteFloat
     @Column(name="product_fats")
     private float fats;
     
-    @DecimalMin(value = "0.00", inclusive = false, message = "Carbohydrates must be a positive number with precision up to two decimal places")
+    @Positive
+    @FiniteFloat
     @Column(name="product_carbohydrates")
     private float carbohydrates;
 
