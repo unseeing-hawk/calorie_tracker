@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
 import ru.unfatcrew.restcalorietracker.pojo.dto.ProductPostDTO;
@@ -77,6 +78,7 @@ public class ProductRestController {
                                                 String userLogin,
                                                 @RequestParam(name="pattern", defaultValue="")
                                                 @Size(min=1, max=100)
+                                                @Pattern(regexp="^[A-Za-z ]*$")
                                                 @Valid
                                                 String pattern) {
         return productService.searchProducts(limit, offset, userLogin, pattern);
