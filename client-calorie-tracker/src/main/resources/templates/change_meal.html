@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change meal</title>
-    <link rel="stylesheet" href="/resources/css/change_meal.css">
+    <link rel="stylesheet" href="/static/resources/css/change_meal.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 <body>
@@ -15,11 +15,15 @@
     </header>
     <div class="data-table-container">
         <h1>Change meal</h1>
-        <div class="search-box">
-            <i class='bx bx-search-alt-2'></i>
-            <input id="date" type="date" placeholder="">
-            <button id="search-btn" class="btn" type="button">Search</button>
-        </div>
+        <!-- FORM /change-meal/search -->
+        <form id="searchMealForm" th:action="@{/change-meal/search}"
+                onsubmit="return validateSearchForm();" method="post">
+            <div class="search-box">
+                <i class='bx bx-search-alt-2'></i>
+                <input id="date" type="date" th:field="*{date}">
+                <button id="search-btn" form="searchMealForm" name="search" class="btn" type="submit">Search</button>
+            </div>
+        </form>
         <div class="table-container">
             <div class="product-container">
                 <div class="tb product-table">
@@ -35,149 +39,73 @@
                         </select>
                     </div>
                     <div class="body-tb body-product-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="namme">Name</th>
-                                    <th>Meal Time</th>
-                                    <th>Weight</th>
-                                    <th>Calories</th>
-                                    <th>Proteins</th>
-                                    <th>Fats</th>
-                                    <th>Carbohydrates</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name</td>
-                                        <td>Dinner</td>
-                                        <td contenteditable="true">500</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <!-- FORM /change-meal/apply -->
+                        <form id="applyChangesMeals" th:object="${mealsDTO}" th:action="@{/change-meal/apply}"
+                                onsubmit="return validateApplyForm();" method="post">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="namme">Name</th>
+                                        <th>Meal Time</th>
+                                        <th>Weight</th>
+                                        <th>Calories</th>
+                                        <th>Proteins</th>
+                                        <th>Fats</th>
+                                        <th>Carbohydrates</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <div>
+                                            <td>Product name</td>
+                                            <td>Dinner</td>
+                                            <td contenteditable="true">500</td>
+                                            <td>120</td>
+                                            <td>50</td>
+                                            <td>20</td>
+                                            <td>80</td>
+                                            <td><input type="checkbox" name="" id=""></td>
+                                        </div>
+                                    </tr>
+                                    <tr th:each="meal, iter : *{meals}">
+                                        <div>
+                                            <input type="hidden" th:field="*{meals[__${iter.index}__].id}" th:value="${meal.id}" />
+                                            <td>
+                                                <input th:field="*{meals[__${iter.index}__].name}" th:value="${meal.name}"/>
+                                            </td>
+                                            <td>
+                                                <input th:field="*{meals[__${iter.index}__].mealTime}" th:value="${meal.mealTime}"/>
+                                            </td>
+                                            <td>
+                                                <input th:field="*{meals[__${iter.index}__].weight}" th:value="${meal.weight}"/>
+                                            </td>
+                                            <td>
+                                                <input th:field="*{meals[__${iter.index}__].calories}" th:value="${meal.calories}" />
+                                            </td>
+                                            <td>
+                                                <input th:field="*{meals[__${iter.index}__].proteins}" th:value="${meal.proteins}" />
+                                            </td>
+                                            <td>
+                                                <input th:field="*{meals[__${iter.index}__].fats}" th:value="${meal.fats}" />
+                                            </td>
+                                            <td>
+                                                <input th:field="*{meals[__${iter.index}__].carbohydrates}" th:value="${meal.carbohydrates}" />
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" th:field="*{idsToDelete}" th:value="${meal.id}" />
+                                            </td>
+                                        </div>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
                 </div>
                 <div class="button-box">
                     <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
-                    <button id="btn-apply-changes" type="button" class="btn">Apply changes</button>
-                    <button id="btn-delete" type="button" class="btn">Delete</button>
+                    <button id="btn-apply-changes" form="applyChangesMeals" name="apply" type="submit" class="btn">Apply changes</button>
+                    <button id="btn-delete" form="applyChangesMeals" name="remove" type="submit" class="btn">Delete</button>
                 </div>
 
                 <div id="client-error-container" class="error-container">
@@ -199,5 +127,5 @@
         </div>
     </div>
 </body>
-<script src="/resources/js/change_meal.js"></script>
+<script src="/static/resources/js/change_meal.js"></script>
 </html>

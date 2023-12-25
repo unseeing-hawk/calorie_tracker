@@ -12,6 +12,10 @@ document.querySelectorAll('.body-product-table tbody tr').forEach(row => {
         selectElment.onchange = function (e){
             let indexSelected = selectElment.selectedIndex
             let valueSelected = selectElment.options[indexSelected].text
+            let inputEl = document.createElement('input')
+            inputEl.type = 'text'
+            inputEl.setAttribute('th:field', '{meals[__${iter.index}__].mealTime}')
+            
             mealtimeElement.innerHTML = valueSelected
         }
     }
@@ -20,7 +24,8 @@ document.querySelectorAll('.body-product-table tbody tr').forEach(row => {
 var clientErrorContainer = document.getElementById('client-error-container')
 var clientErrorMessage = document.getElementById("client-error-message")
 var tbodyTableMeal = document.querySelector('.body-product-table tbody')
-document.querySelector('#btn-apply-changes').onclick = function(e) {
+// document.querySelector('#btn-apply-changes').onclick = validateApplyChangesForm
+function validateApplyChangesForm(e){
     let isCorrectAllMealTime = true
     let isCorrectAllWeight = true
 
@@ -66,7 +71,12 @@ document.querySelector('#btn-apply-changes').onclick = function(e) {
     clientErrorMessage.innerText = contentClientError
     if(contentClientError.length > 0) {
         clientErrorContainer.style.display = 'flex'
+        return false
     }
+    else {
+        return true
+    }
+    return false
 }
 
 function checkWeightColums(element) {
@@ -82,16 +92,17 @@ function checkWeightColums(element) {
         element.innerText = parseFloat(element.innerText).toString()
         return true
     }
+    return false
 }
 
-document.querySelector("#btn-delete").onclick = function() {
-    let checkboxs = tbodyTableMeal.querySelectorAll('input[type="checkbox"]')
-    checkboxs.forEach(checkbox => {
-        if(checkbox.checked){
-            tbodyTableMeal.removeChild(checkbox.parentNode.parentNode);
-        }
-    })
-}
+// document.querySelector("#btn-delete").onclick = function() {
+//     let checkboxs = tbodyTableMeal.querySelectorAll('input[type="checkbox"]')
+//     checkboxs.forEach(checkbox => {
+//         if(checkbox.checked){
+//             tbodyTableMeal.removeChild(checkbox.parentNode.parentNode);
+//         }
+//     })
+// }
 
 document.querySelector("#client-error-box button").onclick = function(e) {
     clientErrorContainer.style.display = "none";
@@ -117,10 +128,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
     dateElement.setAttribute('max', maxDateString)
 })
 
-document.querySelector('#search-btn').onclick = function(e) {
+// document.querySelector('#search-btn').onclick = validateSearchForm
+function validateSearchForm(e) {
     if(dateElement.value == '') {
         clientErrorMessage.innerText = 'Please enter date!'
         clientErrorContainer.style.display = 'flex'
+        return false
     }
     else {
         let selectedDate = new Date(dateElement.value);
@@ -132,6 +145,7 @@ document.querySelector('#search-btn').onclick = function(e) {
             clientErrorMessage.innerText = 'The minimum value of the date is 10 years ago.\nThe maximum value of the date is today.'
             clientErrorContainer.style.display = 'flex'
         }
+        return true
     }
 }
 

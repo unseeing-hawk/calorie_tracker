@@ -173,10 +173,12 @@ a:hover {
     overflow: auto;
 }
 
+
 table {
     width: 100%;
-    table-layout: auto;
+    table-layout: fixed;
 }
+
 
 
 table, th, td {
@@ -200,6 +202,12 @@ thead th:nth-child(2) {
 
 tbody td {
     text-align: center;
+    font-size: 18px;
+}
+
+tbody td input {
+    max-width: 100px;
+    outline: none;
     font-size: 18px;
 }
 
@@ -230,6 +238,12 @@ tbody input[type='checkbox'] {
     width: 15px;
     height: 15px;
 }
+
+
+
+
+
+
 
 .button-box {
     height: 15%;
