@@ -181,7 +181,7 @@ public class CalorieController {
         changeDTO.getMealsToChange().forEach(meal -> mealsToChange.add(new MealPutDataDTO(meal.getId(),
                 meal.getWeight(), meal.getMealTime())));
         restService.changeMeals(new ChangeMealsRequest(mealsToChange, idsMealsToDelete));
-
+        idsMealsToDelete = new ArrayList<>();
         return "change_meal";
     }
 
