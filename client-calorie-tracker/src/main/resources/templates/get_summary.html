@@ -15,27 +15,28 @@
 
     <div class="container">
 
-        <div class="inputs-date-layout" th:unless="${showTable}">
+        <form id="getSummaryFrom" class="inputs-date-layout" th:unless="${showTable}" th:action="@{/summary-form}"
+              method="post" onsubmit="return checkDate();">
             <h1>Summary table</h1>
             <p>please, enter the dates</p>
 
-            <form id="getSummaryFrom" th:action="@{/summary-form}" method="post" onsubmit="return checkDate();">
-                <div class="input-box">
-                    <label for="">Start Date</label>
-                    <input id="start-date" name="startDate" type="date" placeholder="" autofocus="true">
-                </div>
+            <div class="input-box">
+                <label for="">Start Date</label>
+                <input id="start-date" name="startDate" type="date" placeholder="" autofocus="true">
+            </div>
 
-                <div class="input-box">
-                    <label for="">End Date</label>
-                    <input id="end-date" name="endDate" type="date" placeholder="" autofocus="true">
-                </div>
-            </form>
+            <div class="input-box">
+                <label for="">End Date</label>
+                <input id="end-date" name="endDate" type="date" placeholder="" autofocus="true">
+            </div>
 
             <div class="btns-box">
                 <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
-                <button id="get-summary-table-btn" form="getSummaryFrom" class="btn" type="submit">Get summary table</button>
+                <button id="get-summary-table-btn" name="getTable" form="getSummaryFrom" class="btn" type="submit">Get
+                    summary table
+                </button>
             </div>
-        </div>
+        </form>
 
         <div class="summary-table-layout" th:if="${showTable}">
             <h1>Summary table</h1>
@@ -71,10 +72,10 @@
                     </table>
                 </div>
             </div>
-            <div class="button-box">
-                <button id="btn-back" type="button">Back</button>
-                <button id="get-table-csv-btn" type="button">Get table in .csv</button>
-            </div>
+            <form class="button-box" th:action="@{/summary-form}" method="post">
+                <a id="btn-back" th:href="@{/}">Back</a>
+                <button id="get-table-csv-btn" name="csv" type="submit">Get table in .csv</button>
+            </form>
         </div>
         <div id="client-error-container" class="error-container">
             <div id="client-error-box" class="error-box">

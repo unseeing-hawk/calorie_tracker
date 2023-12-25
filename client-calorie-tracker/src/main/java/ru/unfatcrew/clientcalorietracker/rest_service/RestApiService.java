@@ -90,6 +90,7 @@ public class RestApiService {
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/products/user-products")
                 .queryParam("user-login", username)
+                .queryParam("limit", 100)
                 .toUriString();
 
         RequestEntity<Void> request = RequestEntity.get(url).build();

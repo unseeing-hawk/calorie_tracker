@@ -3,7 +3,13 @@ package ru.unfatcrew.clientcalorietracker.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +33,7 @@ import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.RestApiService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +42,9 @@ import java.util.Map;
 @Controller
 public class CalorieController {
     private RestApiService restService;
+    String csvFileName = "summary.csv";
     private List<Long> idsProductsToDelete;
+    private List<DaySummaryDTO> summaryList;
 
     @Autowired
     public CalorieController(RestApiService restService) {
@@ -152,17 +161,43 @@ public class CalorieController {
 
     @GetMapping("/summary-form")
     public String getSummaryFormPage(Model model) {
+        summaryList = new ArrayList<>();
         model.addAttribute("showTable", false);
         return "get_summary";
     }
 
-    @PostMapping("/summary-form")
+    @PostMapping(value = "/summary-form", params = {"getTable"})
     public String getSummary(@ModelAttribute("startDate") String startDate,
                              @ModelAttribute("endDate") String endDate,
                              Model model) {
-        model.addAttribute("summaryDTO", restService.getDaySummary(startDate, endDate));
+        summaryList = restService.getDaySummary(startDate, endDate);
+        model.addAttribute("summaryDTO", summaryList);
         model.addAttribute("showTable", true);
         return "get_summary";
+    }
+
+    @PostMapping(value = "/summary-form", params = {"csv"})
+    public ResponseEntity<Resource> getSummaryCsv() throws IOException {
+        String[] headers = {"Date", "Weight", "Calories", "Proteins", "Fats", "Carbohydrates"};
+        StringBuilder strBuilder = new StringBuilder();
+
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                .setHeader(headers)
+                .build();
+
+        try (CSVPrinter printer = new CSVPrinter(strBuilder, csvFormat)) {
+            for (DaySummaryDTO row : summaryList) {
+                printer.printRecord(row.getDate(), row.getWeight(), row.getCalories(),
+                        row.getProteins(), row.getFats(), row.getCarbohydrates());
+            }
+        }
+        Resource resource = new ByteArrayResource(strBuilder.toString().getBytes());
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=" + csvFileName)
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 
     private static boolean isAnonymous() {

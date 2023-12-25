@@ -258,7 +258,7 @@ tbody tr:hover {
     margin-top: 10px;
 }
 
-.summary-table-layout .button-box button {
+.summary-table-layout .button-box button, a {
     height: 40%;
     width: 20%;
     border-radius: 5px;
