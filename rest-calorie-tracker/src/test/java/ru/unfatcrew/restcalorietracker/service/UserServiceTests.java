@@ -12,8 +12,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
-import org.springframework.test.context.ContextConfiguration;
 import ru.unfatcrew.restcalorietracker.dao.UserDAO;
 import ru.unfatcrew.restcalorietracker.pojo.entity.User;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.IllegalRequestArgumentException;
@@ -26,7 +24,6 @@ import static org.mockito.Mockito.*;
 import static org.mockito.BDDMockito.given;
 
 
-@ContextConfiguration (classes = {ValidationAutoConfiguration.class})
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
 
@@ -75,11 +72,10 @@ public class UserServiceTests {
 
     @DisplayName("Validate invalid user object")
     @ParameterizedTest
-    @CsvFileSource(resources="/invalid-user-pairwise.csv",
+    @CsvFileSource(resources="/invalid-user.csv",
             numLinesToSkip=1,
             delimiter=';',
-            nullValues={"NULL"},
-            emptyValue="EMPTY")
+            nullValues={"NULL"})
     public void givenInvalidUserObject_whenValidate_thenReturnViolations(String name,
                                                                          String login,
                                                                          String password,

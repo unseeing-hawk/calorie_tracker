@@ -1,0 +1,20 @@
+﻿NAME;LOGIN;PASSWORD;WEIGHT
+;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU2;45,36
+NULL;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU3;46,36
+к вот, сценарии использования и альтернативные сценарии, мы обычно получаем от аналитиков из спецификации.. таблицы, деревья и диаграммы мало кто чертит, так как это занимает много времени (при дефиците ресурсов). Как правило, в ходу две популярные техники: классы эквивалентности и граничные значения, и только отдельные умнички используют pairwise ( попарное тестирование ).   Скажу честно, принять эту технику я смог далеко не сразу. Я тогда еще не до конца преисполнился познанием и из-за непонимания было недоверие к, сгенерированным инструментом, кейсам.  Конечно, на к вот, сценарии использования и альтернативные сценарии, мы обычно получаем от аналитиков из спецификации.. таблицы, деревья и диаграммы мало кто чертит, так как это занимает много времени (при дефиците ресурсов). Как правило, в ходу две популярные техники: классы эквивалентности и граничные значения, и только отдельные умнички используют pairwise ( попарное тестирование ).   Скажу честно, принять эту технику я смог далеко не сразу. Я тогда еще не до конца преисполнился познанием и из-за непонимания было недоверие к, сгенерированным инструментом, кейсам.  Конечно, на собесах, у всех от зубов отскакивает: ;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU4;47,36
+Beer master;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU5;48,36
+Beer  Master;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU6;49,36
+Bee1 Master;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU7;50,36
+bEer mAster;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU8;51,36
+Beer M}ster;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU10;53,36
+Beer Master;;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU11;54,36
+Beer Master;NULL;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU12;55,36
+Beer Master;beer;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU13;56,36
+Beer Master;jjjjjjjjjjjjjjjjj#4аjjjjjjjjjjj;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU14;57,36
+Beer Master;justlogin;;58,36
+Beer Master;justlogin;NULL;59,36
+Beer Master;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU21;60,36
+Beer Master;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU18;61,36
+Beer Master;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU;-0,01
+Beer Master;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU20;1,00E+100
+Beer Master;justlogin;{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU21;0
