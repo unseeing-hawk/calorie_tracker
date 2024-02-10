@@ -13,14 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.DaySummaryDTO;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.MealGetDTO;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.*;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeMealsRequest;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -94,6 +93,21 @@ public class RestApiService {
         return response.getBody();
     }
 
+    public List<SearchProductDTO> searchProducts(String pattern) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        String url = UriComponentsBuilder.fromHttpUrl(restURL)
+                .path("/products/search-products")
+                .queryParam("user-login", username)
+                .queryParam("pattern", pattern)
+                .toUriString();
+
+        RequestEntity<Void> request = RequestEntity.get(url).build();
+        ResponseEntity<List<SearchProductDTO>> response = rest.exchange(request, new ParameterizedTypeReference<>() {});
+
+        return response.getBody();
+    }
+
     public void changeUserProducts(ChangeProductsRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         request.setUserLogin(username);
@@ -106,6 +120,16 @@ public class RestApiService {
         product.setUserLogin(username);
 
         rest.postForObject(restURL + "/products", product, ProductPostDTO.class);
+    }
+
+    public List<Product> addFatSecretProducts(List<SearchProductDTO> products) {
+        List<Product> productsList = new ArrayList<>();
+
+        for (SearchProductDTO product : products) {
+            productsList.add(rest.postForObject(restURL + "/products", product, Product.class));
+        }
+
+        return productsList;
     }
 
     public List<DaySummaryDTO> getDaySummary(String startDate, String endDate) {
@@ -133,6 +157,14 @@ public class RestApiService {
                 .toUriString();
 
         return rest.getForObject(url, MealGetDTO.class);
+    }
+
+    public void addMeal(MealPostDTO mealPostDTO) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        mealPostDTO.setUserLogin(username);
+
+        rest.postForObject(restURL + "/meals", mealPostDTO, MealPostDTO.class);
     }
 
     public void changeMeals(ChangeMealsRequest request) {
