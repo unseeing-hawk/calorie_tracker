@@ -13,206 +13,128 @@
             <a th:href="@{/}" class="name-webapp">Calorie Tracker</a>
         </div>
     </header>
-    <div class="data-table-container">
-        <h1>Add meal</h1>
-        <div class="search-box">
-            <i class='bx bx-search-alt-2'></i>
-            <input id="search-input" type="text" placeholder="Search">
-            <button id="search-btn" class="btn" type="button">Search</button>
-        </div>
-        <div class="table-container">
-            <div class="product-container">
-                <div class="tb product-table">
-                    <div class="header-tb header-product-table">
-                        <p>Products</p>
+    <form id="addMealForm" th:object="${addMealDTO}" th:action="@{/add-meal}" method="post">
+        <div class="data-table-container">
+            <h1>Add meal</h1>
+            <div class="search-box">
+                <i class='bx bx-search-alt-2'></i>
+                <input id="search-input" name="searchPattern" type="text" placeholder="Search">
+                <button id="search-btn" name="search" class="btn" type="submit">Search</button>
+            </div>
+            <div class="table-container">
+                <div class="product-container">
+                    <div class="tb product-table">
+                        <div class="header-tb header-product-table">
+                            <p>Products</p>
+                        </div>
+                        <div class="body-tb body-product-table">
+                            <table id="products-table">
+                                <thead>
+                                    <tr>
+                                        <th class="namme">Name</th>
+                                        <th>Calories</th>
+                                        <th>Proteins</th>
+                                        <th>Fats</th>
+                                        <th>Carbohydrates</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="product, iter : *{searchProductList}">
+                                        <input type="hidden" th:id="'searchProductList' + ${iter.index}"
+                                               th:name="'searchProductList[' + ${iter.index} + ']'" th:value="${product.toEncodedJson()}">
+                                        <td th:text="${product.name}"></td>
+                                        <td th:text="${product.calories}"></td>
+                                        <td th:text="${product.proteins}"></td>
+                                        <td th:text="${product.fats}"></td>
+                                        <td th:text="${product.carbohydrates}"></td>
+                                        <td>
+                                            <input type="checkbox" th:field="*{productsToSelect}" th:value="${product.toEncodedJson()}">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="body-tb body-product-table">
-                        <table id="products-table">
-                            <thead>
-                                <tr>
-                                    <th class="namme">Name</th>
-                                    <th>Calories</th>
-                                    <th>Proteins</th>
-                                    <th>Fats</th>
-                                    <th>Carbohydrates</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <div>
-                                        <td>Apple Red Delicious</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Apple Gala </td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Apple Granny Smith</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Beef</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Pork</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Lamb</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name A</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name B</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name C</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                                <tr>
-                                    <div>
-                                        <td>Product name D</td>
-                                        <td>120</td>
-                                        <td>50</td>
-                                        <td>20</td>
-                                        <td>80</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </div>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="button-box">
+                        <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
+                        <button id="btn-add-product" name="addProductBtn" type="submit" class="btn">Add product</button>
                     </div>
                 </div>
-                <div class="button-box">
-                    <a id="btn-back-to-main" th:href="@{/}" class="btn">Back</a>
-                    <button id="btn-add-product" type="button" class="btn">Add product</button>
+                <div class="chosen-product-container">
+                    <div class="chosen-product-table tb">
+                        <div class="header-chosen-product-table header-tb">
+                            <p>List of chosen product</p>
+                        </div>
+                        <div class="body-chosen-product-table body-tb">
+                            <table id="list-of-chosen-product-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Weight</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="product, iter : *{productsToAdd}">
+                                        <input type="hidden" th:id="'productsToAdd' + ${iter.index}"
+                                               th:name="'productsToAdd[' + ${iter.index} + ']'" th:value="${product.toEncodedJson()}">
+                                        <td th:text="${product.product.name}"></td>
+                                        <td>
+                                            <input th:field="*{productsToAdd[__${iter.index}__].weight}" th:value="${product.weight}">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="button-box">
+                        <button  id="btn-clear"  name="clear" type="submit">Clear</button>
+                        <button id="btn-add-meal" type="button">Add the meal</button>
+                    </div>
                 </div>
             </div>
-            <div class="chosen-product-container">
-                <div class="chosen-product-table tb">
-                    <div class="header-chosen-product-table header-tb">
-                        <p>List of chosen product</p>
+            <div class="data-date-container">
+                <div class="block-add-date-time">
+                    <div class="head-box">
+                        <h1>Add date and time of you meal</h1>
+                        <!-- <p>some description</p> -->
                     </div>
-                    <div class="body-chosen-product-table body-tb">
-                        <table id="list-of-chosen-product-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Weight</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                    <div class="input-box">
+                        <label for="">Date</label>
+                        <input id="date" type="date" th:field="*{date}" placeholder="" autofocus="true">
                     </div>
-                </div>
-                <div class="button-box">
-                    <button  id="btn-clear"  name="button" type="button">Clear</button>
-                    <button id="btn-add-meal" type="button">Add the meal</button>
+                    <div class="input-box">
+                        <label for="">Meal time</label>
+                        <select name="" id="" th:field="*{mealTime}" value="Select">
+                            <option th:value="Breakfast" th:text="Breakfast"></option>
+                            <option th:value="Lunch" th:text="Lunch"></option>
+                            <option th:value="Dinner" th:text="Dinner"></option>
+                        </select>
+                    </div>
+                    <div class="btns-box">
+                        <button id="btn-back-to-add-meal" class="btn" type="button">Back</button>
+                        <button id="btn-add" name="addMeal" class="btn" type="submit">Add</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="data-date-container">
-            <div class="block-add-date-time">
-                <div class="head-box">
-                    <h1>Add date and time of you meal</h1>
-                    <p>some description</p>
-                </div>
-                <div class="input-box">
-                    <label for="">Date</label>
-                    <input id="date" type="date" placeholder="" autofocus="true">
-                </div>
-                <div class="input-box">
-                    <label for="">Meal time</label>
-                    <select name="" id="" value="Select">
-                        <option value="">Breakfast</option>
-                        <option value="">Lunch</option>
-                        <option value="">Dinner</option>
-                    </select>
-                </div>
-                <div class="btns-box">
-                    <button id="btn-back-to-add-meal" class="btn" type="button">Back</button>
-                    <button id="btn-add" class="btn" type="button">Add</button>
-                </div>
-            </div>
-        </div>
 
-        <div id="client-error-container" class="error-container">
-            <div id="client-error-box" class="error-box">
-                <p>Error</p>
-                <span id="client-error-message" class="error-message"></span>
-                <button >OK</button>
+            <div id="client-error-container" class="error-container">
+                <div id="client-error-box" class="error-box">
+                    <p>Error</p>
+                    <span id="client-error-message" class="error-message"></span>
+                    <button type="button">OK</button>
+                </div>
             </div>
-        </div>
 
-        <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
-            <div id="sever-error-box" class="error-box">
-                <p>Error</p>
-                <span id="sever-error-message" class="error-message" th:text="${errorMessage}"></span>
-                <button>OK</button>
+            <div id="sever-error-container" class="error-container" th:if="${not #strings.isEmpty(errorMessage)}">
+                <div id="sever-error-box" class="error-box">
+                    <p>Error</p>
+                    <span id="sever-error-message" class="error-message" th:text="${errorMessage}"></span>
+                    <button type="button">OK</button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
     <script src="/resources/js/add_meal.js"></script>
 </body>
 </html>
