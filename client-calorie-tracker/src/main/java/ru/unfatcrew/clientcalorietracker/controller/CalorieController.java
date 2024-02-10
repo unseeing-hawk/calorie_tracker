@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.*;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.AddMealDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ChangeMealDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ProductDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
@@ -154,8 +155,66 @@ public class CalorieController {
     }
 
     @GetMapping("/add-meal")
-    public String getAddMealPage() {
+    public String getAddMealPage(Model model) {
+        model.addAttribute("addMealDTO", new AddMealDTO());
         return "add_meal";
+    }
+
+    @PostMapping(value = "/add-meal", params = {"search"})
+    public String searchProducts(@ModelAttribute("addMealDTO") AddMealDTO addMealDTO,
+                                 @ModelAttribute("searchPattern") String pattern) {
+        List<SearchProductDTO> searchProductList = restService.searchProducts(pattern);
+        addMealDTO.setSearchProductList(searchProductList);
+
+        return "add_meal";
+    }
+
+    @PostMapping(value = "/add-meal", params = {"addProductBtn"})
+    public String selectProducts(@ModelAttribute("addMealDTO") AddMealDTO addMealDTO) {
+        addMealDTO.getProductsToSelect().forEach(product ->
+                addMealDTO.getProductsToAdd().add(new AddMealDTO.ProductToAdd(product)));
+        addMealDTO.getProductsToSelect().clear();
+
+        return "add_meal";
+    }
+
+    @PostMapping(value = "/add-meal", params = {"clear"})
+    public String clearSelectedProducts(@ModelAttribute("addMealDTO") AddMealDTO addMealDTO) {
+        addMealDTO.getProductsToAdd().clear();
+        return "add_meal";
+    }
+
+    @PostMapping(value = "/add-meal", params = {"addMeal"})
+    public String addMeal(@ModelAttribute("addMealDTO") AddMealDTO addMealDTO) {
+        List<SearchProductDTO> fatSecretProducts = new ArrayList<>();
+
+        addMealDTO.getProductsToAdd().forEach(product -> {
+            if (product.getProduct().getId() == null) {
+                fatSecretProducts.add(product.getProduct());
+            }
+        });
+
+        List<Product> fatSecretProductsWithId = restService.addFatSecretProducts(fatSecretProducts);
+
+        List<MealPostDataDTO> mealPostDataDTOList = new ArrayList<>();
+
+        for (AddMealDTO.ProductToAdd productToAdd : addMealDTO.getProductsToAdd()) {
+            if (productToAdd.getProduct().getId() == null) {
+                productToAdd.getProduct().setId(fatSecretProductsWithId.stream()
+                        .filter(value -> value.getFatsecretId().equals(productToAdd.getProduct().getFatsecretId()))
+                        .findFirst().get().getId());
+            }
+
+            mealPostDataDTOList.add(new MealPostDataDTO(productToAdd.getProduct().getId(),
+                                                        productToAdd.getWeight()));
+        }
+
+        MealPostDTO mealPostDTO = new MealPostDTO(mealPostDataDTOList, addMealDTO.getDate(), addMealDTO.getMealTime());
+        mealPostDTO.setDate(LocalDate.parse(mealPostDTO.getDate()).format(dateFormatter));
+
+        restService.addMeal(mealPostDTO);
+
+        return "redirect:/add-meal";
     }
 
     @GetMapping("/change-meal")
