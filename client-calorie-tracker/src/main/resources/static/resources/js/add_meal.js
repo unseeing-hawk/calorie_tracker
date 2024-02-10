@@ -5,7 +5,7 @@ var clientErrorMessage = document.getElementById("client-error-message");
 var productTbody = document.querySelector('#products-table tbody')
 var listOfChosenProductTbody = document.querySelector('#list-of-chosen-product-table tbody')
 
-var buttonAddProducts = document.querySelector("#btn-add-product")
+/* var buttonAddProducts = document.querySelector("#btn-add-product")
 buttonAddProducts.onclick = function(){
     let checkboxesOfProdcutTable = productTbody.querySelectorAll('input[type=checkbox]')
     // Find the checked checkbox in the Product table
@@ -26,16 +26,16 @@ buttonAddProducts.onclick = function(){
         newRow.insertCell().innerHTML = '<input type="checkbox" name="" id="">'
         checkbox.checked = false
     })
-}
+} */
 
-document.querySelector("#btn-clear").onclick = function(e) {
+/* document.querySelector("#btn-clear").onclick = function(e) {
     var checkboxesOfChosenProductTable = listOfChosenProductTbody.querySelectorAll('input[type=checkbox]')
     checkboxesOfChosenProductTable.forEach(checkbox => {
         if(checkbox.checked){
             listOfChosenProductTbody.removeChild(checkbox.parentNode.parentNode);
         }
     })
-}
+} */
 
 var addMealBtn = document.querySelector('#btn-add-meal')
 addMealBtn.onclick = changeLayout
@@ -45,7 +45,7 @@ function changeLayout(e) {
         let isCorrectWeightInRow = true
         listOfChosenProductTbody.querySelectorAll('tr').forEach(row => {
             // check weight
-            if(checkWeightColums(row.cells[1]) == false){
+            if(checkWeightColumns(row.cells[1].getElementsByTagName("input")[0]) == false){
                 isCorrectWeightInRow = false
             }
             else {
@@ -81,19 +81,19 @@ function changeLayout(e) {
     }
 }
 
-function checkWeightColums(element) {
-    element.innerText = element.innerText.trim()
-    if(element.innerText.length == 0
-        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(element.innerText))
-        || parseFloat(element.innerText) == 0
-        || parseFloat(element.innerText) > (3.4 ** 38))
+function checkWeightColumns(element) {
+    element.value = element.value.trim()
+    if(element.value.length == 0
+        || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(element.value))
+        || parseFloat(element.value) == 0
+        || parseFloat(element.value) > (3.4 ** 38))
     {
-        element.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
-        setAnimationError(element.parentNode)
+        element.parentNode.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'
+        setAnimationError(element.parentNode.parentNode)
         return false
     }
     else {
-        element.innerText = parseFloat(element.innerText).toString()
+        element.value = parseFloat(element.value).toString()
         return true
     }
 }
@@ -109,7 +109,7 @@ document.querySelector("#client-error-box button").onclick = function hideErrorB
     clientErrorMessage.innerHTML = ""
 }
 
-var productsInDatabase = productTbody.innerHTML
+/* var productsInDatabase = productTbody.innerHTML
 document.querySelector('#search-btn').onclick = function(e) {
     let searchInput = document.querySelector('#search-input')
     let nameProductSearch = searchInput.value.toLowerCase().trim()
@@ -129,10 +129,11 @@ document.querySelector('#search-btn').onclick = function(e) {
     else {
         productTbody.innerHTML = productsInDatabase
     }
-}
+} */
 
-var addBtn = document.querySelector('#btn-add')
-addBtn.onclick = function(e) {
+/* var addBtn = document.querySelector('#btn-add')
+addBtn.onclick = function(e) { */
+function addBtnClick() {
     if(dateElement.value == '') {
         clientErrorMessage.innerText = 'Please enter date!'
         clientErrorLayout.style.display = 'flex'
@@ -146,14 +147,18 @@ addBtn.onclick = function(e) {
         if (selectedDate < minDate || selectedDate > maxDate) {
             clientErrorMessage.innerText = 'The minimum value of the date is 10 years ago.\nThe maximum value of the date is today.'
             clientErrorLayout.style.display = 'flex'
+        } else {
+            return true;
         }
-        else {
+
+        return false;
+        /* else {
             let dataDateContainer = document.querySelector('.data-date-container')
             dataDateContainer.style.display = "none";
             listOfChosenProductTbody.innerHTML = ''
             document.querySelector('#search-input'). value = ''
             productTbody.innerHTML = productsInDatabase
-        }
+        } */
     }
 }
 
