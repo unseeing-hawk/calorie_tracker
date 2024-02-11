@@ -5,13 +5,12 @@ import ru.unfatcrew.clientcalorietracker.pojo.dto.SearchProductDTO;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 public class AddMealDTO {
     public static class ProductToAdd {
         private SearchProductDTO product;
-        private int weight;
+        private Float weight;
 
         public ProductToAdd() {
 
@@ -19,10 +18,10 @@ public class AddMealDTO {
 
         public ProductToAdd(SearchProductDTO product) {
             this.product = product;
-            this.weight = 0;
+            this.weight = 0.0f;
         }
 
-        public ProductToAdd(SearchProductDTO product, int weight) {
+        public ProductToAdd(SearchProductDTO product, float weight) {
             this.product = product;
             this.weight = weight;
         }
@@ -35,11 +34,11 @@ public class AddMealDTO {
             this.product = product;
         }
 
-        public int getWeight() {
+        public Float getWeight() {
             return weight;
         }
 
-        public void setWeight(int weight) {
+        public void setWeight(float weight) {
             this.weight = weight;
         }
 
