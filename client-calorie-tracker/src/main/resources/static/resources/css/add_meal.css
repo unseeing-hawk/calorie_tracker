@@ -257,6 +257,18 @@ button:hover {
     box-sizing: border-box;
 }
 
+.chosen-product-table input {
+    width: 100%;
+    height: 100%;
+    color: black;
+    background: transparent;
+    padding-left: 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 17px;
+    outline: none;
+}
+
 .header-chosen-product-table {
     display: flex;
     justify-content: space-between;
