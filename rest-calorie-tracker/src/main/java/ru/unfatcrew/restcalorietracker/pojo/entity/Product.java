@@ -29,17 +29,17 @@ public class Product {
     @Column(name="product_calories")
     private int calories;
 
-    @Positive
+    @Min(0)
     @FiniteFloat
     @Column(name="product_proteins")
     private float proteins;
     
-    @Positive
+    @Min(0)
     @FiniteFloat
     @Column(name="product_fats")
     private float fats;
     
-    @Positive
+    @Min(0)
     @FiniteFloat
     @Column(name="product_carbohydrates")
     private float carbohydrates;
