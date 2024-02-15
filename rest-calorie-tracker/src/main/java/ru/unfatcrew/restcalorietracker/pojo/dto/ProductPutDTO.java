@@ -19,15 +19,15 @@ public class ProductPutDTO {
     @Min(0)
     private int calories;
 
-    @Positive
+    @Min(0)
     @FiniteFloat
     private float proteins;
     
-    @Positive
+    @Min(0)
     @FiniteFloat
     private float fats;
     
-    @Positive
+    @Min(0)
     @FiniteFloat
     private float carbohydrates;
 
