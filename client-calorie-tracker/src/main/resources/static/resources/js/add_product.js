@@ -134,13 +134,13 @@ function checkInputInFloatFormat(element, label, errorSpan) {
         setAnimationError(element)
         setAnimationError(label)
     }
-    else if(parseFloat(element.value) == 0) {
+    /*else if(parseFloat(element.value) == 0) {
         label.style.color = '#C9544D'
         errorSpan.innerHTML  = `${label.innerText} cannot take the value 0`
         setAnimationError(errorSpan)
         setAnimationError(element)
         setAnimationError(label)
-    }
+    }*/
     else if(parseFloat(element.value) > (3.4 ** 38)) {
         label.style.color = '#C9544D'
         errorSpan.innerHTML  = `The ${label.innerText.toLowerCase()} value is a positive Float number`

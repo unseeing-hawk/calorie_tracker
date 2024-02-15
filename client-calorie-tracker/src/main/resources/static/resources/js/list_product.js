@@ -153,7 +153,7 @@ function checkProteinFatsCarbohydratesColums(elementToCheck, elementToAnimate) {
     elementToCheck.value = elementToCheck.value.trim()
     if(elementToCheck.value.length == 0
         || !(/^[0-9]([0-9]+)?[.]?([0-9]{1,2})?$/.test(elementToCheck.value))
-        || parseFloat(elementToCheck.value) == 0
+        // || parseFloat(elementToCheck.value) == 0
         || parseFloat(elementToCheck.value) > (3.4 ** 38))
     {
         elementToAnimate.parentNode.style.backgroundColor = 'rgba(248, 38, 38, 0.4)'

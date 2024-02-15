@@ -12,13 +12,13 @@ public class ProductPostDTO {
     @Min(0)
     private int calories;
 
-    @DecimalMin(value = "0.00", inclusive = false, message = "Proteins must be a positive number with precision up to two decimal places")
+    @DecimalMin(value = "0.00", message = "Proteins must be a positive number with precision up to two decimal places")
     private float proteins;
 
-    @DecimalMin(value = "0.00", inclusive = false, message = "Fats must be a positive number with precision up to two decimal places")
+    @DecimalMin(value = "0.00", message = "Fats must be a positive number with precision up to two decimal places")
     private float fats;
 
-    @DecimalMin(value = "0.00", inclusive = false, message = "Carbohydrates must be a positive number with precision up to two decimal places")
+    @DecimalMin(value = "0.00", message = "Carbohydrates must be a positive number with precision up to two decimal places")
     private float carbohydrates;
 
     public ProductPostDTO() {
