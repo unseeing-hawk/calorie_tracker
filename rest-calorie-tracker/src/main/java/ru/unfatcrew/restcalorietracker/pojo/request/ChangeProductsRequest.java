@@ -33,6 +33,12 @@ public class ChangeProductsRequest {
         this.productIdsForDeletion = productIdsForDeletion;
     }
 
+    public ChangeProductsRequest(List<ProductPutDTO> productsForChange, List<Long> productIdsForDeletion, String userLogin) {
+        this.productsForChange = productsForChange;
+        this.productIdsForDeletion = productIdsForDeletion;
+        this.userLogin = userLogin;
+    }
+
     public List<ProductPutDTO> getProductsForChange() {
         return productsForChange;
     }
