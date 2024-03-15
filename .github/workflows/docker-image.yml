@@ -35,6 +35,8 @@ jobs:
            - 5050:80
 
     steps:
+    - name: Set Permissions
+      run: chmod -R 777 db-data/postgres_data
 
     - name: Checkout code
       uses: actions/checkout@v3
