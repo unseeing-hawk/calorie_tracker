@@ -1,9 +1,7 @@
 package ru.unfatcrew.restcalorietracker.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,11 +65,6 @@ public class MealRestControllerIntegrationTests {
 
     @BeforeEach
     private void setup() {
-        mealDAO.deleteAll();
-        mealTimeDAO.deleteAll();
-        productDAO.deleteAll();
-        userDAO.deleteAll();
-
         user = new User("Beer Master",
                 "beermastergood",
                 "{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU2",
@@ -96,8 +89,7 @@ public class MealRestControllerIntegrationTests {
                         true));
         productDAO.saveAll(productList);
 
-        mealTimeList = List.of(new MealTime("Breakfast"), new MealTime("Lunch"), new MealTime("Dinner"));
-        mealTimeDAO.saveAll(mealTimeList);
+        mealTimeList = mealTimeDAO.findAll();
 
         mealPostDto = new MealPostDto(List.of(new MealPostDataDto(productList.get(0).getId(), 123.21f),
                 new MealPostDataDto(productList.get(1).getId(), 341.21f)),
@@ -108,6 +100,13 @@ public class MealRestControllerIntegrationTests {
         LocalDate date = LocalDate.now();
         mealList = List.of(new Meal(user, productList.get(0), 13.48f, date, mealTimeList.get(0)),
                 new Meal(user, productList.get(1), 17.68f, date, mealTimeList.get(1)));
+    }
+
+    @AfterEach
+    private void postProcess() {
+        mealDAO.deleteAll();
+        productDAO.deleteAll();
+        userDAO.deleteAll();
     }
 
     @DisplayName("Add meals with invalid request body")
@@ -125,7 +124,7 @@ public class MealRestControllerIntegrationTests {
     @DisplayName("Add meals where some of request body's components do not exist")
     @Test
     public void givenMealPostDtoWithNotExistingComponents_whenAddMeals_thenThrowException() throws Exception {
-        mealPostDto.setMealTime("yhuihuihy");
+        mealPostDto.setMealTime("yрhufhewkhfwe");
 
         ResultActions response = mockMvc.perform(post("/meals")
                 .contentType(MediaType.APPLICATION_JSON)
