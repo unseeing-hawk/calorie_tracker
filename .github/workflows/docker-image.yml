@@ -37,17 +37,7 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-
-    - name: Set up Maven
-      uses: docker://maven:3.8.3-openjdk-17
-      with:
-        args: mvn --version
+      uses: actions/checkout@v2
         
     - name: Run tests for client-calorie-tracker
       working-directory: client-calorie-tracker
