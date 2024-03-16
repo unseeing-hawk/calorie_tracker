@@ -24,7 +24,7 @@ jobs:
     
     - name: Build the Docker image
       run: docker-compose -f docker-compose-db.yml up -d
-      working-directory: .github/workflows
+      working-directory: .github
 
     - name: Wait db up 
       run: sleep 10
