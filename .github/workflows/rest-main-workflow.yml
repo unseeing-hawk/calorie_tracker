@@ -47,14 +47,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Set up Maven
-      uses: docker://maven:3.8.3-openjdk-17
-      with:
-        args: mvn --version
-
-    - name: Run tests for client-calorie-tracker
-      working-directory: client-calorie-tracker
-      run: mvn test
+    - name: Build and test backend
+      working-directory: rest-calorie-tracker
+      run: mvn clean verify --batch-mode
 
     - name: Run tests for rest-calorie-tracker
       working-directory: rest-calorie-tracker
