@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import ru.unfatcrew.restcalorietracker.validation.annotation.FiniteFloat;
 
 @Entity
-@Table(name="products", schema="public")
+@Table(name="products")
 public class Product {
 
     @Id
