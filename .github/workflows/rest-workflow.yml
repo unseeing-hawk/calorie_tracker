@@ -45,9 +45,9 @@ jobs:
     - name: Wait db up 
       run: sleep 20
         
-    # - name: Build and test backend
-    #   working-directory: rest-calorie-tracker
-    #   run: mvn clean verify --batch-mode
+    - name: Build and test backend
+      working-directory: rest-calorie-tracker
+      run: mvn clean package --batch-mode
 
     - name: Run tests for rest-calorie-tracker
       working-directory: rest-calorie-tracker
