@@ -21,12 +21,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Setup file system permissions
-      run: sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
       
     - name: Build the Docker image
-      run: docker-compose -f docker-compose-db.yml up -d
+      run: sudo docker-compose -f docker-compose-db.yml up -d
       working-directory: .github
 
     - name: Wait db up 
