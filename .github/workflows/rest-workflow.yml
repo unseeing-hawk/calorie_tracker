@@ -34,7 +34,7 @@ jobs:
     - name: Run docker-compose for db
       uses: isbang/compose-action@v1.4.1
       with:
-        compose-file: ".github/docker-compose-db.yml"
+        compose-file: ".github/db_container/docker-compose-db.yml"
       env:
         DB_NAME: "calorieTrecker_db"
         DB_USER: "postgres"
@@ -43,11 +43,11 @@ jobs:
         # POSTGRES_TAG: 13.8
         
     - name: Wait db up 
-      run: sleep 20
+      run: sleep 100
         
     - name: Build and test backend
       working-directory: rest-calorie-tracker
-      run: mvn clean package -DskipTests --batch-mode
+      run: mvn clean package --batch-mode
 
     - name: Run tests for rest-calorie-tracker
       working-directory: rest-calorie-tracker
