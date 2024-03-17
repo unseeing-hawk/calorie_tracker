@@ -20,14 +20,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-      
-    - name: Build the Docker image
-      run: sudo docker-compose -f docker-compose.yml up -d
-      # working-directory: .github
-
-    - name: Wait db up 
-      run: sleep 10
+    - name: Checkout
+      uses: actions/checkout@v3
 
     - name: Set up JDK 17
       uses: actions/setup-java@v3
@@ -35,6 +29,21 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+
+    # - uses: actions/checkout@v3
+    - name: Run docker-compose for db
+      uses: isbang/compose-action@v1.4.1
+      with:
+        compose-file: ".github/docker-compose-db.yml"
+      env:
+        DB_NAME: "calorieTrecker_db"
+        DB_USER: "postgres"
+        DB_PASSWORD: "postgres"
+        DB_PORT: 5432
+        # POSTGRES_TAG: 13.8
+        
+    - name: Wait db up 
+      run: sleep 10
         
     - name: Build and test backend
       working-directory: rest-calorie-tracker
