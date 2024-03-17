@@ -47,7 +47,7 @@ jobs:
         
     - name: Build and test backend
       working-directory: rest-calorie-tracker
-      run: mvn clean package --batch-mode
+      run: mvn clean package -DskipTests --batch-mode
 
     - name: Run tests for rest-calorie-tracker
       working-directory: rest-calorie-tracker
