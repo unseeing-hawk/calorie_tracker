@@ -51,5 +51,5 @@ jobs:
 
     - name: Run tests for rest-calorie-tracker
       working-directory: rest-calorie-tracker
-      run: sudo mvn test
+      run: mvn test
       
