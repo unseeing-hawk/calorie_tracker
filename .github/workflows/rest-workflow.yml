@@ -43,7 +43,7 @@ jobs:
         # POSTGRES_TAG: 13.8
         
     - name: Wait db up 
-      run: sleep 20
+      run: sleep 100
         
     - name: Build and test backend
       working-directory: rest-calorie-tracker
