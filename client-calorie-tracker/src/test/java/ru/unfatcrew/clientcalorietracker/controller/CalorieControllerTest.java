@@ -283,7 +283,6 @@ public class CalorieControllerTest {
                 new MealPutDataDTO(1L, 10f, "Breakfast"),
                 new MealPutDataDTO(2L, 100f, "Breakfast")
         ), List.of());
-        changeMealsRequest.setMealIdsForDeletion(null);
         changeMealsRequest.setUserLogin("user");
 
         mockServer.expect(requestTo(restURL + "meals"))
@@ -348,13 +347,49 @@ public class CalorieControllerTest {
     @Test
     @DisplayName("Successfully my products page opening")
     @WithMockUser
-    public void successfullyMyProductsPageOpening() throws Exception {
+    public void testSuccessfullyMyProductsPageOpening() throws Exception {
         mockServer.expect(requestTo(restURL + "products/user-products?user-login=user&limit=100"))
                 .andRespond(withSuccess(objectMapper.writeValueAsString(productList), MediaType.APPLICATION_JSON));
 
         mockMvc.perform(get("/my-products"))
                 .andExpect(model().attribute("productDTO", new ProductDTO(productList)))
                 .andExpect(view().name("list_product"));
+
+        mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("Successfully meals searching")
+    @WithMockUser
+    public void testSuccessfullyMealsSearching() throws Exception {
+        ChangeMealDTO changeMealDTO = new ChangeMealDTO(List.of(
+                new MealGetDataDTO(1L,
+                        new ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO(1L, 1L, "user","Product 1", 1, 2.0f, 3.0f, 4.0f, true),
+                        10f, "Breakfast"),
+                new MealGetDataDTO(2L,
+                        new ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO(2L, 2L, "user","Product 2", 5, 6.0f, 7.0f, 8.0f, true),
+                        100f, "Breakfast")
+        ));
+        MealGetDTO mealGetDTO = new MealGetDTO(
+                List.of(new MealGetDataDTO(1L,
+                                new ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO(1L, 1L, "user", "Product 1", 1, 2.0f, 3.0f, 4.0f, true),
+                                10f, "Breakfast"),
+                        new MealGetDataDTO(2L,
+                                new ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO(2L, 2L, "user", "Product 2", 5, 6.0f, 7.0f, 8.0f, true),
+                                100f, "Breakfast")),
+                "user", date);
+
+        mockServer.expect(requestTo(restURL + "meals?user-login=%s&date=%s"
+                        .formatted("user", LocalDate.parse(date).format(dateFormatter))))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(mealGetDTO), MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(post("/change-meal?search")
+                        .flashAttr("date", date)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("changeDTO", changeMealDTO))
+                .andExpect(view().name("change_meal"));
 
         mockServer.verify();
     }

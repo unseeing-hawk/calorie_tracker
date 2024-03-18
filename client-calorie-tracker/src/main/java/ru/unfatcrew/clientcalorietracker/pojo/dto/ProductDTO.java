@@ -2,6 +2,8 @@ package ru.unfatcrew.clientcalorietracker.pojo.dto;
 
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 
+import java.util.Objects;
+
 public class ProductDTO {
     private Long id;
     private Long fatsecretId;
@@ -122,5 +124,26 @@ public class ProductDTO {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        ProductDTO that = (ProductDTO) object;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(fatsecretId, that.fatsecretId) &&
+                Objects.equals(userLogin, that.userLogin) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(calories, that.calories) &&
+                Objects.equals(proteins, that.proteins) &&
+                Objects.equals(fats, that.fats) &&
+                Objects.equals(carbohydrates, that.carbohydrates) &&
+                Objects.equals(isActive, that.isActive);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fatsecretId, userLogin, name, calories, proteins, fats, carbohydrates, isActive);
     }
 }

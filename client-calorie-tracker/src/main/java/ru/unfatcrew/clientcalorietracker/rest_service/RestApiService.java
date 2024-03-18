@@ -148,7 +148,7 @@ public class RestApiService {
     }
 
     public MealGetDTO getMeals(String date) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/meals")

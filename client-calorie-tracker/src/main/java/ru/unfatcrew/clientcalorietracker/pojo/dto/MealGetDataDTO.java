@@ -2,6 +2,8 @@ package ru.unfatcrew.clientcalorietracker.pojo.dto;
 
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Meal;
 
+import java.util.Objects;
+
 public class MealGetDataDTO {
 
     private long id;
@@ -60,5 +62,21 @@ public class MealGetDataDTO {
 
     public void setMealTime(String mealTime) {
         this.mealTime = mealTime;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        MealGetDataDTO that = (MealGetDataDTO) object;
+        return id == that.id &&
+                Float.compare(weight, that.weight) == 0 &&
+                Objects.equals(product, that.product) &&
+                Objects.equals(mealTime, that.mealTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, product, weight, mealTime);
     }
 }

@@ -4,6 +4,7 @@ import ru.unfatcrew.clientcalorietracker.pojo.dto.MealGetDataDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChangeMealDTO {
     private List<MealGetDataDTO> mealsToChange;
@@ -33,5 +34,19 @@ public class ChangeMealDTO {
 
     public void setIdsMealsToDelete(List<Long> idsMealsToDelete) {
         this.idsMealsToDelete = idsMealsToDelete;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        ChangeMealDTO that = (ChangeMealDTO) object;
+        return Objects.equals(mealsToChange, that.mealsToChange) &&
+                Objects.equals(idsMealsToDelete, that.idsMealsToDelete);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mealsToChange, idsMealsToDelete);
     }
 }
