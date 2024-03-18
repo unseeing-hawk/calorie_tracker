@@ -35,7 +35,7 @@ import java.util.Arrays;
 
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ProductRestControllerIntegrationTests {
+public class ProductRestControllerIT {
     private User user;
     private List<Product> products;
     private ProductPostDTO productPostDTO;

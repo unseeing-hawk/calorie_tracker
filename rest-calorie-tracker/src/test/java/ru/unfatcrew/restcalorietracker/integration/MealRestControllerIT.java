@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MealRestControllerIntegrationTests {
+public class MealRestControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
