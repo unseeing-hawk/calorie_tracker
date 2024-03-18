@@ -60,6 +60,6 @@ jobs:
         cache: maven
         
     - name: Test client
-      working-directory: rest-calorie-tracker
+      working-directory: client-calorie-tracker
       run: mvn clean --batch-mode test -Dtest="ru.unfatcrew.clientcalorietracker.integration.*Tests"
       
