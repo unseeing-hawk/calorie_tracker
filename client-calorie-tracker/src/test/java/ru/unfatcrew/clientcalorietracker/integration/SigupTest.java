@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -84,5 +85,34 @@ public class SigupTest {
         Assertions.assertEquals("my-webapp", nextPage.getTitleText());
 
         mockServer.verify();
+    }
+
+    @DisplayName("Error user register with invalid name")
+    @Test
+    @WithAnonymousUser
+    public void testErrorUserRegister() throws Exception {
+        mockServer.expect(requestTo(restURL + "users"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.BAD_REQUEST));
+        HtmlPage page = webClient.getPage("http://localhost/register");
+        Assertions.assertEquals("Sign up", page.getTitleText());
+
+        final HtmlForm form = page.getFirstByXPath("//form[@id='registerForm']");
+
+        HtmlInput inputName = form.getFirstByXPath("//input[@id='name']");
+        inputName.setValueAttribute("irstName LastName MiddleName");
+        HtmlInput inputWeight = form.getFirstByXPath("//input[@id='weight']");
+        inputWeight.setValueAttribute("60.0");
+        HtmlInput inputUsername = form.getFirstByXPath("//input[@id='username']");
+        inputUsername.setValueAttribute("testuser");
+        HtmlInput inputPassword = form.getFirstByXPath("//input[@id='password']");
+        inputPassword.setValueAttribute("password");
+
+        final HtmlButton button = form.getFirstByXPath("//button[@type='button']");
+        Assertions.assertEquals("Sign up", button.getTextContent());
+        final HtmlPage nextPage = button.click();
+
+        final HtmlSpan errorSpan = form.getFirstByXPath("//span[@id='name-error-span']");
+        Assertions.assertEquals("Format error! The first letters of the name must be capitalized.", errorSpan.getTextContent());
     }
 }
