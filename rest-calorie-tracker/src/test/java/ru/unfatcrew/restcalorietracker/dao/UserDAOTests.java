@@ -3,6 +3,8 @@ package ru.unfatcrew.restcalorietracker.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,9 +28,11 @@ public class UserDAOTests {
                 "beermastergood",
                 "{bcrypt}$2a$10$RSvT7b55.bwDLBg4c1Rw/uWygwjfvxFw.MJo/ZlRDnEr1xSwPkJU2",
                 49.54f);
+
+        user.setId(5);
     }
 
-    @DisplayName("Save user correctly")
+    @DisplayName("Save user")
     @Test
     public void givenUserObject_whenSaveUser_thenReturnUserObject() {
         User savedUser = userDAO.save(user);
@@ -38,7 +42,7 @@ public class UserDAOTests {
                 () -> assertTrue(savedUser.getId() > 0));
     }
 
-    @DisplayName("Update user correctly")
+    @DisplayName("Update user")
     @Test
     public void givenUserObject_whenUpdateUser_thenReturnUpdatedUserObject() {
         String newName = "Laura Palmer";
@@ -57,7 +61,7 @@ public class UserDAOTests {
                 () -> assertEquals(newWeight, updatedUser.getWeight()));
     }
 
-    @DisplayName("Find by login which exists")
+    @DisplayName("Find by existing login")
     @Test
     public void givenLogin_whenFindByLogin_thenReturnUserObject() {
         User savedUser = userDAO.save(user);
@@ -66,7 +70,7 @@ public class UserDAOTests {
         assertNotNull(foundUser);
     }
 
-    @DisplayName("Find by login which does not exist")
+    @DisplayName("Find by not existing login")
     @Test
     public void givenLogin_whenFindByNotExistingLogin_thenReturnNull() {
         String notExistingLogin = "fesfesfe";
@@ -86,35 +90,28 @@ public class UserDAOTests {
         assertNotNull(foundUser);
     }
 
-    @DisplayName("Find by existing id and not existing login")
-    @Test
-    public void givenExistingIdAndNotExistingLogin_whenFindByIdAndLogin_thenReturnNull() {
-        String notExistingLogin = "fefefe";
-
+    @DisplayName("Find by not existing id or login")
+    @ParameterizedTest
+    @CsvFileSource(resources="/invalid-parameters-find-by-id-and-login.csv",
+            numLinesToSkip=1,
+            delimiter=';')
+    public void givenNotExistingIdOrLogin_whenFindByIdAndLogin_thenReturnNull(String stringId, String stringLogin) {
         User savedUser = userDAO.save(user);
-        User foundUser = userDAO.findByIdAndLogin(savedUser.getId(), notExistingLogin);
+        Long id = 0l;
+        if (stringId.equals("EXISTING")) {
+            id = savedUser.getId();
+        } else {
+            id = savedUser.getId() + 1;
+        }
 
-        assertNull(foundUser);
-    }
+        String login = null;
+        if (stringLogin.equals("EXISTING")) {
+            login = savedUser.getLogin();
+        } else {
+            login = "bebebebe";
+        }
 
-    @DisplayName("Find by not existing id and existing login")
-    @Test
-    public void givenNotExistingIdAndExistingLogin_whenFindByIdAndLogin_thenReturnNull() {
-        User savedUser = userDAO.save(user);
-        long notExistingId = savedUser.getId() + 1;
-        User foundUser = userDAO.findByIdAndLogin(notExistingId, savedUser.getLogin());
-
-        assertNull(foundUser);
-    }
-
-    @DisplayName("Find by not existing id and not existing login")
-    @Test
-    public void givenNotExistingIdAndNotExistingLogin_whenFindByIdAndLogin_thenReturnNull() {
-        String notExistingLogin = "fefefe";
-
-        User savedUser = userDAO.save(user);
-        long notExistingId = savedUser.getId() + 1;
-        User foundUser = userDAO.findByIdAndLogin(notExistingId, notExistingLogin);
+        User foundUser = userDAO.findByIdAndLogin(id, login);
 
         assertNull(foundUser);
     }

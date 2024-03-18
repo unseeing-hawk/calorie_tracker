@@ -16,7 +16,6 @@ import ru.unfatcrew.restcalorietracker.dao.UserDAO;
 import ru.unfatcrew.restcalorietracker.pojo.entity.User;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.IllegalRequestArgumentException;
 import ru.unfatcrew.restcalorietracker.rest.exception_handling.exception.ResourceNotFoundException;
-
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;

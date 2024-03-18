@@ -306,7 +306,7 @@ public class ProductService {
             endIndex -= countUserProducts;
 
             int pageNumber_first = startIndex / FS_LIMIT;
-            int pageNumber_last = (int) Math.ceil((double) endIndex / FS_LIMIT); 
+            int pageNumber_last = (int) Math.floor((double) endIndex / FS_LIMIT); 
 
             List<ProductPostDTO> fatsecretProducts = new ArrayList<>();
             for (int i = pageNumber_first; i <= pageNumber_last; i++) {
@@ -322,7 +322,7 @@ public class ProductService {
         return products;
     }
 
-    private static List<ProductPostDTO> convertJsonToProductPostDTO(String jsonString) {
+    public static List<ProductPostDTO> convertJsonToProductPostDTO(String jsonString) {
         List<ProductPostDTO> productPostDTOList = new ArrayList<>();
 
         try {
