@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 public class AddMealDTO {
     public static class ProductToAdd {
@@ -105,5 +106,22 @@ public class AddMealDTO {
 
     public void setMealTime(String mealTime) {
         this.mealTime = mealTime;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        AddMealDTO that = (AddMealDTO) object;
+        return Objects.equals(searchProductList, that.searchProductList) &&
+                Objects.equals(productsToSelect, that.productsToSelect) &&
+                Objects.equals(productsToAdd, that.productsToAdd) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(mealTime, that.mealTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(searchProductList, productsToSelect, productsToAdd, date, mealTime);
     }
 }

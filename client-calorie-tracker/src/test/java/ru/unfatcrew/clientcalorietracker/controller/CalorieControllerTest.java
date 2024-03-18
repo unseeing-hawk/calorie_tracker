@@ -27,11 +27,13 @@ import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.AddMealDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ProductDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
+import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.config.RestTemplateConfig;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -57,6 +59,7 @@ public class CalorieControllerTest {
     private ProductPostDTO validProductPostDTO;
     private List<Product> productList;
     private AddMealDTO addMealDTO;
+    private ProductDTO productDTO;
     private MealPostDTO mealPostDTO;
     private String date;
 
@@ -92,6 +95,8 @@ public class CalorieControllerTest {
         mealPostDTO = new MealPostDTO(List.of(new MealPostDataDTO(1L, 150.0f),
                 new MealPostDataDTO(2L, 250.0f)),
                 "user", LocalDate.parse(date).format(dateFormatter), "Breakfast");
+
+        productDTO = new ProductDTO(productList);
     }
 
     @DisplayName("Successfully opening of the login page with unauthorised user")
@@ -193,6 +198,29 @@ public class CalorieControllerTest {
                 .andExpect(model().attributeExists("product"));
     }
 
+    @DisplayName("Successfully products searching")
+    @Test
+    @WithMockUser
+    public void testSuccessfullyProductsSearching() throws Exception {
+        String searchPattern = "searchPattern";
+        AddMealDTO addMealDTO_ = new AddMealDTO();
+        addMealDTO_.setSearchProductList(addMealDTO.getSearchProductList());
+
+        mockServer.expect(requestTo(restURL + "products/search-products?user-login=%s&pattern=%s"
+                        .formatted("user", searchPattern)))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(addMealDTO.getSearchProductList()), MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(post("/add-meal?search")
+                        .flashAttr("searchPattern", searchPattern)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("addMealDTO", addMealDTO_))
+                .andExpect(view().name("add_meal"));
+
+        mockServer.verify();
+    }
+
     @DisplayName("Successfully opening of the add meal page")
     @Test
     @WithMockUser
@@ -230,6 +258,16 @@ public class CalorieControllerTest {
         mockServer.verify();
     }
 
+    @DisplayName("Successful change meal page opening")
+    @Test
+    @WithMockUser
+    public void testSuccessfulChangeMealPageOpening() throws Exception {
+        mockMvc.perform(get("/change-meal"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("changeDTO"))
+                .andExpect(view().name("change_meal"));
+    }
+
     @DisplayName("Error opening the product creation page unauthorized")
     @Test
     @WithAnonymousUser
@@ -250,6 +288,27 @@ public class CalorieControllerTest {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/create-product"));
+
+        mockServer.verify();
+    }
+
+    @DisplayName("Successfully products change")
+    @Test
+    @WithMockUser
+    public void testSuccessfullyProductsChange() throws Exception {
+        ChangeProductsRequest changeProductsRequest = new ChangeProductsRequest(productList, List.of());
+        changeProductsRequest.setUserLogin("user");
+
+        mockServer.expect(requestTo(restURL + "products"))
+                .andExpect(method(HttpMethod.PUT))
+                .andExpect(MockRestRequestMatchers.content().json(objectMapper.writeValueAsString(changeProductsRequest)))
+                .andRespond(withSuccess());
+
+        mockMvc.perform(post("/my-products?apply")
+                        .flashAttr("productDTO", productDTO)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/my-products"));
 
         mockServer.verify();
     }

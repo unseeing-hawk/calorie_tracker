@@ -94,7 +94,7 @@ public class RestApiService {
     }
 
     public List<SearchProductDTO> searchProducts(String pattern) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/products/search-products")
@@ -109,7 +109,7 @@ public class RestApiService {
     }
 
     public void changeUserProducts(ChangeProductsRequest request) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         request.setUserLogin(username);
 
         rest.put(restURL + "/products", request);
