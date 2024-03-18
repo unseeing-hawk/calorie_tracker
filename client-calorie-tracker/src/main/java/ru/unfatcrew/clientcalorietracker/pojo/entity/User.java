@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.Objects;
+
 public class User {
     @Positive
     private Long id;
@@ -78,5 +80,22 @@ public class User {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        User user = (User) object;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(login, user.login) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(weight, user.weight);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, login, password, weight);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -43,6 +44,10 @@ public class CalorieControllerTest {
     private MockRestServiceServer mockServer;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
+    private User userWithIncorrectWeight;
+    private User validUser;
+    private ProductPostDTO validProductPostDTO;
+    private List<Product> productList;
 
     @Autowired
     public CalorieControllerTest(RestTemplate restTemplate,
@@ -55,6 +60,12 @@ public class CalorieControllerTest {
     @BeforeEach
     public void init() {
         mockServer = MockRestServiceServer.createServer(rest);
+
+        validUser = new User("FirstName LastName MiddleName", "testuser", "password", "60.0");
+        userWithIncorrectWeight = new User("FirstName LastName MiddleName", "testuser", "password", "-60.0");
+        validProductPostDTO = new ProductPostDTO("User", "Test Product", 15, 10.0f, 5.0f, 2.5f);
+        productList = List.of(new Product(1L, "Product 1", 12, 20.0f, 15.0f, 5.0f),
+                new Product(2L, "Product 2", 255, 125.0f, 55.0f, 0.0f));
     }
 
     @DisplayName("Successfully opening of the login page with unauthorised user")
@@ -97,13 +108,11 @@ public class CalorieControllerTest {
     @Test
     @WithAnonymousUser
     public void testSuccessfullyUserRegister() throws Exception {
-        User user = new User("FirstName LastName MiddleName", "testuser", "password", "60.0");
-
         mockServer.expect(requestTo(restURL + "users"))
                 .andRespond(withSuccess());
 
         mockMvc.perform(post("/register")
-                        .flashAttr("user", user)
+                        .flashAttr("user", validUser)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection());
 
@@ -114,10 +123,8 @@ public class CalorieControllerTest {
     @Test
     @WithAnonymousUser
     public void testUserRegisterWithIncorrectUserWeight() throws Exception {
-        User user = new User("FirstName LastName MiddleName", "testuser", "password", "-60.0");
-
         mockMvc.perform(post("/register")
-                        .flashAttr("user", user)
+                        .flashAttr("user", userWithIncorrectWeight)
                         .with(csrf()))
                 .andExpect(result -> Assertions.assertInstanceOf(MethodArgumentNotValidException.class, result.getResolvedException()))
                 .andExpect(status().is3xxRedirection())
@@ -132,6 +139,22 @@ public class CalorieControllerTest {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("main"));
+    }
+
+    @DisplayName("Successfully opening of the settings page")
+    @Test
+    @WithMockUser
+    public void testSuccessfullyOpeningOfSettingsPage() throws Exception {
+        mockServer.expect(requestTo(restURL + "users?login=%s".formatted("user")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(validUser), MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(get("/settings"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("user", validUser))
+                .andExpect(view().name("settings"));
+
+        mockServer.verify();
     }
 
     @DisplayName("Successfully opening the product creation page")
@@ -167,13 +190,11 @@ public class CalorieControllerTest {
     @Test
     @WithMockUser
     public void testSuccessfullyProductCreation() throws Exception {
-        ProductPostDTO product = new ProductPostDTO("User", "Test Product", 15, 10.0f, 5.0f, 2.5f);
-
         mockServer.expect(requestTo(restURL + "products"))
                 .andRespond(withSuccess());
 
         mockMvc.perform(post("/create-product")
-                        .flashAttr("product", product)
+                        .flashAttr("product", validProductPostDTO)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/create-product"));
@@ -183,16 +204,15 @@ public class CalorieControllerTest {
 
     @Test
     @DisplayName("Successfully my products page opening")
-    @WithMockUser(username = "testuser")
+    @WithMockUser
     public void successfullyMyProductsPageOpening() throws Exception {
-        List<Product> products = List.of(new Product(1L, "Product 1", 12, 20.0f, 15.0f, 5.0f),
-                new Product(2L, "Product 2", 255,125.0f, 55.0f, 0.0f));
 
-        mockServer.expect(requestTo(restURL + "products/user-products?user-login=testuser&limit=100"))
-                .andRespond(withSuccess(objectMapper.writeValueAsString(products), MediaType.APPLICATION_JSON));
+
+        mockServer.expect(requestTo(restURL + "products/user-products?user-login=user&limit=100"))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(productList), MediaType.APPLICATION_JSON));
 
         mockMvc.perform(get("/my-products"))
-                .andExpect(model().attribute("productDTO", new ProductDTO(products)))
+                .andExpect(model().attribute("productDTO", new ProductDTO(productList)))
                 .andExpect(view().name("list_product"));
 
         mockServer.verify();

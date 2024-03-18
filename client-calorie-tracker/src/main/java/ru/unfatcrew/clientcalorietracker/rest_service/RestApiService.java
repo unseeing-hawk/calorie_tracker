@@ -56,7 +56,7 @@ public class RestApiService {
     }
 
     public User getUserData() throws RestClientException {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         String uri = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/users")
