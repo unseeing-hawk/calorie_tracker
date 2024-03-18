@@ -160,7 +160,7 @@ public class RestApiService {
     }
 
     public void addMeal(MealPostDTO mealPostDTO) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         mealPostDTO.setUserLogin(username);
 

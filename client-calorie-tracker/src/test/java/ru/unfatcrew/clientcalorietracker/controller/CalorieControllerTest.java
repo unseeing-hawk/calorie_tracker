@@ -15,15 +15,22 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.RestTemplate;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.MealPostDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.MealPostDataDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.SearchProductDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.AddMealDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ProductDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 import ru.unfatcrew.clientcalorietracker.rest_service.config.RestTemplateConfig;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -33,6 +40,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static ru.unfatcrew.clientcalorietracker.utils.DateUtils.*;
 
 @WebMvcTest(CalorieController.class)
 @ContextConfiguration(classes = {RestTemplateConfig.class})
@@ -48,13 +56,17 @@ public class CalorieControllerTest {
     private User validUser;
     private ProductPostDTO validProductPostDTO;
     private List<Product> productList;
+    private AddMealDTO addMealDTO;
+    private MealPostDTO mealPostDTO;
+    private String date;
 
     @Autowired
     public CalorieControllerTest(RestTemplate restTemplate,
                                  MockMvc mockMvc) {
         this.rest = restTemplate;
         this.mockMvc = mockMvc;
-        objectMapper = new ObjectMapper();
+        this.objectMapper = new ObjectMapper();
+        this.date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     @BeforeEach
@@ -66,6 +78,20 @@ public class CalorieControllerTest {
         validProductPostDTO = new ProductPostDTO("User", "Test Product", 15, 10.0f, 5.0f, 2.5f);
         productList = List.of(new Product(1L, "Product 1", 12, 20.0f, 15.0f, 5.0f),
                 new Product(2L, "Product 2", 255, 125.0f, 55.0f, 0.0f));
+
+        addMealDTO = new AddMealDTO();
+        addMealDTO.setProductsToAdd(List.of(new AddMealDTO.ProductToAdd(
+                new SearchProductDTO(1L, "testuser", "Product", 150, 5.0f, 10.0f, 20.0f),
+                150.0f),
+                new AddMealDTO.ProductToAdd(
+                        new SearchProductDTO(2L, "Product FS", 15, 10.0f, 20.0f, 30.0f),
+                        250.0f)));
+        addMealDTO.setDate(date);
+        addMealDTO.setMealTime("Breakfast");
+
+        mealPostDTO = new MealPostDTO(List.of(new MealPostDataDTO(1L, 150.0f),
+                new MealPostDataDTO(2L, 250.0f)),
+                "user", LocalDate.parse(date).format(dateFormatter), "Breakfast");
     }
 
     @DisplayName("Successfully opening of the login page with unauthorised user")
@@ -167,7 +193,6 @@ public class CalorieControllerTest {
                 .andExpect(model().attributeExists("product"));
     }
 
-
     @DisplayName("Successfully opening of the add meal page")
     @Test
     @WithMockUser
@@ -176,6 +201,33 @@ public class CalorieControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("add_meal"))
                 .andExpect(model().attributeExists("addMealDTO"));
+    }
+
+    @DisplayName("Successful addition of a meal")
+    @Test
+    @WithMockUser
+    public void testSuccessfulAdditionOfMeal() throws Exception {
+        SearchProductDTO fatSecretProduct = addMealDTO.getProductsToAdd().get(1).getProduct();
+        Product fatSecretProductWithId = new Product(2L,  "Product FS", 15, 10.0f, 20.0f, 30.0f);
+        fatSecretProductWithId.setId(2L);
+
+        mockServer.expect(requestTo(restURL + "products"))
+                .andExpect(method(HttpMethod.POST))
+                .andExpect(MockRestRequestMatchers.content().json(objectMapper.writeValueAsString(fatSecretProduct)))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(fatSecretProductWithId), MediaType.APPLICATION_JSON));
+
+        mockServer.expect(requestTo(restURL + "meals"))
+                .andExpect(method(HttpMethod.POST))
+                .andExpect(MockRestRequestMatchers.content().json(objectMapper.writeValueAsString(mealPostDTO)))
+                .andRespond(withSuccess());
+
+        mockMvc.perform(post("/add-meal?addMeal")
+                        .flashAttr("addMealDTO", addMealDTO)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/add-meal"));
+
+        mockServer.verify();
     }
 
     @DisplayName("Error opening the product creation page unauthorized")
