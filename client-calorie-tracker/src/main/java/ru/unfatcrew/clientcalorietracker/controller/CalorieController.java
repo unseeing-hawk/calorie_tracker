@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Validated
 public class CalorieController {
     private RestApiService restService;
     private static final String csvFileName = "summary.csv";
@@ -92,7 +94,7 @@ public class CalorieController {
     }
 
     @PostMapping("/register")
-    public String registerNewUser(@Valid @ModelAttribute User user) {
+    public String registerNewUser(@Valid @ModelAttribute("user") User user) {
         restService.registerNewUser(user);
         return "redirect:/login";
     }
@@ -111,7 +113,7 @@ public class CalorieController {
     }
 
     @PostMapping("/settings/save")
-    public String saveUserSettings(@ModelAttribute User user) {
+    public String saveUserSettings(@ModelAttribute("user") User user) {
         restService.saveUserSettings(user);
         setNewPasswordInSecurityContext(user.getPassword());
         return "redirect:/settings";
@@ -124,7 +126,7 @@ public class CalorieController {
     }
 
     @PostMapping("/create-product")
-    public String createUserProduct(@Valid @ModelAttribute ProductPostDTO product) {
+    public String createUserProduct(@Valid @ModelAttribute("product") ProductPostDTO product) {
         restService.addUserProduct(product);
         return "redirect:/create-product";
     }
@@ -142,13 +144,13 @@ public class CalorieController {
     }
 
     @PostMapping(value = "/my-products", params = {"apply"})
-    public String applyProductsChanges(@ModelAttribute ProductDTO productDTO) {
+    public String applyProductsChanges(@ModelAttribute("productDTO") ProductDTO productDTO) {
         restService.changeUserProducts(new ChangeProductsRequest(productDTO.getProducts(), idsProductsToDelete));
         return "redirect:/my-products";
     }
 
     @PostMapping(value = "/my-products", params = {"remove"})
-    public String addToProductsToDelete(@ModelAttribute ProductDTO productDTO) {
+    public String addToProductsToDelete(@ModelAttribute("productDTO") ProductDTO productDTO) {
         idsProductsToDelete.addAll(productDTO.getIdsToDelete());
         productDTO.getProducts().removeIf(product -> idsProductsToDelete.contains(product.getId()));
         return "list_product";

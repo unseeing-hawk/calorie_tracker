@@ -39,6 +39,16 @@ public class ProductPostDTO {
         this.carbohydrates = carbohydrates;
     }
 
+    public ProductPostDTO(String userLogin, String name, Integer calories, Float proteins,
+                          Float fats, Float carbohydrates) {
+        this.userLogin = userLogin;
+        this.name = name;
+        this.calories = calories;
+        this.proteins = proteins;
+        this.fats = fats;
+        this.carbohydrates = carbohydrates;
+    }
+
     public String getUserLogin() {
         return userLogin;
     }

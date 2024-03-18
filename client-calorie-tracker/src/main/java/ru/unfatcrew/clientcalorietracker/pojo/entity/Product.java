@@ -2,6 +2,8 @@ package ru.unfatcrew.clientcalorietracker.pojo.entity;
 
 import jakarta.validation.constraints.*;
 
+import java.util.Objects;
+
 public class Product {
     @Min(0)
     private Long id;
@@ -60,11 +62,11 @@ public class Product {
         this.isActive = true;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -130,5 +132,26 @@ public class Product {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Product product = (Product) object;
+        return calories == product.calories &&
+                Float.compare(proteins, product.proteins) == 0 &&
+                Float.compare(fats, product.fats) == 0 &&
+                Float.compare(carbohydrates, product.carbohydrates) == 0 &&
+                Objects.equals(id, product.id) &&
+                Objects.equals(fatsecretId, product.fatsecretId) &&
+                Objects.equals(user, product.user) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(isActive, product.isActive);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fatsecretId, user, name, calories, proteins, fats, carbohydrates, isActive);
     }
 }

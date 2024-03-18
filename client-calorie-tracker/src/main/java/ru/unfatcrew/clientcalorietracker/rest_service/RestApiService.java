@@ -78,7 +78,7 @@ public class RestApiService {
     }
 
     public List<Product> getUserProducts() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/products/user-products")
@@ -94,7 +94,7 @@ public class RestApiService {
     }
 
     public List<SearchProductDTO> searchProducts(String pattern) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/products/search-products")
@@ -109,7 +109,7 @@ public class RestApiService {
     }
 
     public void changeUserProducts(ChangeProductsRequest request) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         request.setUserLogin(username);
 
         rest.put(restURL + "/products", request);
@@ -133,7 +133,7 @@ public class RestApiService {
     }
 
     public List<DaySummaryDTO> getDaySummary(String startDate, String endDate) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/meals/summary")
@@ -148,7 +148,7 @@ public class RestApiService {
     }
 
     public MealGetDTO getMeals(String date) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/meals")
@@ -160,7 +160,7 @@ public class RestApiService {
     }
 
     public void addMeal(MealPostDTO mealPostDTO) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         mealPostDTO.setUserLogin(username);
 
@@ -168,7 +168,7 @@ public class RestApiService {
     }
 
     public void changeMeals(ChangeMealsRequest request) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         request.setUserLogin(username);
         rest.put(restURL + "/meals", request);
     }
