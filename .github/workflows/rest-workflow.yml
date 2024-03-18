@@ -30,7 +30,6 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    # - uses: actions/checkout@v3
     - name: Run docker-compose for db
       uses: isbang/compose-action@v1.4.1
       with:
@@ -40,16 +39,11 @@ jobs:
         DB_USER: "postgres"
         DB_PASSWORD: "postgres"
         DB_PORT: 5432
-        # POSTGRES_TAG: 13.8
         
     - name: Wait db up 
       run: sleep 10
         
     - name: Build and test backend
       working-directory: rest-calorie-tracker
-      run: mvn clean package --batch-mode
-
-    - name: Run tests for rest-calorie-tracker
-      working-directory: rest-calorie-tracker
-      run: mvn test
+      run: mvn clean verify --batch-mode -Dtest="**/*IT.java"
       
