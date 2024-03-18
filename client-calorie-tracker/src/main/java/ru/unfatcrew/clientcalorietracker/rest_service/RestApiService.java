@@ -168,7 +168,7 @@ public class RestApiService {
     }
 
     public void changeMeals(ChangeMealsRequest request) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         request.setUserLogin(username);
         rest.put(restURL + "/meals", request);
     }

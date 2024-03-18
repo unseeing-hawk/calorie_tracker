@@ -19,14 +19,13 @@ import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.RestTemplate;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.MealPostDTO;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.MealPostDataDTO;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.ProductPostDTO;
-import ru.unfatcrew.clientcalorietracker.pojo.dto.SearchProductDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.*;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.AddMealDTO;
+import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ChangeMealDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ProductDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.Product;
 import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
+import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeMealsRequest;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.config.RestTemplateConfig;
 
@@ -268,6 +267,39 @@ public class CalorieControllerTest {
                 .andExpect(view().name("change_meal"));
     }
 
+    @DisplayName("Successfully change meals apply")
+    @Test
+    @WithMockUser
+    public void testSuccessfullyChangeMealsApply() throws Exception {
+        ChangeMealDTO changeMealDTO = new ChangeMealDTO(List.of(
+                new MealGetDataDTO(1L,
+                        new ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO(1L, 1L, "user","Product 1", 1, 2.0f, 3.0f, 4.0f, true),
+                        10f, "Breakfast"),
+                new MealGetDataDTO(2L,
+                        new ru.unfatcrew.clientcalorietracker.pojo.dto.ProductDTO(2L, 2L, "user","Product 2", 5, 6.0f, 7.0f, 8.0f, true),
+                        100f, "Breakfast")
+        ));
+        ChangeMealsRequest changeMealsRequest = new ChangeMealsRequest(List.of(
+                new MealPutDataDTO(1L, 10f, "Breakfast"),
+                new MealPutDataDTO(2L, 100f, "Breakfast")
+        ), List.of());
+        changeMealsRequest.setMealIdsForDeletion(null);
+        changeMealsRequest.setUserLogin("user");
+
+        mockServer.expect(requestTo(restURL + "meals"))
+                .andExpect(method(HttpMethod.PUT))
+                .andExpect(MockRestRequestMatchers.content().json(objectMapper.writeValueAsString(changeMealsRequest)))
+                .andRespond(withSuccess());
+
+        mockMvc.perform(post("/change-meal?apply")
+                        .flashAttr("changeDTO", changeMealDTO)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("change_meal"));
+
+        mockServer.verify();
+    }
+
     @DisplayName("Error opening the product creation page unauthorized")
     @Test
     @WithAnonymousUser
@@ -317,8 +349,6 @@ public class CalorieControllerTest {
     @DisplayName("Successfully my products page opening")
     @WithMockUser
     public void successfullyMyProductsPageOpening() throws Exception {
-
-
         mockServer.expect(requestTo(restURL + "products/user-products?user-login=user&limit=100"))
                 .andRespond(withSuccess(objectMapper.writeValueAsString(productList), MediaType.APPLICATION_JSON));
 
