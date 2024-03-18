@@ -2,6 +2,7 @@ package ru.unfatcrew.clientcalorietracker.pojo.dto;
 
 import static ru.unfatcrew.clientcalorietracker.utils.DateUtils.dateFormatter;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class DaySummaryDTO {
     private String date;
@@ -80,5 +81,23 @@ public class DaySummaryDTO {
 
     public void setCarbohydrates(Double carbohydrates) {
         this.carbohydrates = carbohydrates;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        DaySummaryDTO that = (DaySummaryDTO) object;
+        return Objects.equals(date, that.date) &&
+                Objects.equals(weight, that.weight) &&
+                Objects.equals(calories, that.calories) &&
+                Objects.equals(proteins, that.proteins) &&
+                Objects.equals(fats, that.fats) &&
+                Objects.equals(carbohydrates, that.carbohydrates);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, weight, calories, proteins, fats, carbohydrates);
     }
 }

@@ -133,7 +133,7 @@ public class RestApiService {
     }
 
     public List<DaySummaryDTO> getDaySummary(String startDate, String endDate) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         String url = UriComponentsBuilder.fromHttpUrl(restURL)
                 .path("/meals/summary")

@@ -61,6 +61,8 @@ public class CalorieControllerTest {
     private ProductDTO productDTO;
     private MealPostDTO mealPostDTO;
     private String date;
+    private String startDate;
+    private String endDate;
 
     @Autowired
     public CalorieControllerTest(RestTemplate restTemplate,
@@ -69,6 +71,8 @@ public class CalorieControllerTest {
         this.mockMvc = mockMvc;
         this.objectMapper = new ObjectMapper();
         this.date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.startDate = "2022-03-20";
+        this.endDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     @BeforeEach
@@ -390,6 +394,44 @@ public class CalorieControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("changeDTO", changeMealDTO))
                 .andExpect(view().name("change_meal"));
+
+        mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("Successfully summary form page opening")
+    @WithMockUser
+    public void testSuccessfullySummaryFormPageOpening() throws Exception {
+        mockMvc.perform(get("/summary-form"))
+                .andExpect(model().attributeExists("showTable"))
+                .andExpect(view().name("get_summary"));
+    }
+
+    @Test
+    @DisplayName("Successfully summary loading")
+    @WithMockUser
+    public void testSuccessfullySummaryLoading() throws Exception {
+        List<DaySummaryDTO> summaryList = List.of(
+                new DaySummaryDTO("2023-12-01", 10.0, 15.0, 20.0, 25.0, 30.0),
+                new DaySummaryDTO("2024-03-01", 100.0, 25.0, 18.0, 10.0, 5.0)
+        );
+        List<DaySummaryDTO> summaryListWithFormattedData = List.of(
+                new DaySummaryDTO("01.12.2023", 10.0, 15.0, 20.0, 25.0, 30.0),
+                new DaySummaryDTO("01.03.2024", 100.0, 25.0, 18.0, 10.0, 5.0)
+        );
+
+        mockServer.expect(requestTo(restURL + "meals/summary?start-date=%s&end-date=%s&user-login=%s"
+                        .formatted(LocalDate.parse(startDate).format(dateFormatter), LocalDate.parse(endDate).format(dateFormatter), "user")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(summaryList), MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(post("/summary-form?getTable")
+                        .flashAttr("startDate", startDate)
+                        .flashAttr("endDate", endDate)
+                        .with(csrf()))
+                .andExpect(model().attributeExists("showTable"))
+                .andExpect(model().attribute("summaryDTO", summaryListWithFormattedData))
+                .andExpect(view().name("get_summary"));
 
         mockServer.verify();
     }
