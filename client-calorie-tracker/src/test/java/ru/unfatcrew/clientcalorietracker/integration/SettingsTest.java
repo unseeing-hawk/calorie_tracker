@@ -81,4 +81,39 @@ public class SettingsTest {
 
         mockServer.verify();
     }
+
+    @DisplayName("Successfully saving user")
+    @Test
+    @WithMockUser
+    public void testSuccessfullySavingUser() throws IOException  {
+        User user = new User( 1L,"FirstName LastName MiddleName", "user", "12345678", "60.0");
+        mockServer.expect(requestTo(restURL + "users?login=user"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(user), MediaType.APPLICATION_JSON));
+
+        HtmlPage page = webClient.getPage("http://localhost/settings");
+        Assertions.assertEquals("Settings", page.getTitleText());
+
+        final HtmlForm form = page.getFirstByXPath("//form[@id='settingsForm']");
+
+        HtmlInput inputPassword = form.getFirstByXPath("//input[@id='password']");
+
+        mockServer.verify();
+        mockServer.reset();
+
+        mockServer.expect(requestTo(restURL + "users?login=user"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess());
+
+        mockServer.expect(requestTo(restURL + "users"))
+                .andExpect(method(HttpMethod.PUT))
+//                .andExpect(content().json(objectMapper.writeValueAsString(user)))
+                .andRespond(withSuccess());
+
+        inputPassword.setValue("1234567890");
+
+        final HtmlButton button = form.getFirstByXPath("//button[@id='btn-save']");
+        Assertions.assertEquals("Save change", button.getTextContent());
+        final HtmlPage nextPage = button.click();
+    }
 }
