@@ -15,7 +15,7 @@ on:
     branches: [ "develop" ]
 
 jobs:
-  build:
+  backend:
 
     runs-on: ubuntu-latest
 
@@ -40,10 +40,26 @@ jobs:
         DB_PASSWORD: "postgres"
         DB_PORT: 5432
         
-    - name: Wait db up 
-      run: sleep 10
-        
-    - name: Build and test backend
+    - name: Test rest
       working-directory: rest-calorie-tracker
-      run: mvn clean verify --batch-mode -Dtest="**/*IT.java"
+      run: mvn clean --batch-mode test -Dtest="**/*IT.java"
+
+  front:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Test client
+      working-directory: rest-calorie-tracker
+      run: mvn clean --batch-mode test -Dtest="ru.unfatcrew.clientcalorietracker.integration.*Tests"
       
