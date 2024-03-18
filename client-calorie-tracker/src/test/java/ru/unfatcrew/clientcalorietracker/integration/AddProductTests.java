@@ -30,7 +30,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @WebMvcTest
 @ContextConfiguration(classes = {RestTemplateConfig.class})
 @ComponentScan("ru.unfatcrew.clientcalorietracker")
-public class AddProductTest {
+public class AddProductTests {
     private String restURL;
     private WebApplicationContext context;
     private WebClient webClient;
@@ -39,10 +39,10 @@ public class AddProductTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    public AddProductTest(WebApplicationContext context,
-                     RestTemplate restTemplate,
-                     @Value("${application.rest.api.url}") String restURL,
-                     MockMvc mockMvc) {
+    public AddProductTests(WebApplicationContext context,
+                           RestTemplate restTemplate,
+                           @Value("${application.rest.api.url}") String restURL,
+                           MockMvc mockMvc) {
         this.context = context;
         this.restTemplate = restTemplate;
         this.restURL = restURL;

@@ -30,7 +30,7 @@ import ru.unfatcrew.clientcalorietracker.pojo.entity.User;
 @WebMvcTest
 @ContextConfiguration(classes = {RestTemplateConfig.class})
 @ComponentScan("ru.unfatcrew.clientcalorietracker")
-public class SettingsTest {
+public class SettingsTests {
     private String restURL;
     private WebApplicationContext context;
     private WebClient webClient;
@@ -39,10 +39,10 @@ public class SettingsTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    public SettingsTest(WebApplicationContext context,
-                          RestTemplate restTemplate,
-                          @Value("${application.rest.api.url}") String restURL,
-                          MockMvc mockMvc) {
+    public SettingsTests(WebApplicationContext context,
+                         RestTemplate restTemplate,
+                         @Value("${application.rest.api.url}") String restURL,
+                         MockMvc mockMvc) {
         this.context = context;
         this.restTemplate = restTemplate;
         this.restURL = restURL;
