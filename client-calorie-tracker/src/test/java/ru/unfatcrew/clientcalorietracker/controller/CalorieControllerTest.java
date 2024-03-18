@@ -1,6 +1,8 @@
 package ru.unfatcrew.clientcalorietracker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -29,6 +33,7 @@ import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeMealsRequest;
 import ru.unfatcrew.clientcalorietracker.pojo.requests.ChangeProductsRequest;
 import ru.unfatcrew.clientcalorietracker.rest_service.config.RestTemplateConfig;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -434,5 +439,57 @@ public class CalorieControllerTest {
                 .andExpect(view().name("get_summary"));
 
         mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("Successfully summary CSV generation")
+    @WithMockUser
+    public void testSuccessfullySummaryCSVGeneration() throws Exception {
+        List<DaySummaryDTO> summaryList = List.of(
+                new DaySummaryDTO("2023-12-01", 10.0, 15.0, 20.0, 25.0, 30.0),
+                new DaySummaryDTO("2024-03-01", 100.0, 25.0, 18.0, 10.0, 5.0)
+        );
+        List<DaySummaryDTO> summaryListWithFormattedData = List.of(
+                new DaySummaryDTO("01.12.2023", 10.0, 15.0, 20.0, 25.0, 30.0),
+                new DaySummaryDTO("01.03.2024", 100.0, 25.0, 18.0, 10.0, 5.0)
+        );
+
+        mockServer.expect(requestTo(restURL + "meals/summary?start-date=%s&end-date=%s&user-login=%s"
+                        .formatted(LocalDate.parse(startDate).format(dateFormatter), LocalDate.parse(endDate).format(dateFormatter), "user")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(summaryList), MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(post("/summary-form?getTable")
+                        .flashAttr("startDate", startDate)
+                        .flashAttr("endDate", endDate)
+                        .with(csrf()))
+                .andExpect(model().attributeExists("showTable"))
+                .andExpect(model().attribute("summaryDTO", summaryListWithFormattedData))
+                .andExpect(view().name("get_summary"));
+
+        Resource resource = generateCsv(summaryList);
+
+        mockMvc.perform(post("/summary-form?csv")
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .content(resource.getContentAsByteArray())
+                        .with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    private Resource generateCsv(List<DaySummaryDTO> summaryList) throws IOException {
+        String[] headers = {"Date", "Weight", "Calories", "Proteins", "Fats", "Carbohydrates"};
+        StringBuilder strBuilder = new StringBuilder();
+
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                .setHeader(headers)
+                .build();
+
+        try (CSVPrinter printer = new CSVPrinter(strBuilder, csvFormat)) {
+            for (DaySummaryDTO row : summaryList) {
+                printer.printRecord(row.getDate(), row.getWeight(), row.getCalories(), row.getProteins(),
+                        row.getFats(), row.getCarbohydrates());
+            }
+        }
+        return new ByteArrayResource(strBuilder.toString().getBytes());
     }
 }
