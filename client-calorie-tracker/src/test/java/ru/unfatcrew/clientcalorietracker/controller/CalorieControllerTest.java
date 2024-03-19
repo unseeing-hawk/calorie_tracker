@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,7 +24,10 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+import ru.unfatcrew.clientcalorietracker.controller.exception_handler.server_response.ValidationErrorResponse;
+import ru.unfatcrew.clientcalorietracker.controller.exception_handler.server_response.Violation;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.*;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.AddMealDTO;
 import ru.unfatcrew.clientcalorietracker.pojo.dto.dom.ChangeMealDTO;
@@ -37,7 +42,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -58,7 +62,6 @@ public class CalorieControllerTest {
     private MockRestServiceServer mockServer;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
-    private User userWithIncorrectWeight;
     private User validUser;
     private ProductPostDTO validProductPostDTO;
     private List<Product> productList;
@@ -68,6 +71,8 @@ public class CalorieControllerTest {
     private String date;
     private String startDate;
     private String endDate;
+    private List<DaySummaryDTO> summaryList;
+    private List<DaySummaryDTO> summaryListWithFormattedData;
 
     @Autowired
     public CalorieControllerTest(RestTemplate restTemplate,
@@ -83,9 +88,9 @@ public class CalorieControllerTest {
     @BeforeEach
     public void init() {
         mockServer = MockRestServiceServer.createServer(rest);
+        
 
         validUser = new User("FirstName LastName MiddleName", "testuser", "password", "60.0");
-        userWithIncorrectWeight = new User("FirstName LastName MiddleName", "testuser", "password", "-60.0");
         validProductPostDTO = new ProductPostDTO("User", "Test Product", 15, 10.0f, 5.0f, 2.5f);
         productList = List.of(new Product(1L, "Product 1", 12, 20.0f, 15.0f, 5.0f),
                 new Product(2L, "Product 2", 255, 125.0f, 55.0f, 0.0f));
@@ -105,6 +110,15 @@ public class CalorieControllerTest {
                 "user", LocalDate.parse(date).format(dateFormatter), "Breakfast");
 
         productDTO = new ProductDTO(productList);
+
+        summaryList = List.of(
+                new DaySummaryDTO("2023-12-01", 10.0, 15.0, 20.0, 25.0, 30.0),
+                new DaySummaryDTO("2024-03-01", 100.0, 25.0, 18.0, 10.0, 5.0)
+        );
+        summaryListWithFormattedData = List.of(
+                new DaySummaryDTO("01.12.2023", 10.0, 15.0, 20.0, 25.0, 30.0),
+                new DaySummaryDTO("01.03.2024", 100.0, 25.0, 18.0, 10.0, 5.0)
+        );
     }
 
     @DisplayName("Successfully opening of the login page with unauthorised user")
@@ -134,6 +148,69 @@ public class CalorieControllerTest {
                 .andExpect(view().name("signup"));
     }
 
+    @DisplayName("Registration test when the server is not responding")
+    @Test
+    @WithAnonymousUser
+    public void testRegistrationWhenServerIsNotResponding() throws Exception {
+        mockServer.expect(requestTo(restURL + "users"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withServiceUnavailable());
+
+        mockMvc.perform(post("/register")
+                        .flashAttr("user", validUser)
+                        .with(csrf()))
+                .andExpect(result -> Assertions.assertInstanceOf(RestClientResponseException.class, result.getResolvedException()))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/register"));
+
+        mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("Registration test when the server sends a validation error")
+    @WithAnonymousUser
+    public void testRegistrationWhenServerSendValidationError() throws Exception {
+        ValidationErrorResponse response = new ValidationErrorResponse(400,
+                List.of(new Violation("date", "must match \"dd.MM.yyyy\" and be less than 10 years old")));
+
+        mockServer.expect(requestTo(restURL + "users"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withBadRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper.writeValueAsString(response)));
+
+        mockMvc.perform(post("/register")
+                        .flashAttr("user", validUser)
+                        .with(csrf()))
+                .andExpect(result -> Assertions.assertInstanceOf(RestClientResponseException.class, result.getResolvedException()))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/register"));
+
+        mockServer.verify();
+    }
+
+    @DisplayName("Pairwise testing registration of the valid user")
+    @ParameterizedTest
+    @CsvFileSource(resources = "/validUserPairwise.csv", delimiter = ';', numLinesToSkip = 1)
+    @WithAnonymousUser
+    public void testRegistrationValidUser_Pairwise(String name, String login, String password, String weight) throws Exception {
+        User user = new User(name, login, password, weight);
+
+        mockServer.expect(requestTo(restURL + "users"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess());
+
+        mockMvc.perform(post("/register")
+                        .flashAttr("user", user)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+
+        mockServer.verify();
+    }
+
     @DisplayName("Successfully redirection to main page when register page open with authorised user")
     @Test
     @WithMockUser
@@ -158,12 +235,15 @@ public class CalorieControllerTest {
         mockServer.verify();
     }
 
-    @DisplayName("User register with incorrect user weight")
-    @Test
+    @DisplayName("User register with incorrect user data")
     @WithAnonymousUser
-    public void testUserRegisterWithIncorrectUserWeight() throws Exception {
+    @ParameterizedTest
+    @CsvFileSource(resources = "/invalidUserData.csv")
+    public void testUserRegisterWithIncorrectUserData(String name, String login, String password, String weight) throws Exception {
+        User invaludUser = new User(name, login, password, weight);
+
         mockMvc.perform(post("/register")
-                        .flashAttr("user", userWithIncorrectWeight)
+                        .flashAttr("user", invaludUser)
                         .with(csrf()))
                 .andExpect(result -> Assertions.assertInstanceOf(MethodArgumentNotValidException.class, result.getResolvedException()))
                 .andExpect(status().is3xxRedirection())
@@ -416,15 +496,6 @@ public class CalorieControllerTest {
     @DisplayName("Successfully summary loading")
     @WithMockUser
     public void testSuccessfullySummaryLoading() throws Exception {
-        List<DaySummaryDTO> summaryList = List.of(
-                new DaySummaryDTO("2023-12-01", 10.0, 15.0, 20.0, 25.0, 30.0),
-                new DaySummaryDTO("2024-03-01", 100.0, 25.0, 18.0, 10.0, 5.0)
-        );
-        List<DaySummaryDTO> summaryListWithFormattedData = List.of(
-                new DaySummaryDTO("01.12.2023", 10.0, 15.0, 20.0, 25.0, 30.0),
-                new DaySummaryDTO("01.03.2024", 100.0, 25.0, 18.0, 10.0, 5.0)
-        );
-
         mockServer.expect(requestTo(restURL + "meals/summary?start-date=%s&end-date=%s&user-login=%s"
                         .formatted(LocalDate.parse(startDate).format(dateFormatter), LocalDate.parse(endDate).format(dateFormatter), "user")))
                 .andExpect(method(HttpMethod.GET))
@@ -445,15 +516,6 @@ public class CalorieControllerTest {
     @DisplayName("Successfully summary CSV generation")
     @WithMockUser
     public void testSuccessfullySummaryCSVGeneration() throws Exception {
-        List<DaySummaryDTO> summaryList = List.of(
-                new DaySummaryDTO("2023-12-01", 10.0, 15.0, 20.0, 25.0, 30.0),
-                new DaySummaryDTO("2024-03-01", 100.0, 25.0, 18.0, 10.0, 5.0)
-        );
-        List<DaySummaryDTO> summaryListWithFormattedData = List.of(
-                new DaySummaryDTO("01.12.2023", 10.0, 15.0, 20.0, 25.0, 30.0),
-                new DaySummaryDTO("01.03.2024", 100.0, 25.0, 18.0, 10.0, 5.0)
-        );
-
         mockServer.expect(requestTo(restURL + "meals/summary?start-date=%s&end-date=%s&user-login=%s"
                         .formatted(LocalDate.parse(startDate).format(dateFormatter), LocalDate.parse(endDate).format(dateFormatter), "user")))
                 .andExpect(method(HttpMethod.GET))

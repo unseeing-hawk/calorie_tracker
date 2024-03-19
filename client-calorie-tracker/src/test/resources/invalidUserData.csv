@@ -1,0 +1,15 @@
+FirstName LastName MiddleName,testuser,password,-60.0
+FirstName LastName MiddleName,testuser,password,60.123
+FirstName LastName MiddleName,testuser,password,-60.123
+FirstName LastName MiddleName,testuser,password,-60.123a
+FirstName LastName MiddleName,testuser,password,abc
+FirstName LastName MiddleName,testuser,password,@.;
+FirstName LastName MiddleName,testuser,password,""
+FirstName LastName MiddleName,testuser,passwordpasswordpasswordpasswordpasswordpasswordpassword,60.0
+FirstName LastName MiddleName,testuser,pswd,60.0
+FirstName LastName MiddleName,testuser,"",60.0
+FirstName LastName MiddleName,testusertestusertestusertestuser,password,60.0
+FirstName LastName MiddleName,user,password,60.0
+FirstName LastName MiddleName,"",password,60.0
+FirstNameFirstNameFirstNameFirstName LastNameLastNameLastNameLastName MiddleNameMiddleNameMiddleNameMiddleName,testuser,password,60.0
+"",testuser,password,60.0
